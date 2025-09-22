@@ -1,0 +1,76 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Development files
+*.log
+*.tmp
+*.temp
+
+# Python files (development scripts)
+*.py
+*.pyc
+__pycache__/
+
+# Excel and data files
+*.xlsx
+*.tsv
+*.json
+!package.json
+!package-lock.json
+
+# Screenshots and verification files
+screenshots/
+verification-screenshots/
+
+# Allow all media files in site directory
+!site/media/
+
+# Ignore other image files outside site/media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.tif
+*.tiff
+*.mov
+*.mp4
+*.webp
+
+# Output files
+output.txt
+output2.txt
+page_content.html
+test_*.html
+
+# Documentation (keep only essential)
+ANIMISTIC_IMAGERY_DOWNLOAD_INSTRUCTIONS.md
+ENHANCED_COLOR_PALETTE.md
+NEURAL_NETWORK_*.md
+PROJECT_IMAGES_DOWNLOAD_LIST.md
+
+# Batch files (development only)
+*.bat
+
+# Backup files
+*.backup
+*.bak
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Keep essential files
+!site/
+!README.md
+!server.js
+!package.json
+!package-lock.json
