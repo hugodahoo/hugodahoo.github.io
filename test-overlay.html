@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Overlay Formatting</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        h3 { color: #333; border-bottom: 2px solid #90EE90; padding-bottom: 5px; }
+        ul { margin: 10px 0; }
+        li { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Test Overlay Formatting</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Thermal Drift Description</h2>
+        <div id="thermal-drift-content"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Spectral Subjects Description</h2>
+        <div id="spectral-subjects-content"></div>
+    </div>
+
+    <script src="site/data.js"></script>
+    <script>
+        // Test the generateProjectHTML function
+        function generateProjectHTML(project, mediaIndex) {
+            const extra = (mediaIndex || {}).projects || {};
+            const mainDescription = project.fullDescription || project.description || "";
+            
+            // Create description HTML
+            let descHtml;
+            if (project.fullDescription) {
+                const formattedDesc = mainDescription
+                    .replace(/\\n/g, '\n')
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0);
+                
+                let html = '';
+                let currentSection = '';
+                
+                formattedDesc.forEach(line => {
+                    // Check for section headers (with ** markdown formatting)
+                    if (line.startsWith('**') && line.endsWith('**')) {
+                        // Section header - remove ** markers
+                        if (currentSection) html += '</ul>';
+                        const sectionTitle = line.substring(2, line.length - 2);
+                        
+                        // Add data attribute for styling
+                        let dataSection = '';
+                        if (sectionTitle.includes('Technical details')) dataSection = 'technical';
+                        else if (sectionTitle.includes('Challenges')) dataSection = 'challenges';
+                        else if (sectionTitle.includes('Impact')) dataSection = 'impact';
+                        else if (sectionTitle.includes('Process')) dataSection = 'process';
+                        
+                        html += `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
+                        currentSection = sectionTitle;
+                    } else if (line.startsWith('•') || line.startsWith('-')) {
+                        // Bullet point
+                        const bulletText = line.slice(1).trim();
+                        html += `<li>${bulletText}</li>`;
+                    } else if (line.length > 0) {
+                        // Regular paragraph
+                        if (currentSection) {
+                            html += '</ul>';
+                            currentSection = '';
+                        }
+                        html += `<p>${line}</p>`;
+                    }
+                });
+                
+                if (currentSection) html += '</ul>';
+                descHtml = html;
+            } else {
+                descHtml = `<p>${mainDescription}</p>`;
+            }
+            
+            return descHtml;
+        }
+        
+        // Test with Thermal Drift
+        const thermalDrift = window.projects.find(p => p.id === 'thermal-drift');
+        if (thermalDrift) {
+            document.getElementById('thermal-drift-content').innerHTML = generateProjectHTML(thermalDrift);
+        }
+        
+        // Test with Spectral Subjects
+        const spectralSubjects = window.projects.find(p => p.id === 'spectral-subjects');
+        if (spectralSubjects) {
+            document.getElementById('spectral-subjects-content').innerHTML = generateProjectHTML(spectralSubjects);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+﻿<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Projet — Hugo Daoust</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <a href="index.html">← Tous les projets</a>
+    </header>
+    <main id="project"></main>
+    
+    <!-- Neural network background -->
+    <div class="neural-background"></div>
+    
+    <script src="data.js"></script>
+    <script src="media/index.js"></script>
+    <script>
+        const projects = (window.projects || []);
+        const extra = (window.projectMedia || {});
+        const params = new URLSearchParams(location.search);
+        const id = params.get("id");
+        const p = projects.find(x => x.id === id);
+        const root = document.getElementById("project");
+        
+        function renderMedia(url, title) {
+            try {
+                let m;
+                if ((m = url.match(/^https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/))) {
+                    const vid = m[1];
+                    return `<div class="media"><iframe width="560" height="315" src="https://www.youtube.com/embed/${vid}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+                }
+                if ((m = url.match(/^https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|shorts\/)([\w-]+)/))) {
+                    const vid = m[1];
+                    return `<div class="media"><iframe width="560" height="315" src="https://www.youtube.com/embed/${vid}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+                }
+                if ((m = url.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/))) {
+                    const vid = m[1];
+                    return `<div class="media"><iframe src="https://player.vimeo.com/video/${vid}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+                }
+                const isVideo = /\.(mp4|webm|mov)$/i.test(url);
+                return isVideo ? `<video controls src="${url}" preload="metadata"></video>` : `<img loading="lazy" src="${url}" alt="${title}">`;
+            } catch (e) {
+                return `<a target="_blank" rel="noopener" href="${url}">${url}</a>`;
+            }
+        }
+        
+        if (!p) {
+            root.innerHTML = `<p>Projet introuvable.</p>`;
+        } else {
+            // Use fullDescription if available, otherwise fall back to description
+            const mainDescription = p.fullDescription || p.description || "";
+            
+            // Create description HTML
+            let descHtml;
+            if (p.fullDescription) {
+                // Format fullDescription with proper structure
+                const formattedDesc = mainDescription
+                    .replace(/\\n/g, '\n')  // Convert \n to actual line breaks
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0);
+                
+                let html = '';
+                let currentSection = '';
+                
+                for (let i = 0; i < formattedDesc.length; i++) {
+                    const line = formattedDesc[i];
+                    
+                    // Check if this is a section header
+                    if (line.match(/^(Technical details and implementation|Challenges and solutions|Impact and results|Process and methodology)$/)) {
+                        if (currentSection) {
+                            html += `</ul></div>`;
+                        }
+                        currentSection = line;
+                        html += `<div class="section"><h3>${line}</h3><ul>`;
+                    } else if (line.startsWith('- ')) {
+                        // Bullet point
+                        html += `<li>${line.substring(2)}</li>`;
+                    } else if (line.length > 0) {
+                        // Regular paragraph
+                        if (currentSection) {
+                            html += `</ul></div>`;
+                            currentSection = '';
+                        }
+                        html += `<p class="desc">${line}</p>`;
+                    }
+                }
+                
+                // Close any open section
+                if (currentSection) {
+                    html += `</ul></div>`;
+                }
+                
+                descHtml = html;
+            } else {
+                // Fallback for regular description
+                const bullets = mainDescription.split(/\r?\n|•|\s-\s|, /).map(s => s.trim()).filter(Boolean);
+                descHtml = bullets.length > 1 ? 
+                    `<ul>` + bullets.map(b => `<li>${b}</li>`).join("") + `</ul>` : 
+                    `<p class="desc">${mainDescription}</p>`;
+            }
+            
+            // Get media
+            const mergedMedia = [...(extra[p.id] || []), ...((p.media) || [])];
+            const medias = mergedMedia.map(url => renderMedia(url, p.title)).join("");
+            
+            // Get Instagram links
+            const insta = (p.instagram || []).map(u => `<a target="_blank" rel="noopener" href="${u}">Instagram</a>`).join(" · ");
+            
+            // Render the project page
+            root.innerHTML = `
+                <article>
+                    <h1>${p.title}</h1>
+                    <p class="meta">${[p.year, p.client, p.role].filter(Boolean).join(" · ")}</p>
+                    <p class="tech">${p.technologies || ""}</p>
+                    ${descHtml}
+                    <div class="media-grid">${medias}</div>
+                    <p class="links">${insta}</p>
+                </article>
+            `;
+        }
+        
+        // Add click handler to close project when clicking outside the content
+        document.addEventListener('DOMContentLoaded', function() {
+            const article = document.querySelector('article'); // The project content card
+
+            if (article) {
+                document.body.addEventListener('click', function(e) {
+                    // If the click target is NOT inside the article, go back
+                    if (!article.contains(e.target)) {
+                        // Use history.back() for cached navigation
+                        // This will be much faster than window.location.href
+                        history.back();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

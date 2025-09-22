@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Projets — Hugo Daoust</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+    
+    <!-- Preload critical resources with high priority for production -->
+    <link rel="preload" href="./data.js" as="script" fetchpriority="high">
+    <link rel="preload" href="./media/index.js" as="script" fetchpriority="high">
+    <link rel="preload" href="./neural-network.js" as="script" fetchpriority="high">
+    
+    <!-- Preconnect to improve loading performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+<body class="neural-network-style">
+    <!-- Concentric squares parallax background -->
+    <div class="concentric-squares">
+        <!-- Squares will be generated dynamically based on viewport size -->
+    </div>
+    
+    <div class="main-container">
+        <section class="project-section" id="section-1">
+            <main id="list-1" class="project-grid"></main>
+        </section>
+    </div>
+    
+    <!-- Critical CSS inline for faster rendering -->
+    <style>
+        /* Critical above-the-fold styles */
+        body { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; }
+        .main-container { min-height: 100vh; position: relative; }
+        .concentric-squares { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
+        .project-grid { min-height: 100vh; position: relative; }
+        .loading { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            color: #00ff88; 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 14px;
+            z-index: 1000;
+        }
+    </style>
+    
+    <!-- Load non-critical resources asynchronously -->
+    <script>
+        // Show loading state immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectGrid = document.getElementById('list-1');
+            projectGrid.innerHTML = '<div class="loading">Loading projects...</div>';
+        });
+    </script>
+    
+    <!-- Load data asynchronously with caching -->
+    <script>
+        // Load data asynchronously with caching
+        function loadData() {
+            return new Promise((resolve) => {
+                // Check if data is already cached in sessionStorage
+                const cachedData = sessionStorage.getItem('projectsData');
+                const cachedMedia = sessionStorage.getItem('mediaData');
+                
+                if (cachedData && cachedMedia) {
+                    console.log('Using cached data from sessionStorage');
+                    try {
+                        window.projects = JSON.parse(cachedData);
+                        window.projectMedia = JSON.parse(cachedMedia);
+                        // Load neural network script
+                        const neuralScript = document.createElement('script');
+                        neuralScript.src = './neural-network.js?v=5';
+                        neuralScript.onload = resolve;
+                        document.head.appendChild(neuralScript);
+                        return;
+                    } catch (e) {
+                        console.log('Cached data corrupted, loading fresh');
+                    }
+                }
+                
+                // Load fresh data
+                const script = document.createElement('script');
+                script.src = './data.js?v=5';
+                script.onload = () => {
+                    const mediaScript = document.createElement('script');
+                    mediaScript.src = './media/index.js?v=5';
+                    mediaScript.onload = () => {
+                        // Cache the data for future use
+                        sessionStorage.setItem('projectsData', JSON.stringify(window.projects));
+                        sessionStorage.setItem('mediaData', JSON.stringify(window.projectMedia));
+                        console.log('Data cached in sessionStorage');
+                        
+                        const neuralScript = document.createElement('script');
+                        neuralScript.src = './neural-network.js?v=5';
+                        neuralScript.onload = resolve;
+                        document.head.appendChild(neuralScript);
+                    };
+                    document.head.appendChild(mediaScript);
+                };
+                document.head.appendChild(script);
+            });
+        }
+        
+        // Start loading data when DOM is ready
+        document.addEventListener('DOMContentLoaded', async function() {
+            const projectGrid = document.getElementById('list-1');
+            if (projectGrid) {
+                projectGrid.innerHTML = '<div class="loading">Loading projects...</div>';
+            }
+            
+            try {
+                await loadData();
+                // Small delay to ensure everything is loaded
+                setTimeout(() => {
+                    if (window.projects && window.projects.length > 0) {
+                        initializeNeuralNetwork();
+                    }
+                }, 50);
+            } catch (error) {
+                console.error('Error loading data:', error);
+                if (projectGrid) {
+                    projectGrid.innerHTML = '<div class="loading">Error loading projects</div>';
+                }
+            }
+        });
+    </script>
+
+    
+</body>
+</html>
+
+
+
+
+
