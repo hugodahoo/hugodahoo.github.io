@@ -789,6 +789,9 @@ const mediaIndex = {
   }
 };
 
+// Make mediaIndex available globally
+window.mediaIndex = mediaIndex;
+
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = mediaIndex;
 }
