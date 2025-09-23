@@ -236,7 +236,7 @@ function getThumbnail(projectId) {
     }
     
     // Use the optimized thumbnail path
-    return `media/thumbnails/${thumbnailPath}`;
+    return `media/${thumbnailPath}`;
 }
 
 // Shape bank for different project card arrangements
