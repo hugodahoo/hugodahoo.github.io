@@ -617,8 +617,13 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
     let position;
     
     if (currentShape === 'random') {
-        // Use organic positioning for random layout
-        position = positionCardOrganically(index, totalCards);
+        // Use pre-sorted organic positions (sorted by X coordinate)
+        if (window.sortedOrganicPositions && window.sortedOrganicPositions[index]) {
+            position = { x: window.sortedOrganicPositions[index].x, y: window.sortedOrganicPositions[index].y };
+            console.log(`Project ${index} using position:`, position);
+        } else {
+            position = positionCardOrganically(index, totalCards);
+        }
     } else {
         // Use geometric shapes for other layouts
         const centerX = viewportWidth / 2;
@@ -1313,7 +1318,8 @@ window.closeProjectOverlay = closeProjectOverlay;
 // Render neural network section
 function renderNeuralNetworkSection(sectionId, projectIds) {
     const list = document.getElementById(sectionId);
-    const projectsToUse = window.projects || projects || [];
+    // Use the sorted projectsWithMedia array instead of the original unsorted window.projects
+    const projectsToUse = window.sortedProjectsWithMedia || window.projects || projects || [];
     const sectionProjects = projectsToUse.filter(p => projectIds.includes(p.id));
     
     console.log('Rendering section:', sectionId);
@@ -1718,23 +1724,91 @@ function initializeNeuralNetwork() {
             return titleA.localeCompare(titleB);
         });
         
-        // Create shuffled position mapping for random layout
-        // This keeps projects in alphabetical order but assigns them to random positions
-        window.positionMapping = Array.from({length: projectsWithMedia.length}, (_, i) => i);
-        if (currentShape === 'random') {
-            // Shuffle the position indices to create random positioning
-            for (let i = window.positionMapping.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [window.positionMapping[i], window.positionMapping[j]] = [window.positionMapping[j], window.positionMapping[i]];
+        // Create position mapping for random layout
+        // Generate positions using the same logic as positionCardOrganically but adapted
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = Math.max(window.innerHeight, 1000);
+        const margin = 80;
+        const minX = margin;
+        const maxX = viewportWidth - margin;
+        const minY = margin;
+        const maxY = viewportHeight - margin;
+        
+        const organicPositions = [];
+        const usedPositions = []; // Track used positions for collision detection
+        
+        for (let i = 0; i < projectsWithMedia.length; i++) {
+            let bestPosition = null;
+            let bestScore = -1;
+            
+            // Try multiple positions to find a good organic placement (same logic as positionCardOrganically)
+            for (let attempt = 0; attempt < 50; attempt++) {
+                let x, y;
+                
+                if (attempt < 10) {
+                    // First 10 attempts: try center-biased positions
+                    const centerBias = 0.3;
+                    x = (viewportWidth / 2) + (Math.random() - 0.5) * viewportWidth * centerBias;
+                    y = (viewportHeight / 2) + (Math.random() - 0.5) * viewportHeight * centerBias;
+                } else {
+                    // Remaining attempts: full random
+                    x = Math.random() * (maxX - minX) + minX;
+                    y = Math.random() * (maxY - minY) + minY;
+                }
+                
+                // Simple collision detection
+                let hasCollision = false;
+                for (const used of usedPositions) {
+                    const distance = Math.sqrt((x - used.x) ** 2 + (y - used.y) ** 2);
+                    if (distance < 120) { // Minimum distance between cards
+                        hasCollision = true;
+                        break;
+                    }
+                }
+                
+                if (!hasCollision) {
+                    const score = Math.random(); // Random score for variety
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestPosition = { x, y };
+                    }
+                }
             }
+            
+            // If no good position found, use a random one
+            if (!bestPosition) {
+                bestPosition = {
+                    x: Math.random() * (maxX - minX) + minX,
+                    y: Math.random() * (maxY - minY) + minY
+                };
+            }
+            
+            organicPositions.push({ index: i, x: bestPosition.x, y: bestPosition.y });
+            usedPositions.push(bestPosition);
         }
+        
+        // Sort positions by X coordinate (left to right)
+        organicPositions.sort((a, b) => a.x - b.x);
+        
+        // Store the sorted positions globally
+        window.sortedOrganicPositions = organicPositions;
+        
+        // Create mapping: first project (alphabetically) gets leftmost position, etc.
+        window.positionMapping = Array.from({length: projectsWithMedia.length}, (_, i) => i);
+        
+        // Store the sorted projects globally for the rendering function
+        window.sortedProjectsWithMedia = projectsWithMedia;
         
         const allProjectIds = projectsWithMedia.map(p => p.id);
         
         console.log('Projects with media:', projectsWithMedia.length);
         console.log('All project IDs:', allProjectIds);
+        console.log('First 5 projects alphabetically:', projectsWithMedia.slice(0, 5).map(p => p.title));
+        console.log('First 5 positions (X sorted):', window.sortedOrganicPositions.slice(0, 5).map(p => ({ x: p.x, y: p.y })));
+        console.log('Position mapping:', window.positionMapping.slice(0, 5));
         
         // Render all projects with media in the first section
+        console.log('About to render with project IDs:', allProjectIds.slice(0, 5));
         renderNeuralNetworkSection('list-1', allProjectIds);
         
         // Initialize background image hover effect

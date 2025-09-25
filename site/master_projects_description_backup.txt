@@ -1,10 +1,12 @@
 ## SPECTRAL SUBJECTS
 
-Spectral Subjects is a thermal observatory that makes invisible heat exchanges visible. High-sensitivity infrared cameras map the room’s temperature in real time, showing visitors’ bodies, breath, and movements as flowing fields of particles. The work blends live thermal data with echoes of the recent past, layering traces so the atmosphere itself becomes a kind of portrait. Presented both as large-scale projections and as screen-based editions, the piece adapts to its setting while keeping interaction immediate and intuitive. Exhibited at MOCA Jacksonville in 2024–25, Spectral Subjects invited the public to see themselves as part of a constantly evolving thermal landscape.**Technical details and implementation**High-sensitivity thermographic cameras (Xenics Dione class) capture temperature variations in real-timeCustom GPU processing transforms thermal data into flowing particle systems with temporal persistenceLarge-scale architectural projection calibrated for the atrium's unique surfaces and lighting conditionsMultiple editions: immersive projection version and intimate screen-based installations**Challenges and solutions**Complex thermal backgrounds required per-site calibration and adaptive threshold algorithmsAchieving responsive interaction demanded optimized GPU pipelines with minimal latencyBalancing signal clarity with ambient noise through temporal filteringArchitectural projection mapping required precise geometric calibration and keystone correction**Impact and results**Makes the invisible exchanges of daily life—heat, breath, presence—visually tangibleVisitors become co-authors of the workExhibited Dec 2024–Jun 2025 at MOCA Jacksonville as part of centennial programmingGenerated exceptional public engagement through intuitive, immediate interaction**Process and methodology**Comprehensive site analysis including thermal mapping, HVAC patterns, and lighting studiesIterative prototyping of diffusion algorithms and visual palettesOn-site installation with continuous tuning based on real visitor behavior patterns---
+“Spectral Subjects” is a thermal observatory that displays a constantly updating map of the room's temperature. Using thermographic cameras, the project detects heat and cold in the environment, including the building’s air circulation and ventilation, visitors’ body heat, and inanimate objects. As temperature is detected, the artwork creates a visible manifestation of the public’s “heat signature” in various ways, mixing live feeds with recently past heat signatures, materializing thermal echoes of the atmosphere, and creating an evolving portrait of uncanny spectral traces that make the atmosphere tangible. The artwork has two versions: a unique projection-based treatment that can be adapted to any architecture, and an edition that can be adapted to flatscreens of different sizes.
+**Technical details and implementation**High-sensitivity thermographic cameras (Xenics Dione class) capture temperature variations in real-timeCustom GPU processing transforms thermal data into flowing particle systems with temporal persistenceLarge-scale architectural projection calibrated for the atrium's unique surfaces and lighting conditionsMultiple editions: immersive projection version and intimate screen-based installations**Challenges and solutions**Complex thermal backgrounds required per-site calibration and adaptive threshold algorithmsAchieving responsive interaction demanded optimized GPU pipelines with minimal latencyBalancing signal clarity with ambient noise through temporal filteringArchitectural projection mapping required precise geometric calibration and keystone correction**Impact and results**Makes the invisible exchanges of daily life—heat, breath, presence—visually tangibleVisitors become co-authors of the workExhibited Dec 2024–Jun 2025 at MOCA Jacksonville as part of centennial programmingGenerated exceptional public engagement through intuitive, immediate interaction**Process and methodology**Comprehensive site analysis including thermal mapping, HVAC patterns, and lighting studiesIterative prototyping of diffusion algorithms and visual palettesOn-site installation with continuous tuning based on real visitor behavior patterns---
 
 ## Climate Parliament
 
-Climate Parliament is an immersive installation where 481 suspended speaker-lights form a responsive canopy of sound and light. Archival recordings, scientific testimonies, protest chants, and personal reflections are distributed across the array, activating as visitors move through the space. Each step assembles temporary coalitions of voices, turning abstract climate discourse into an embodied experience. Sophisticated spatial audio processing prevents overload, ensuring clarity even as thousands of clips overlap. By walking among the lights, visitors physically gather and disperse debates, experiencing climate voices as a living parliament.
+A suspended forest of 481 speaker-lights creates a living parliament where climate voices gather and disperse. Archival recordings, scientific testimonies, protest chants, and personal reflections form a chorus that responds to movement—as visitors walk through the space, they literally assemble temporary coalitions of voices around their bodies. The installation transforms abstract climate discourse into an embodied, spatial experience.
+
 **Technical details and implementation**
 - Suspended array of 481 pendant speaker-lights with integrated LED rings creating a responsive canopy
 - Thousands of curated audio clips distributed across nodes with sophisticated spatial audio processing
@@ -31,7 +33,8 @@ Climate Parliament is an immersive installation where 481 suspended speaker-ligh
 
 ## Field Atmosphonia
 
-Field Atmosphonia is an immersive sound environment composed of thousands of discrete audio channels spread across a vast speaker array. Instead of a fixed composition, the system redistributes attention and density in response to audience movement, making the space itself feel alive. Multiple 2D lidars were merged to track people across the entire room, allowing the system to respond seamlessly to shifts in presence and proximity. Visitors don’t just listen—they become participants in a shifting acoustic ecosystem, where their movements continually reshape the mix. The result is less a performance than an atmosphere
+An immersive sound environment where thousands of discrete audio channels create a living acoustic ecosystem. Rather than presenting a fixed composition, the space becomes an active listener—responding to presence by redistributing attention, proximity, and density across its vast sonic landscape. Visitors enter not as passive listeners but as participants in an ever-shifting atmospheric composition.
+
 **Technical details and implementation**
 - 3,000+ channel audio library distributed across multiple speakers with sophisticated spatialization
 - Interactive logic modulates density and emphasis based on real-time audience presence and movement
@@ -58,7 +61,8 @@ Field Atmosphonia is an immersive sound environment composed of thousands of dis
 
 ## Kristallstimmen
 
-Kristallstimmen is a permanent interactive installation created in 2024 for Swarovski’s Crystal Worlds Museum in Wattens, Austria. The work features an array of 3,000 suspended loudspeakers, each clad in hundreds of small black crystals that illuminate when active. As visitors walk through the space, sensors detect their presence and trigger the loudspeaker directly above them. A light turns on, and a voice is heard: a recording from one of Swarovski’s employees around the world. Together, the array represents over 100 languages and countless perspectives—designers, engineers, welders, researchers, salespeople, technicians, and more. When no one is present, the installation falls silent, existing as a social sculpture that shifts attention from the product to the people whose work brings it to life.
+A crystalline sound chamber where voices transform into shimmering harmonics. Visitors speak into the space and hear their words returned as refracted echoes, spectral shimmers, and harmonized layers that dance through the faceted architecture. The installation transforms the room into a living instrument, where material luxury meets intimate acoustic presence.
+
 **Technical details and implementation**
 - Microphones and speakers embedded within crystal structures create seamless audio integration
 - Advanced DSP processing generates crystalline echoes, spectral shimmers, and harmonized voice layers
@@ -85,9 +89,8 @@ Kristallstimmen is a permanent interactive installation created in 2024 for Swar
 
 ## Shadow Tuner
 
-Shadow Tuner is an interactive installation that turns visitors’ shadows into a global tuning device. An animated image of the Earth rotates on a sphere, and as shadows fall across different cities, live local radio stations from those places are automatically triggered, creating a constantly shifting polyphonic soundscape.
+An interactive installation where participants transform their shadows into living instruments. The absence of light becomes the source of expression—gestures cast as shadows generate sound and graphics, turning negative space into a canvas for musical and visual creation. Visitors discover they can 'tune' their shadows, creating a poetic inversion where darkness becomes the instrument of light.
 
-The piece exists in two versions. The monumental version uses a custom-made spherical balloon with large-scale projection mapping: shadows cast by passers-by are tracked and appear at heights between 2 and 14 meters, depending on their distance from the camera. In the smaller version, the Earth rotates on a tight spherical LED display, with shadows mapped onto its surface as visitors move around it. In both cases, shadows covering cities activate their corresponding radio stations, blending voices and music from across the world into a single, shared instrument.
 **Technical details and implementation**
 - Infrared capture system provides reliable silhouette detection under variable lighting conditions
 - Advanced projection mapping renders edge-tracked forms with audio-reactive fills and textures
@@ -114,9 +117,8 @@ The piece exists in two versions. The monumental version uses a custom-made sphe
 
 ## Collider
 
-Collider is a light installation that translates invisible cosmic radiation into visible form. In its first iteration, presented at Translation Island in Abu Dhabi in 2023, hundreds of pencil-beam robotic searchlights formed a glimmering curtain of light visible from Lulu Island and downtown Abu Dhabi. The lights responded in real time to muons—subatomic particles produced when cosmic rays from stars and black holes collide with Earth’s atmosphere. Sensors adapted from Geiger counters detected the angle of these particles, and the live data was mapped directly into the shifting geometry of the light curtain.
+A real-time visualization of cosmic radiation events transforms invisible astrophysics into luminous collisions and particle showers. Live data from cosmic ray detectors becomes an evolving field of light that visitors can read at a glance or inhabit over time, making the constant bombardment of high-energy particles from space visible and comprehensible.
 
-The second iteration, installed on the façade of the Parrish Art Museum’s Herzog & de Meuron building, replaced searchlights with hundreds of small LED spotlights. Here, the data shaped a calm, rippling curtain of light across the museum’s architecture, offering a more intimate encounter with the same cosmic phenomena. In both versions, Collider turns distant astrophysical events into a perceptible, architectural experience.
 **Technical details and implementation**
 - Live data feed from cosmic ray detectors captures real-time radiation events
 - Custom visualization engine maps event energy and angle to dynamic particles, trails, and bursts
@@ -143,9 +145,8 @@ The second iteration, installed on the façade of the Parrish Art Museum’s Her
 
 ## Recurrent First Dream
 
-Recurrent First Dream (Primero Sueño Recurrente) is an algorithmic animation based on Sor Juana Inés de la Cruz’s 1692 poem Primero Sueño, a feminist ode to transcendence, knowledge, and deductive reasoning. Created during a period when Sor Juana faced censorship from the Catholic Church and the Inquisition, the poem reflects her struggle to uphold rationalist principles while living within a religious order.
+A generative homage to Sor Juana Inés de la Cruz's 'Primero Sueño' that unfolds as endlessly recomposed text-image constellations. The installation creates an infinite poem where textual structures inform visual grammars, and synchronized currents of meaning diverge and reconverge across multiple screens without ever repeating. Viewers witness literature transformed into living, breathing visual code.
 
-The installation employs a double layer of language: beneath lies the full text of the poem, while above it golden words drift like streamers, animated through fluid dynamics to resemble a flame in slow motion—the flame of knowledge. In its standalone version, the work unfolds on an elongated screen, where an ascending vortex of words gradually reveals the transcendental scope of Sor Juana’s vision.
 **Technical details and implementation**
 - Custom generative engine drives multi-screen sequences that never repeat, creating infinite variations
 - Textual structures from the original poem inform graphical grammars, pacing, and visual composition
@@ -172,13 +173,8 @@ The installation employs a double layer of language: beneath lies the full text 
 
 ## Translation Island
 
-Translation Island was a large-scale outdoor exhibition trail on Lulu Island in Abu Dhabi, presented from November 20, 2023, to January 31, 2024, as part of the inaugural MANAR Light Festival. Ten audiovisual artworks—six of them world premieres—transformed the deserted island into a two-kilometre-long night-time path through sand dunes, desert flora, beaches, and freshwater lakes.
+A public art trail in Abu Dhabi that stages translation as wayfinding—light, text, and sound guide visitors through sequential ‘islands’ of narrative across an outdoor landscape.
 
-Commissioned by Abu Dhabi’s Department for Culture and Tourism, the project was conceived as an “ode to translation,” understood both as the rendering of one language into another and as the relocation of subjects in space. The works combined AI, computer vision, environmental sensing, and 3D mapping to create poetic experiences in the desert landscape.
-
-Pieces such as Collider translated cosmic radiation into a colossal curtain of light visible from 10 kilometers away, while Thermal Drift, Dune Ringers, and Pulse Island revealed biometric signatures—body heat, voice, heartbeat—through projection mapping and fields of glowing bulbs. Other works addressed language directly: Translation Stream projected streams of letters that reorganized around visitors to reveal poems by Emirati poets in Arabic and English; Shadow Tuner allowed visitors to tune into thousands of live radio stations worldwide with their shadows; and Translation Lake used AI voice avatars to endlessly translate James Joyce’s Finnegan’s Wake into 24 languages.
-
-By gathering these pieces into a single nocturnal journey, Translation Island wove together histories of translation—from the Tower of Babel to the Library of Alexandria and the Abbasid House of Wisdom—while engaging with the promises and absurdities of contemporary AI.
 Technical details and implementation
 - Weatherproof projection/lighting integrated with site features.
 - Sensors along the path to pace narrative reveals.
@@ -202,11 +198,8 @@ Process and methodology
 
 ## Atmospheric Memory
 
-Atmospheric Memory is a touring exhibition inspired by Charles Babbage’s 19th-century speculation that the air retains every word ever spoken. Spread across multiple rooms, the project uses voice-activated projections, robotics, and sound to turn atmosphere into both archive and instrument. Visitors speak into the installation and see their words transformed into text, light, and kinetic movement, creating an environment where memory and presence are made tangible.
+A touring large-scale exhibition inspired by Charles Babbage's visionary speculation that the air retains every word ever spoken. Multiple rooms of voice-activated projections, robotics, and sonification transform atmosphere into both archive and instrument, creating an immersive exploration of memory, surveillance, and the persistence of sound in space.
 
-At its core is The Chamber, a monumental room of immersive projection mapping powered by around 20 projectors, enveloping visitors in shifting layers of text and imagery. Other sections integrate thousands of single-channel speakers from Atmosphonia, building dense sonic ecosystems that respond to presence. Different moments of the exhibition are interlinked, so that visitors can encounter echoes of their earlier actions and see how their presence reverberates across spaces.
-
-Designed for touring, the work uses modular rooms adaptable to different venues and architectural conditions. Complex systems integration across projections, robotics, and multichannel audio demanded robust show control and standardized installation methods. By linking historical computing concepts to contemporary questions of surveillance, privacy, and permanence, Atmospheric Memory offered audiences a large-scale, immersive reflection on how technology preserves—and reshapes—the traces we leave behind.
 **Technical details and implementation**
 - Multiple interconnected rooms combining projection, robotics, multi-channel sound, and interactive voice capture
 - Voice input drives complex text, visual, and kinetic responses across different media systems
@@ -233,7 +226,8 @@ Designed for touring, the work uses modular rooms adaptable to different venues 
 
 ## Sync
 
-Sync is a live performance collaboration with percussionist Eli Keszler where every strike, scrape, and resonance of the drum kit becomes light and image. Using Sensory Percussion to control an array of 3,000 light bulbs, each gesture expands into synchronized patterns with sub-frame precision. Built on Pulse Topology as its artistic infrastructure, the work reframes percussion as a multi-sensory practice, immersing audiences in sound made visible. Sync was presented at Pace Gallery in New York and at Gray Area in San Francisco.
+A live performance collaboration with percussionist Eli Keszler, presented in San Francisco and at Pace Gallery (New York). Using Sensory Percussion, the drum kit becomes a controller for light and image—each strike, scrape and resonance extends into synchronized projection.
+
 Technical details and implementation
 - Sensory Percussion mapped to OSC/MIDI controlling projection and lighting.
 - TouchDesigner/real‑time pipeline tuned for sub‑frame responsiveness.
@@ -258,11 +252,8 @@ Process and methodology
 
 ## Techs Mechs
 
-Techs Mechs was a solo exhibition at Gray Area in San Francisco showcasing three works: Airborne Newscast, a dual-projector shadow-tracking piece; a four-screen version of Recurrent First Dream; and an experimental Thermal Drift Density Map. Together, they demonstrated the breadth of realtime techniques in the studio, from tracking and generative poetics to thermal imaging.
+A solo exhibition at Gray Area (San Francisco) that foregrounded three contributions: Airborne Newscast (dual‑projector shadow tracking that projects around/inside), a four‑screen Recurrent First Dream, and a Thermal Drift Density Map experiment.
 
-The show required careful GPU tuning to keep multi-screen systems stable and precise calibration to manage dual-projector blending and shadow occlusion. The Thermal Drift experiment also pushed new rendering approaches for thermal sensing under gallery conditions.
-
-Beyond presenting individual works, Techs Mechs consolidated a coherent exhibition language that highlighted the interplay between custom tracking, generative systems, and media-poetic experimentation.
 Technical details and implementation
 - Airborne Newscast: two mapped projectors; live shadow tracking and projection.
 - Recurrent First Dream: synced 4‑screen generative choreography.
@@ -287,9 +278,8 @@ Process and methodology
 
 ## Biometric Theatre
 
-Biometric Theatre was an immersive environment in Hong Kong where collective physiology shaped large-scale projections. Sensors measured heartbeat, respiration, and body temperature, transforming the audience’s inner rhythms into shifting audiovisual compositions. A monumental Thermal Drift visualization mapped the group’s heat signatures, while Hormonium rendered cyclical biological patterns at architectural scale.
+An immersive environment in Hong Kong where audience physiology drives media. A monumental Thermal Drift projection visualizes collective heat, while a large Hormonium projection renders cyclical rhythms at architectural scale.
 
-Scaling biometric input to a crowd required anonymized, aggregate mappings that balanced clarity with privacy. The projections were calibrated for variable ambient light, ensuring visibility without overwhelming the site. By making inner states visible and shareable, Biometric Theatre turned personal data into a collective performance, sparking public curiosity and debate around the ethics of sensing technologies in art.
 Technical details and implementation
 - Heartbeat/respiration/thermal sensing; anonymized, aggregate mappings.
 - Large Thermal Drift projection; large Hormonium projection.
@@ -313,7 +303,7 @@ Process and methodology
 
 ## Thermal Drift
 
-Thermal Drift transforms human heat into visible poetry. A thermal camera captures bodies, turning their energy into drifting particles that swirl, dissolve, and flow across the screen. Over a six-minute narrative arc, the work shifts from pure abstraction to figuration, guided by an audio-reactive soundtrack that drives its density and rhythm. Adaptive calibration ensures clarity in any environment, allowing the piece to resonate whether projected in vast venues or intimate settings. Exhibited worldwide—including the NYC Armory, Basel 2022, and Crystal Bridges—Thermal Drift has become a signature work collected by both private and institutional collections, a testament to the poetic potential of thermal imaging.
+An interactive thermal camera installation where human bodies emit particles that drift and dissolve along a six-minute narrative arc. This cornerstone work transforms invisible body heat into visible poetry, creating an intimate dance between technology and human presence that has been exhibited worldwide and collected in multiple editions.
 
 **Technical details and implementation**
 - High-sensitivity thermal camera with sophisticated calibrated background profiling
@@ -341,11 +331,8 @@ Thermal Drift transforms human heat into visible poetry. A thermal camera captur
 
 ## Listening Forest
 
-Listening Forest was a night-time exhibition trail at Crystal Bridges in Arkansas, where distributed interactive artworks transformed the woods into a responsive landscape. Spread along a long outdoor path, the works included Arkansas Text Stream, an outdoor adaptation of Thermal Drift, and Summon, a collective response node that gathered visitors’ presence.
+A night‑time forest trail at Crystal Bridges (Arkansas) featuring distributed interactive artworks. Contributions included Arkansas Text Stream, an outdoor adaptation of Thermal Drift, and Summon—each transforming the woods into a responsive commons.
 
-The challenge of weatherproofing and running reliable power and data across distance shaped the design, while careful planning ensured safety and wayfinding without breaking the mystery of the trail. Calibration and maintenance cycles were carried out at night, and visitor flow was tested to avoid bottlenecks.
-
-As the first project of its kind for Rafael Lozano-Hemmer’s studio, Listening Forest set a precedent for large-scale outdoor exhibitions, paving the way for later projects such as Translation Island. By blending projection, light, and sensing into the forest environment, it expanded the museum’s audience and offered families and communities a shared encounter with media art in nature.
 Technical details and implementation
 - Distributed projection/lights and sensing along a long outdoor path.
 - Arkansas Text Stream; Thermal Drift (outdoor); Summon as collective response node.
@@ -368,9 +355,8 @@ Process and methodology
 
 ## Excuse You
 
-Excuse You was a solo exhibition at Wilde Gallery in Basel that brought together several works into a unified installation. The presentation included a Thermal Drift Density Map, a projection of Hormonium, and an adapted Parametric Staircase. Rather than treating each piece separately, the exhibition emphasized coherence, with each work carefully installed to meet the expectations of a gallery setting.
+A solo show at Wilde (Basel) that consolidated several works into a gallery context. Production included a Thermal Drift Density Map, a presentation of Hormonium, and an adapted Parametric Staircase—focusing on installation craft and cohesion.
 
-In this context, technical experiments had to be presented as polished, finished artworks—framed, calibrated, and refined to feel at home in the white-cube environment. By consolidating these pieces into a cohesive presentation, Excuse You strengthened collector interest and demonstrated the studio’s ability to translate research-driven installations into a gallery-ready form.
 Technical details and implementation
 - Gallery‑scale Thermal Drift Density Map variant.
 - Hormonium projection install; Parametric Staircase adaptation.
@@ -394,11 +380,8 @@ Process and methodology
 
 ## CAUDALES
 
-Caudales is a suite of generative text installations that transform literature, philosophy, and critical theory into flowing streams of words. Exhibited from February 25 to April 24, 2022 at Casa de México in Madrid, the show brought together eight works under a shared curatorial frame linking textuality and visual abstraction.
+An exhibition at Casa de Mexico (Madrid) organized around flows and circulation. Contributions spanned Airborne Newscast, Recurrent Rayuela, Sor Juana Chandelier, installations of Encode/Decode and Mallarmé, and a presentation of Hormonium.
 
-Using algorithms borrowed from fluid dynamics and non-linear systems, the pieces deconstruct and recompose texts by authors such as Sor Juana Inés de la Cruz, George Orwell, Julio Cortázar, and Stuart Hall. One standout is Primero Sueño Recurrente, rendered through 45 flat suspended screens forming a spiraling paraboloid; words emerge as an ascending vortex across the screens.
-
-Rather than delivering literal readings, Caudales foregrounds unstable typographic flows and the agency of the viewer in navigating meaning.
 Technical details and implementation
 
 Dual‑projector tracking (Airborne Newscast); kinetic/light components (Chandelier).Installation of Encode/Decode and Mallarmé; Hormonium display.Challenges and solutions
@@ -411,11 +394,8 @@ Piece‑specific prebuilds; crate/ship documentation.On‑site sequencing and li
 
 ## Hormonium
 
-Hormonium (Text Stream 8) is a generative artwork that visualizes human chronobiology through waves of text. Sequences of ocean waves crash across the screen, releasing airborne text particles that represent acronyms of hormones. Each hormone appears according to its natural rhythm, turning the invisible cycles of the body into flowing audiovisual patterns.
+A generative visual of cyclical ‘biological’ rhythms. Over the years it has proven highly adaptable—shown in multiple exhibitions and acquired by collections, evolving across formats without losing identity.
 
-The piece incorporates circadian rhythms, releasing cortisol, progesterone, and testosterone in the morning; FSH and LH in the afternoon; and oestradiol and prolactin at night. Ultradian rhythms—shorter cycles within the day—are shown through leptin and ghrelin fluctuations. Infradian rhythms—longer cycles such as the 28-day hormonal variations of estrogen, FSH, progesterone, and LH—also appear. Finally, a 90-year lifespan cycle charts long-term changes such as the decline of aldosterone, calcitonin, GH, and renin, and the rise of cortisol. After 90 years, the work resets, beginning the cycles anew.
-
-By mapping these rhythms into an endless ocean of words, Hormonium makes the body’s hidden cycles perceptible through the language of waves.
 Technical details and implementation
 - Cyclical waveform engines with parameterized phase/period relationships.
 - Projection mapping or screen presentation; ambient or focal modes.
@@ -437,11 +417,8 @@ Process and methodology
 
 ## Ecosystemes
 
-Écosystemes (Ecosystem Alpha) is an interactive video-mapping sculpture created by Aude Guivarc’h, with interactivity programmed by Hugo Daoust. The work presents a fictional fragment of mountainous terrain as a “sample of planet Earth,” built from 3D-printed forms coated in plaster and precisely mapped with 4K projection, Kinect 2.0 depth sensing, and a stereo sound system.
+A projection mapping work (with Aude Guivarch) for MAPP MTL that turns city facades into living ecologies. Rather than listing features, the project unfolds like urban weather—growth, decay and regeneration written onto architecture so passersby can feel cyclical time in a single evening. Irregular surfaces and city light became collaborators; the map gives buildings a pulse.
 
-Natural cycles of water, wind, erosion, and the seasons animate the surface, bringing the static relief to life. When visitors approach, pass a hand in front of the projection, or touch the sculpture, the ecosystem reacts with fire and destruction. The more it is disturbed, the longer it takes to regenerate. This mechanic makes each visitor directly responsible for the health of the landscape and the experience of others.
-
-Premiered in 2021 at Never Apart Gallery in Montreal and permanently acquired by Age of Union’s Earth Center in 2022, Écosystemes is both poetic and provocative—raising awareness of our impact on fragile environments by turning every gesture into an ecological choice.
 Technical details and implementation
 - Large‑format projection mapping onto irregular facades.
 - Visual sequences composed as ecological cycles; adaptive brightness for urban light.
@@ -510,7 +487,8 @@ Process and methodology
 
 ## Panasonic Augmented Basketball Court
 
-High-Speed Tracking: Basketball Court was an R&D project that merged multiple sensing systems—3D LiDARs, infrared cameras, and high-speed tracking—into a real-time projection mapping setup. Graphics were overlaid directly onto gameplay, with the court and walls reacting instantly to dribbles, collisions, and ball movement. This fusion of technologies created a uniquely responsive environment where athletic gestures became dynamic visual events. The prototype not only showcased the artistic potential of projection in sports but also proved its practical value, leading directly to an NBA contract.
+A projection-mapped basketball court that tracks players and the ball in real-time, overlaying responsive graphics directly onto gameplay. This R&D project originated in Montreal and **led directly to an NBA contract**, demonstrating how experimental media art can evolve into practical applications that transform professional sports.
+
 **Technical details and implementation**
 - High-speed projection system with ultra-low-latency tracking of players and ball movement
 - Sophisticated camera/projector calibration system ensures perfect alignment with court geometry
@@ -583,7 +561,7 @@ Process and methodology
 
 ## Refractions
 
-Refractions was a laser installation presented at Never Apart gallery during MAPP Festival 2019. Lasers were mapped onto water, materials, smoke, and a suspended glass cube, creating shifting volumes of light that changed with the viewer’s position. The setup emphasized the physical qualities of beams interacting with surfaces and atmosphere
+A laser‑based light sculpture that treats beams as tangible volumes. With haze and precise optics, geometry becomes architecture, asking viewers to walk and align their perspective to ‘slice’ light.
 
 Technical details and implementation
 - Multi‑laser rig with controlled scan patterns; safety interlocks.
@@ -606,7 +584,8 @@ Process and methodology
 
 ## Colors of Bangkok
 
-Central World Bangkok explored a new production pipeline where realtime software enhanced video content on the fly. Using TouchDesigner, I created effects layered over footage and tested them live during the shoot, adjusting lighting and parameters to match the conditions. The work was designed for the flagship Central World building in Bangkok, whose unusually wide screen ratio called for custom visuals and compositions. The process combined motion design with creative coding, enabling quick prototyping of aesthetics and immediate feedback on set. This collaboration showed how realtime tools could bridge the gap between production and post-production, giving motion graphic artists and coders a shared space to experiment.
+An experiment fusing studio shoots with real‑time overlays. We used feedback‑style effects on fast‑moving dancers to amplify gesture across a long, horizontal canvas—tuning parameters live during recording.
+
 Technical details and implementation
 - TouchDesigner‑based overlays blended with filmed footage in studio.
 - Real‑time parameter control to react to choreography.
@@ -629,7 +608,7 @@ Process and methodology
 
 ## Ed Fornieles’ The Finiliar
 
-The Finiliar is a collaboration with artist Ed Fornieles that brings market data to life through animated creatures. Stocks, currencies, and cryptocurrencies are linked to each Finiliar’s mood, making them grow happy or sick as values rise and fall. I developed the realtime system that fetched live financial data and drove the characters’ behavior, smoothing volatility while keeping changes expressive. The project evolved across multiple iterations, from 2D screen-based versions to a 3D installation at the Venice Biennale (Ca’ Pesaro), and has been acquired by institutional collections. By turning abstract numbers into emotional companions, The Finiliar made finance tangible, playful, and strangely empathetic.
+Market data becomes animated ‘creatures’ whose moods track stocks, currencies and crypto. The project evolved through **multiple variations**, including a 3D version at the Venice Biennale (Ca’ Pesaro) and institutional acquisitions (e.g., Rosenkranz).
 
 Technical details and implementation
 - Realtime financial APIs feeding creature behavior; smoothing for volatility.
@@ -653,7 +632,8 @@ Process and methodology
 
 ## Sound Tracer
 
-Soundtracer was an interactive musical landscape commissioned by the Brooklyn Academy of Music. Aimed primarily at children, the installation let visitors draw with sound and light—gestures left glowing traces while speakers responded with musical phrases. Built on a multitouch surface, it supported multiple users simultaneously, turning the challenge of shared interaction into one of its biggest successes. Realtime audio generation kept the sound playful and responsive, while the interface stayed simple enough for kids to understand immediately. Durable and designed for continuous public use, Soundtracer transformed listening into an active, collaborative experience.
+An interactive instrument for kids: draw with sound and light. Gestures leave luminous traces while speakers sing back, inviting collaborative play.
+
 Technical details and implementation
 - Large touch/gesture surface; vision tracking to strokes.
 - Real‑time sound synthesis; projection/display for drawn paths.
@@ -675,7 +655,8 @@ Process and methodology
 
 ## Renault Annual Meeting
 
-Renault’s Augmented Dancers brought motion capture and live performance together in Paris. Working with Compagnie Hybride, dancers shared the stage with their digital doubles—sometimes mirroring themselves, sometimes attracting swarms of particles with their movements. The project combined full 3D capture with a tight collaboration between realtime and motion graphics pipelines, ensuring fluid integration of bodies and visuals. Presented as a one-time performance for Renault’s annual gathering, it showed how interactive technologies could be applied reliably in a large-scale live event.
+A corporate stage piece where motion capture drove real‑time visuals during the brand’s annual gathering—bringing R&D stagecraft to a formal setting without losing clarity.
+
 Technical details and implementation
 - Live mocap pipeline mapped to generative visuals.
 - Integration with presenter cues and show caller.
@@ -697,7 +678,8 @@ Process and methodology
 
 ## Arcade Fire Infinite Content Tour
 
-Arcade Fire – Infinite Content Tour was built around four massive LED walls that surrounded the stage. We designed a system that captured live camera feeds and transformed them in realtime, layering complex compositing effects with motion graphics to amplify key moments in the performance. The visuals converted 2D footage into 3D space and applied generative treatments that kept pace with the band’s energy. This approach made the live feed itself part of the scenography, creating an arena-scale visual identity that scaled across different venues and LED configurations.
+A touring system centered on **four LED walls** (not 360° projection). We produced complex live‑feed effects that transformed camera captures into layered graphics and integrated them with motion design for high‑energy moments.
+
 Technical details and implementation
 - Live camera ingest → real‑time transforms → LED walls.
 - Look library blending generative treatments with designed assets.
@@ -747,7 +729,8 @@ Before Ottawa's light-rail tunnel opened to commuters, it became a kilometer-lon
 
 ## Tabegami Sama
 
-Tabegami Sama was a multi-room interactive exhibition that explored Japanese food and culture through playful, technology-driven experiences. One room featured huge rice bowls where projection mapping and depth sensors invited visitors to experiment with gestures, revealing layered audiovisual responses. The exhibition unfolded along a narrative arc of cultural discovery, combining entertainment with information in a way that was both accessible and engaging. A major technical challenge was running four large-scale interactive walls from a single computer, solved through highly optimized realtime pipelines. Touch sensing was achieved using a 3D point cloud remapped to the installation’s geometry, allowing precise and reliable interaction
+An interactive projection inspired by Japanese folklore of nourishment—an invented ‘deity’ that responds to offerings of gesture and presence.
+
 Technical details and implementation
 - Projection mapping onto sculptural/ritual surface.
 - Audio narrative and sensor triggers for call‑and‑response.
@@ -769,7 +752,8 @@ Process and methodology
 
 ## Ozone
 
-Ozone was a haptic audiovisual instrument built around a stretched fabric surface. Hidden sensors detected the pressure of touch, transforming each push into generative sound and visuals projected onto the material. The piece invited the public to play with intensity, discovering how physical force could shape a flowing environment of light and sound. By merging tactile feedback with realtime audiovisual generation, Ozone created a simple but powerful experience where visitors felt they could literally sculpt atmosphere with their hands.
+A contemplative visualization of atmospheric data—ozone, pollution and weather rendered as shifting abstract fields rather than charts.
+
 Technical details and implementation
 - Real‑time environmental data inputs; normalized and smoothed.
 - Abstract visual grammars mapped to indices; projection/screen display.
@@ -791,7 +775,8 @@ Process and methodology
 
 ## Red Hot Chili Peppers Getaway Tour
 
-Red Hot Chili Peppers – Getaway Tour featured a kinetic lighting ceiling and stage visuals controlled in real time. We designed a custom tool in TouchDesigner to generate fluid movement across motorized lights while sending RGB values to video content. Audioreactive components responded to the music, while live feed effects were composited with motion graphics to amplify the performance. By introducing interactive sensors into the arena context, the project helped push the live show industry toward trusting real-time, responsive systems. The result was a portable and flexible visual package that raised the intensity of the tour.
+Arena tour visuals blending live camera with generative overlays tuned to the band’s high‑energy set—designed to read clearly to the back rows.
+
 Technical details and implementation
 - TouchDesigner effects on camera feeds; LED wall delivery.
 - Color and rhythm cues coordinated with lighting director.
