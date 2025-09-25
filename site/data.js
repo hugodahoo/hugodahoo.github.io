@@ -1127,7 +1127,21 @@ Process and methodology
         ],
         "cover": null,
         "hasMedia": true,
-        "fullDescription": "Artist Ed Fornieles created an universe in which cute creatures called Finiliar evolves emotionally. As different currencies and stocks lose and gain values over short and long period of time, the Finiliar becomes sick or happy according to the market. I've developped a system fetching different cryptocurrency values, currency values and stock values to feed the creatures in realtime."
+        "fullDescription": "The Finiliar is a collaboration with artist Ed Fornieles that brings market data to life through animated creatures. Stocks, currencies, and cryptocurrencies are linked to each Finiliar’s mood, making them grow happy or sick as values rise and fall. I developed the realtime system that fetched live financial data and drove the characters’ behavior, smoothing volatility while keeping changes expressive. The project evolved across multiple iterations, from 2D screen-based versions to a 3D installation at the Venice Biennale (Ca’ Pesaro), and has been acquired by institutional collections. By turning abstract numbers into emotional companions, The Finiliar made finance tangible, playful, and strangely empathetic.
+Technical details and implementation
+- Realtime financial APIs feeding creature behavior; smoothing for volatility.
+- 2D and 3D pipelines; exhibition builds and web‑adjacent variants.
+Challenges and solutions
+- Unpredictable data spikes → clamping, hysteresis and narrative guardrails.
+- Designing affect that stays legible yet satirical.
+Impact and results
+- Bridged finance and pop culture; drew broad attention.
+- Institutional collection confirmed cultural traction.
+Process and methodology
+- Data‑pipeline prototyping and fallback caching.
+- Creature rig design; mood->motion mappings.
+- Install presets for screen types and aspect ratios.
+---"
     },
     {
         "id": "sound-tracer",
