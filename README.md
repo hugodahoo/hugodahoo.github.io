@@ -4,7 +4,7 @@ A dynamic, interactive portfolio showcasing Hugo Daoust's creative and technical
 
 ## 🌐 Live Site
 
-Visit the live portfolio: **[hugo-daoust.github.io](https://hugo-daoust.github.io)**
+Visit the live portfolio: **[hugodahoo.github.io](https://hugodahoo.github.io)**
 
 ## ✨ Features
 
@@ -30,8 +30,8 @@ Visit the live portfolio: **[hugo-daoust.github.io](https://hugo-daoust.github.i
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/hugo-daoust/hugo-daoust.github.io.git
-cd hugo-daoust.github.io
+git clone https://github.com/hugodahoo/hugodahoo.github.io.git
+cd hugodahoo.github.io
 ```
 
 2. Start the development server:
