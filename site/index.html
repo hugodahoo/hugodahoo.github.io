@@ -110,7 +110,7 @@
                         window.projectMedia = JSON.parse(cachedMedia);
                         // Load neural network script
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=8';
+                        neuralScript.src = 'neural-network.js?v=9';
                         neuralScript.onload = resolve;
                         document.head.appendChild(neuralScript);
                         return;
@@ -121,7 +121,7 @@
                 
                 // Load fresh data
                 const script = document.createElement('script');
-                script.src = 'data.js?v=6';
+                script.src = 'data.js?v=7';
                 script.onload = () => {
                     const mediaScript = document.createElement('script');
                     mediaScript.src = 'media/index.js?v=7';
@@ -132,7 +132,7 @@
                         console.log('Data cached in sessionStorage');
                         
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=8';
+                        neuralScript.src = 'neural-network.js?v=9';
                         neuralScript.onload = () => {
                             // Refresh project cache to ensure overlay and project pages are synchronized
                             if (window.refreshProjectCache) {
