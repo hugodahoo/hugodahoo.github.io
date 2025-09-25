@@ -133,7 +133,13 @@
                         
                         const neuralScript = document.createElement('script');
                         neuralScript.src = 'neural-network.js?v=8';
-                        neuralScript.onload = resolve;
+                        neuralScript.onload = () => {
+                            // Refresh project cache to ensure overlay and project pages are synchronized
+                            if (window.refreshProjectCache) {
+                                window.refreshProjectCache();
+                            }
+                            resolve();
+                        };
                         document.head.appendChild(neuralScript);
                     };
                     document.head.appendChild(mediaScript);

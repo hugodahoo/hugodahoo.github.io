@@ -1024,6 +1024,17 @@ function resetPositionedCards() {
 }
 
 // Caching system for instant project navigation
+function clearProjectCache() {
+    console.log('Clearing project cache...');
+    projectCache.clear();
+}
+
+function refreshProjectCache() {
+    console.log('Refreshing project cache...');
+    clearProjectCache();
+    preloadProjectContent();
+}
+
 function preloadProjectContent() {
     console.log('Preloading project content...');
     const projectsToCache = window.projects || projects || [];
@@ -1033,8 +1044,7 @@ function preloadProjectContent() {
     console.log('Media index projects:', Object.keys(mediaIndex.projects || {}));
     
     projectsToCache.forEach(project => {
-        if (projectCache.has(project.id)) return; // Already cached
-        
+        // Always regenerate content to ensure it's up-to-date
         const projectHTML = generateProjectHTML(project, mediaIndex);
         projectCache.set(project.id, {
             html: projectHTML,
@@ -1314,6 +1324,8 @@ function closeProjectOverlay() {
 // Make functions globally available
 window.showProjectOverlay = showProjectOverlay;
 window.closeProjectOverlay = closeProjectOverlay;
+window.refreshProjectCache = refreshProjectCache;
+window.clearProjectCache = clearProjectCache;
 
 // Render neural network section
 function renderNeuralNetworkSection(sectionId, projectIds) {

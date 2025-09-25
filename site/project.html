@@ -21,9 +21,15 @@
     <!-- Neural network background with 3 layers -->
     <div class="concentric-squares"></div>
     
-    <script src="data.js?v=2"></script>
+    <script src="data.js?v=3"></script>
     <script src="media/index.js"></script>
     <script src="neural-network.js"></script>
+    <script>
+        // Refresh project cache to ensure overlay and project pages are synchronized
+        if (window.refreshProjectCache) {
+            window.refreshProjectCache();
+        }
+    </script>
     <script>
         console.log('Script starting...');
         console.log('window.projects:', window.projects);
