@@ -352,11 +352,15 @@ const SHAPE_BANK = {
     random: {
         name: 'Random (Alphabetical)',
         calculatePosition: (index, totalCards, centerX, centerY, radius) => {
-            // Random positioning with some structure
             const viewportWidth = window.innerWidth;
             const viewportHeight = Math.max(window.innerHeight, 1000);
             
-            // Create a more structured random layout
+            // Mobile-first layout: use grid on small screens
+            if (window.innerWidth <= 768) {
+                return calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight);
+            }
+            
+            // Desktop: Random positioning with some structure
             const margin = 100;
             const availableWidth = viewportWidth - (margin * 2);
             const availableHeight = viewportHeight - (margin * 2);
@@ -434,8 +438,36 @@ function addShapeKeyboardListener() {
         }
     });
     
+    // Add window resize listener for responsive repositioning
+    window.addEventListener('resize', debounce(function() {
+        console.log('📱 Window resized - repositioning for current device type');
+        if (isNeuralNetworkStyle) {
+            // Re-layout all cards on resize
+            resetPositionedCards();
+            const allBlocks = document.querySelectorAll('.project-block');
+            allBlocks.forEach((block, index) => {
+                const sizeClass = block.getAttribute('data-size') || getRandomSizeClass();
+                const totalCards = allBlocks.length;
+                positionCardCircularly(block, sizeClass, index, totalCards);
+            });
+        }
+    }, 250));
+    
     keyboardListenerAdded = true;
     console.log('⌨️ Shape cycling keyboard listener added');
+}
+
+// Debounce function for resize events
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
 // Test function - can be called from browser console
@@ -574,6 +606,35 @@ function positionCardOrganically(index, totalCards) {
     return bestPosition;
 }
 
+// Mobile grid positioning for touch-friendly layout
+function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight) {
+    // Mobile: Grid layout with touch-friendly cards
+    const margin = 30;
+    const padding = 15;
+    const cardWidth = 120;
+    const cardHeight = 90;
+    
+    // Calculate columns that fit comfortably
+    const colsPerRow = Math.floor((viewportWidth - margin * 2) / (cardWidth + padding));
+    const rows = Math.ceil(totalCards / colsPerRow);
+    
+    // Calculate position within grid
+    const row = Math.floor(index / colsPerRow);
+    const col = index % colsPerRow;
+    
+    // Center the grid horizontally
+    const totalGridWidth = colsPerRow * cardWidth + (colsPerRow - 1) * padding;
+    const gridStartX = (viewportWidth - totalGridWidth) / 2;
+    
+    // Calculate position with staggered rows for better touch accessibility
+    const staggerOffset = row % 2 === 1 ? cardWidth / 4 : 0;
+    
+    const x = gridStartX + col * (cardWidth + padding) + staggerOffset;
+    const y = margin + row * (cardHeight + padding * 0.8);
+    
+    return { x, y };
+}
+
 // Calculate position based on current shape
 function calculateShapePosition(index, totalCards, centerX, centerY, radius) {
     if (currentShape === 'random') {
@@ -612,7 +673,10 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
     
     let position;
     
-    if (currentShape === 'random') {
+    // Mobile: Use grid layout for all shapes
+    if (window.innerWidth <= 768) {
+        position = calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight);
+    } else if (currentShape === 'random') {
         // Use pre-sorted organic positions (sorted by X coordinate)
         if (window.sortedOrganicPositions && window.sortedOrganicPositions[index]) {
             position = { x: window.sortedOrganicPositions[index].x, y: window.sortedOrganicPositions[index].y };
@@ -621,7 +685,7 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
             position = positionCardOrganically(index, totalCards);
         }
     } else {
-        // Use geometric shapes for other layouts
+        // Use geometric shapes for other layouts on desktop
         const centerX = viewportWidth / 2;
         const centerY = viewportHeight / 2;
         
@@ -649,8 +713,8 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
     card.style.width = dimensions.width + 'px';
     card.style.height = dimensions.height + 'px';
     
-    // Store positioned card info for collision detection (for random layout)
-    if (currentShape === 'random') {
+    // Store positioned card info for collision detection (for random layout, desktop only)
+    if (currentShape === 'random' && window.innerWidth > 768) {
         positionedCards.push({
             x: finalX + dimensions.width / 2,
             y: finalY + dimensions.height / 2,
