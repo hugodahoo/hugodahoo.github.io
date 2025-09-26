@@ -793,6 +793,7 @@ body {
     width: 100%;
     text-align: justify;
     line-height: 1.6;
+    margin: 2rem 2rem 2rem 2rem;
 }
 
 .project-overlay .text-with-image .image-section {
@@ -1005,13 +1006,13 @@ body {
 .project-overlay .text-section {
     flex: 1;
     min-width: 0;
-    padding: 2rem;
+    padding: 0;
     background: none;
     color: #2c2c2c;
     border: none;
     position: relative;
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: none;
+    margin: 2rem 2rem 2rem 2rem;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
@@ -1176,7 +1177,7 @@ body {
 
 /* Bullet points section - smaller and at the end */
 .project-overlay .bullet-points-section {
-    margin-top: 3rem;
+    margin: 5rem 2rem 2rem 2rem;
     padding: 2rem;
     background: rgba(240, 240, 240, 0.3);
     border-top: 1px solid #e0e0e0;
