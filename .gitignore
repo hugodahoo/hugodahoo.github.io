@@ -25,14 +25,10 @@ __pycache__/
 screenshots/
 verification-screenshots/
 
-# Media files - only include optimized folders for remote hosting
-!site/media/high-res/
-!site/media/thumbnails/
-!site/media/index.js
-# Ignore all media subdirectories except for high-res and thumbnails
+# Media files - ignore everything except thumbnails and high-res folders
 site/media/*
-!site/media/thumbnails
-!site/media/high-res
+!site/media/thumbnails/
+!site/media/high-res/
 !site/media/index.js
 
 # Output files
