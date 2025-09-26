@@ -1,6 +1,6 @@
 // Media Index - Generated automatically
 // High-res images only
-// Total files: 269
+// Total files: 278
 
 const mediaIndex = {
   "projects": {
@@ -10,7 +10,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87371895-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87371895-WS.jpg",
-          "size": 287600,
+          "size": 533383,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -18,7 +18,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87373696-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87373696-WS.jpg",
-          "size": 335726,
+          "size": 626389,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -26,7 +26,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87373933-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87373933-WS.jpg",
-          "size": 236926,
+          "size": 465005,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -34,7 +34,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87374695-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87374695-WS.jpg",
-          "size": 334866,
+          "size": 636309,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -42,7 +42,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87375367-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87375367-WS.jpg",
-          "size": 248318,
+          "size": 510087,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -50,7 +50,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87375744-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87375744-WS.jpg",
-          "size": 221004,
+          "size": 438186,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -58,7 +58,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87375795-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87375795-WS.jpg",
-          "size": 255814,
+          "size": 495967,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -66,7 +66,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87376041-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87376041-WS.jpg",
-          "size": 248323,
+          "size": 488636,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -74,7 +74,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87376464-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87376464-WS.jpg",
-          "size": 267740,
+          "size": 526701,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -82,7 +82,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87376693-WS.jpg",
           "path": "high-res/animistic-imagery/Moment_Factory_Cultural_Educational_UCCA_87376693-WS.jpg",
-          "size": 177087,
+          "size": 358898,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -95,7 +95,7 @@ const mediaIndex = {
         {
           "filename": "1X3A7899_JPG.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/1X3A7899_JPG.jpg",
-          "size": 449559,
+          "size": 313652,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -103,7 +103,7 @@ const mediaIndex = {
         {
           "filename": "1X3A8264_JPG.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/1X3A8264_JPG.jpg",
-          "size": 404490,
+          "size": 307301,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -111,7 +111,7 @@ const mediaIndex = {
         {
           "filename": "1X3A8368_JPG.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/1X3A8368_JPG.jpg",
-          "size": 450207,
+          "size": 312641,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -119,7 +119,7 @@ const mediaIndex = {
         {
           "filename": "21743852_10155516213100168_7047934179910833416_o.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/21743852_10155516213100168_7047934179910833416_o.jpg",
-          "size": 192469,
+          "size": 257322,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -127,7 +127,7 @@ const mediaIndex = {
         {
           "filename": "DSC00164_JPG.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/DSC00164_JPG.jpg",
-          "size": 551137,
+          "size": 392307,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -135,7 +135,7 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_1.jpg",
-          "size": 53997,
+          "size": 280817,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -143,7 +143,7 @@ const mediaIndex = {
         {
           "filename": "image_2.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_2.jpg",
-          "size": 148143,
+          "size": 313652,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -151,7 +151,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_3.jpg",
-          "size": 154506,
+          "size": 307301,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -159,7 +159,7 @@ const mediaIndex = {
         {
           "filename": "image_4.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_4.jpg",
-          "size": 156592,
+          "size": 312641,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -167,7 +167,7 @@ const mediaIndex = {
         {
           "filename": "image_5.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_5.jpg",
-          "size": 190507,
+          "size": 257322,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -175,7 +175,7 @@ const mediaIndex = {
         {
           "filename": "image_6.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_6.jpg",
-          "size": 187313,
+          "size": 392307,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -183,7 +183,7 @@ const mediaIndex = {
         {
           "filename": "image_7.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_7.jpg",
-          "size": 508356,
+          "size": 688792,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -191,7 +191,7 @@ const mediaIndex = {
         {
           "filename": "image_8.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_8.jpg",
-          "size": 94935,
+          "size": 137816,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -199,7 +199,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Infinite_Content_Tour_11-WS.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/Moment_Factory_Infinite_Content_Tour_11-WS.jpg",
-          "size": 52274,
+          "size": 280817,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -207,7 +207,7 @@ const mediaIndex = {
         {
           "filename": "Moment_Factory_Infinite_Content_Tour_8-WS.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/Moment_Factory_Infinite_Content_Tour_8-WS.jpg",
-          "size": 508356,
+          "size": 688792,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -281,7 +281,7 @@ const mediaIndex = {
         {
           "filename": "Aura-image.jpg",
           "path": "high-res/aura/Aura-image.jpg",
-          "size": 112287,
+          "size": 226362,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -289,7 +289,7 @@ const mediaIndex = {
         {
           "filename": "Aura-image2.jpg",
           "path": "high-res/aura/Aura-image2.jpg",
-          "size": 208048,
+          "size": 432042,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -297,7 +297,7 @@ const mediaIndex = {
         {
           "filename": "Aura-image3.jpg",
           "path": "high-res/aura/Aura-image3.jpg",
-          "size": 144401,
+          "size": 154326,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -318,7 +318,7 @@ const mediaIndex = {
         {
           "filename": "Avett-Brothers-09.jpg",
           "path": "high-res/avett-brothers-tour/Avett-Brothers-09.jpg",
-          "size": 191785,
+          "size": 419822,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -326,7 +326,7 @@ const mediaIndex = {
         {
           "filename": "Avett-Brothers-10_crop.jpg",
           "path": "high-res/avett-brothers-tour/Avett-Brothers-10_crop.jpg",
-          "size": 108927,
+          "size": 296888,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -334,7 +334,7 @@ const mediaIndex = {
         {
           "filename": "SES-Avett-Greensboro.2.jpg",
           "path": "high-res/avett-brothers-tour/SES-Avett-Greensboro.2.jpg",
-          "size": 1388561,
+          "size": 692863,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -355,7 +355,7 @@ const mediaIndex = {
         {
           "filename": "Hek_thermal_hugoda.png",
           "path": "high-res/basel-2022/Hek_thermal_hugoda.png",
-          "size": 635585,
+          "size": 150847,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -363,7 +363,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220607_180818247.MP.jpg",
           "path": "high-res/basel-2022/PXL_20220607_180818247.MP.jpg",
-          "size": 318328,
+          "size": 568170,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -395,7 +395,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220611_173322441.MP.jpg",
           "path": "high-res/basel-2022/PXL_20220611_173322441.MP.jpg",
-          "size": 171802,
+          "size": 325853,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -427,7 +427,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220614_112906043.MP.jpg",
           "path": "high-res/basel-2022/PXL_20220614_112906043.MP.jpg",
-          "size": 352882,
+          "size": 559261,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -435,7 +435,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220614_174140800.jpg",
           "path": "high-res/basel-2022/PXL_20220614_174140800.jpg",
-          "size": 224016,
+          "size": 398305,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -443,7 +443,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220614_192831195.jpg",
           "path": "high-res/basel-2022/PXL_20220614_192831195.jpg",
-          "size": 170067,
+          "size": 324390,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -459,7 +459,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220616_002023800.MP.jpg",
           "path": "high-res/basel-2022/PXL_20220616_002023800.MP.jpg",
-          "size": 79442,
+          "size": 156898,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -480,7 +480,7 @@ const mediaIndex = {
         {
           "filename": "89089866_10157038567742031_1455522540683264000_n.jpg",
           "path": "high-res/billie-eilish-2020-world-tour/89089866_10157038567742031_1455522540683264000_n.jpg",
-          "size": 205533,
+          "size": 436420,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -493,7 +493,7 @@ const mediaIndex = {
         {
           "filename": "hormonium_hong_kong_2023_WKCDA_002.jpg",
           "path": "high-res/biometric-theatre/hormonium_hong_kong_2023_WKCDA_002.jpg",
-          "size": 430253,
+          "size": 549616,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -509,7 +509,7 @@ const mediaIndex = {
         {
           "filename": "thermal_drift_hong_kong_2023_wkcda_002.jpg",
           "path": "high-res/biometric-theatre/thermal_drift_hong_kong_2023_wkcda_002.jpg",
-          "size": 301854,
+          "size": 396595,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -517,7 +517,7 @@ const mediaIndex = {
         {
           "filename": "thermal_drift_hong_kong_2023_wkcda_002.png",
           "path": "high-res/biometric-theatre/thermal_drift_hong_kong_2023_wkcda_002.png",
-          "size": 1468448,
+          "size": 494014,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -546,7 +546,7 @@ const mediaIndex = {
         {
           "filename": "airborne_newscasts_madrid_2022_rlh_001.png",
           "path": "high-res/caudales/airborne_newscasts_madrid_2022_rlh_001.png",
-          "size": 1527845,
+          "size": 374493,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -554,7 +554,7 @@ const mediaIndex = {
         {
           "filename": "airborne_newscasts_madrid_2022_rlh_002.png",
           "path": "high-res/caudales/airborne_newscasts_madrid_2022_rlh_002.png",
-          "size": 1500323,
+          "size": 368289,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -562,7 +562,7 @@ const mediaIndex = {
         {
           "filename": "airborne_newscasts_madrid_2022_rlh_003.png",
           "path": "high-res/caudales/airborne_newscasts_madrid_2022_rlh_003.png",
-          "size": 1596157,
+          "size": 400179,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -570,7 +570,7 @@ const mediaIndex = {
         {
           "filename": "CME_CAUDALES_RAFAEL_LOZANO_HEMMER_021-scaled.jpg",
           "path": "high-res/caudales/CME_CAUDALES_RAFAEL_LOZANO_HEMMER_021-scaled.jpg",
-          "size": 117059,
+          "size": 259825,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -578,7 +578,7 @@ const mediaIndex = {
         {
           "filename": "Exposicion-Madrid-gratis-Caudales-de-Rafael-Lozano-Hemmer-en-Casa-de-Mexico-en-Espana-scaled.jpg",
           "path": "high-res/caudales/Exposicion-Madrid-gratis-Caudales-de-Rafael-Lozano-Hemmer-en-Casa-de-Mexico-en-Espana-scaled.jpg",
-          "size": 436440,
+          "size": 743422,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -591,7 +591,7 @@ const mediaIndex = {
         {
           "filename": "climate_parliament_2024_houston_ar_785.jpg",
           "path": "high-res/climate-parliament/climate_parliament_2024_houston_ar_785.jpg",
-          "size": 261122,
+          "size": 355859,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -623,7 +623,7 @@ const mediaIndex = {
         {
           "filename": "RLH 3.jpg",
           "path": "high-res/climate-parliament/RLH 3.jpg",
-          "size": 107003,
+          "size": 153281,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -636,7 +636,7 @@ const mediaIndex = {
         {
           "filename": "collider_abu_dhabi_2023_lg_008.png",
           "path": "high-res/collider/collider_abu_dhabi_2023_lg_008.png",
-          "size": 731342,
+          "size": 141462,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -660,7 +660,7 @@ const mediaIndex = {
         {
           "filename": "collider_abu_dhabi_2023_rlh_003.png",
           "path": "high-res/collider/collider_abu_dhabi_2023_rlh_003.png",
-          "size": 1029367,
+          "size": 232955,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -668,7 +668,7 @@ const mediaIndex = {
         {
           "filename": "collider_water_mill_2024_rlh_012_t.jpg",
           "path": "high-res/collider/collider_water_mill_2024_rlh_012_t.jpg",
-          "size": 1656,
+          "size": 6439,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -684,7 +684,7 @@ const mediaIndex = {
         {
           "filename": "Muonsensor_Collider-Machine-1400x951.jpg",
           "path": "high-res/collider/Muonsensor_Collider-Machine-1400x951.jpg",
-          "size": 153199,
+          "size": 209134,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -692,7 +692,7 @@ const mediaIndex = {
         {
           "filename": "Muonsensor_Collider-Machine-1400x951.png",
           "path": "high-res/collider/Muonsensor_Collider-Machine-1400x951.png",
-          "size": 101216,
+          "size": 267471,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -700,7 +700,7 @@ const mediaIndex = {
         {
           "filename": "RLH_Parrish_2024.jpg",
           "path": "high-res/collider/RLH_Parrish_2024.jpg",
-          "size": 156869,
+          "size": 311756,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -708,7 +708,7 @@ const mediaIndex = {
         {
           "filename": "star_icon.png",
           "path": "high-res/collider/star_icon.png",
-          "size": 903,
+          "size": 1310,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -721,7 +721,7 @@ const mediaIndex = {
         {
           "filename": "2019-04-29_22_54_11-Work_-_Hugo_Daoust_s_Portfolio.jpg",
           "path": "high-res/colors-of-bangkok/2019-04-29_22_54_11-Work_-_Hugo_Daoust_s_Portfolio.jpg",
-          "size": 142936,
+          "size": 193608,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -729,7 +729,7 @@ const mediaIndex = {
         {
           "filename": "2019-04-29_22_54_11-Work_-_Hugo_Daoust_s_Portfolio.png",
           "path": "high-res/colors-of-bangkok/2019-04-29_22_54_11-Work_-_Hugo_Daoust_s_Portfolio.png",
-          "size": 1683944,
+          "size": 251867,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -737,7 +737,7 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/colors-of-bangkok/image_1.jpg",
-          "size": 46399,
+          "size": 238933,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -745,7 +745,7 @@ const mediaIndex = {
         {
           "filename": "image_2.jpg",
           "path": "high-res/colors-of-bangkok/image_2.jpg",
-          "size": 9479342,
+          "size": 0,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -753,7 +753,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/colors-of-bangkok/image_3.jpg",
-          "size": 1131641,
+          "size": 187712,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -761,7 +761,7 @@ const mediaIndex = {
         {
           "filename": "image_4.jpg",
           "path": "high-res/colors-of-bangkok/image_4.jpg",
-          "size": 1683944,
+          "size": 251867,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -769,7 +769,7 @@ const mediaIndex = {
         {
           "filename": "image_5.jpg",
           "path": "high-res/colors-of-bangkok/image_5.jpg",
-          "size": 134319,
+          "size": 190637,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -782,7 +782,7 @@ const mediaIndex = {
         {
           "filename": "frame_001.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_001.jpg",
-          "size": 1682,
+          "size": 7395,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -790,7 +790,7 @@ const mediaIndex = {
         {
           "filename": "frame_002.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_002.jpg",
-          "size": 13112,
+          "size": 94004,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -798,7 +798,7 @@ const mediaIndex = {
         {
           "filename": "frame_003.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_003.jpg",
-          "size": 14617,
+          "size": 50732,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -806,7 +806,7 @@ const mediaIndex = {
         {
           "filename": "frame_004.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_004.jpg",
-          "size": 26841,
+          "size": 94755,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -814,7 +814,7 @@ const mediaIndex = {
         {
           "filename": "frame_005.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_005.jpg",
-          "size": 22174,
+          "size": 80042,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -822,7 +822,7 @@ const mediaIndex = {
         {
           "filename": "frame_006.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_006.jpg",
-          "size": 36639,
+          "size": 127064,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -830,7 +830,7 @@ const mediaIndex = {
         {
           "filename": "frame_007.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_007.jpg",
-          "size": 22038,
+          "size": 73991,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -838,7 +838,7 @@ const mediaIndex = {
         {
           "filename": "frame_008.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_008.jpg",
-          "size": 19777,
+          "size": 64448,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -846,7 +846,7 @@ const mediaIndex = {
         {
           "filename": "frame_009.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_009.jpg",
-          "size": 16547,
+          "size": 58240,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -854,7 +854,7 @@ const mediaIndex = {
         {
           "filename": "frame_010.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_010.jpg",
-          "size": 29734,
+          "size": 109484,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -862,7 +862,7 @@ const mediaIndex = {
         {
           "filename": "frame_011.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_011.jpg",
-          "size": 30228,
+          "size": 102076,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -870,7 +870,7 @@ const mediaIndex = {
         {
           "filename": "frame_012.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_012.jpg",
-          "size": 42462,
+          "size": 143491,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -878,7 +878,7 @@ const mediaIndex = {
         {
           "filename": "frame_013.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_013.jpg",
-          "size": 27427,
+          "size": 96331,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -886,7 +886,7 @@ const mediaIndex = {
         {
           "filename": "frame_014.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_014.jpg",
-          "size": 19249,
+          "size": 70809,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -894,7 +894,7 @@ const mediaIndex = {
         {
           "filename": "frame_015.jpg",
           "path": "high-res/dead-obies-doo-wop/frame_015.jpg",
-          "size": 11025,
+          "size": 34779,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -944,7 +944,7 @@ const mediaIndex = {
         {
           "filename": "ed_fornieles-install-5.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/ed_fornieles-install-5.jpg",
-          "size": 211901,
+          "size": 294682,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -952,7 +952,7 @@ const mediaIndex = {
         {
           "filename": "ed_fornieles-install-5.png",
           "path": "high-res/ed-fornieles-the-finiliar/ed_fornieles-install-5.png",
-          "size": 183802,
+          "size": 378894,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -960,7 +960,7 @@ const mediaIndex = {
         {
           "filename": "ed_fornieles-install-9 (1).jpg",
           "path": "high-res/ed-fornieles-the-finiliar/ed_fornieles-install-9 (1).jpg",
-          "size": 64546,
+          "size": 149057,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -968,7 +968,7 @@ const mediaIndex = {
         {
           "filename": "ed_fornieles-install-9 (1).png",
           "path": "high-res/ed-fornieles-the-finiliar/ed_fornieles-install-9 (1).png",
-          "size": 47760,
+          "size": 147529,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -976,7 +976,7 @@ const mediaIndex = {
         {
           "filename": "ed_fornieles-install-9.webp",
           "path": "high-res/ed-fornieles-the-finiliar/ed_fornieles-install-9.webp",
-          "size": 47760,
+          "size": 147529,
           "type": "image",
           "extension": ".webp",
           "hash": "high-res"
@@ -984,7 +984,7 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/image_1.jpg",
-          "size": 78516,
+          "size": 248320,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -992,7 +992,7 @@ const mediaIndex = {
         {
           "filename": "image_2.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/image_2.jpg",
-          "size": 14704,
+          "size": 80079,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1000,7 +1000,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/image_3.jpg",
-          "size": 19756,
+          "size": 70659,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1008,7 +1008,7 @@ const mediaIndex = {
         {
           "filename": "image_4.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/image_4.jpg",
-          "size": 16285,
+          "size": 88860,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1016,7 +1016,7 @@ const mediaIndex = {
         {
           "filename": "image_5.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/image_5.jpg",
-          "size": 21909,
+          "size": 66441,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1024,7 +1024,7 @@ const mediaIndex = {
         {
           "filename": "image_6.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/image_6.jpg",
-          "size": 30425,
+          "size": 75598,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1032,7 +1032,7 @@ const mediaIndex = {
         {
           "filename": "image_7.jpg",
           "path": "high-res/ed-fornieles-the-finiliar/image_7.jpg",
-          "size": 140571,
+          "size": 195273,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1045,7 +1045,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220610_095932062.MP.jpg",
           "path": "high-res/excuse-you/PXL_20220610_095932062.MP.jpg",
-          "size": 364619,
+          "size": 615630,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1053,7 +1053,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220613_170924610.MP.jpg",
           "path": "high-res/excuse-you/PXL_20220613_170924610.MP.jpg",
-          "size": 236662,
+          "size": 457379,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1066,7 +1066,7 @@ const mediaIndex = {
         {
           "filename": "atmospheric-memory_airborne_newscasts_sydney_2023_rlh_001.jpg",
           "path": "high-res/extra_ignore/atmospheric-memory_airborne_newscasts_sydney_2023_rlh_001.jpg",
-          "size": 39593,
+          "size": 236408,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1074,7 +1074,7 @@ const mediaIndex = {
         {
           "filename": "basel-2022_PXL_20220607_142841257.jpg",
           "path": "high-res/extra_ignore/basel-2022_PXL_20220607_142841257.jpg",
-          "size": 322493,
+          "size": 581348,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1087,7 +1087,7 @@ const mediaIndex = {
         {
           "filename": "field_atmosphonia_naples_2024_rp_001.jpg",
           "path": "high-res/field-atmosphonia/field_atmosphonia_naples_2024_rp_001.jpg",
-          "size": 301457,
+          "size": 401518,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1103,7 +1103,7 @@ const mediaIndex = {
         {
           "filename": "field_atmosphonia_naples_2024_rp_002.jpg",
           "path": "high-res/field-atmosphonia/field_atmosphonia_naples_2024_rp_002.jpg",
-          "size": 242328,
+          "size": 330771,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1119,7 +1119,7 @@ const mediaIndex = {
         {
           "filename": "field_atmosphonia_naples_2024_rp_003.png",
           "path": "high-res/field-atmosphonia/field_atmosphonia_naples_2024_rp_003.png",
-          "size": 1436503,
+          "size": 232008,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -1140,7 +1140,7 @@ const mediaIndex = {
         {
           "filename": "tdmovieout00.jpg",
           "path": "high-res/halte-0-sepaq-iles-de-boucherville/tdmovieout00.jpg",
-          "size": 193577,
+          "size": 315013,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1148,7 +1148,7 @@ const mediaIndex = {
         {
           "filename": "tdmovieout10.jpg",
           "path": "high-res/halte-0-sepaq-iles-de-boucherville/tdmovieout10.jpg",
-          "size": 180467,
+          "size": 298569,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1164,7 +1164,7 @@ const mediaIndex = {
         {
           "filename": "untitled-1.jpg",
           "path": "high-res/halte-0-sepaq-iles-de-boucherville/untitled-1.jpg",
-          "size": 225215,
+          "size": 261127,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1185,7 +1185,7 @@ const mediaIndex = {
         {
           "filename": "hormonium_montreal_2022_rlh_012_t.jpg",
           "path": "high-res/hormonium/hormonium_montreal_2022_rlh_012_t.jpg",
-          "size": 7156,
+          "size": 35781,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1193,7 +1193,7 @@ const mediaIndex = {
         {
           "filename": "hormonium_paris_2024_pd_001.jpg",
           "path": "high-res/hormonium/hormonium_paris_2024_pd_001.jpg",
-          "size": 273046,
+          "size": 367230,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1209,7 +1209,7 @@ const mediaIndex = {
         {
           "filename": "mg_4374.png",
           "path": "high-res/hormonium/mg_4374.png",
-          "size": 214696,
+          "size": 342451,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -1217,7 +1217,7 @@ const mediaIndex = {
         {
           "filename": "rafaellozanohemmer_hormonium-2022-1_w.png",
           "path": "high-res/hormonium/rafaellozanohemmer_hormonium-2022-1_w.png",
-          "size": 274810,
+          "size": 406792,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -1230,7 +1230,7 @@ const mediaIndex = {
         {
           "filename": "Kontinuum_Signature_Shows_Check_in_2-WS.jpg",
           "path": "high-res/kontinuum/Kontinuum_Signature_Shows_Check_in_2-WS.jpg",
-          "size": 151574,
+          "size": 296376,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1238,7 +1238,7 @@ const mediaIndex = {
         {
           "filename": "Kontinuum_Signature_Shows_path_1-WS.jpg",
           "path": "high-res/kontinuum/Kontinuum_Signature_Shows_path_1-WS.jpg",
-          "size": 124659,
+          "size": 229193,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1246,7 +1246,7 @@ const mediaIndex = {
         {
           "filename": "Kontinuum_Signature_Shows_path_2-WS.jpg",
           "path": "high-res/kontinuum/Kontinuum_Signature_Shows_path_2-WS.jpg",
-          "size": 108374,
+          "size": 211613,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1262,7 +1262,7 @@ const mediaIndex = {
         {
           "filename": "Kontinuum_Signature_Shows_path_5-WS.jpg",
           "path": "high-res/kontinuum/Kontinuum_Signature_Shows_path_5-WS.jpg",
-          "size": 168809,
+          "size": 318677,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1299,7 +1299,7 @@ const mediaIndex = {
         {
           "filename": "454589.jpg",
           "path": "high-res/kristallstimmen/454589.jpg",
-          "size": 634056,
+          "size": 812729,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1323,7 +1323,7 @@ const mediaIndex = {
         {
           "filename": "kristallstimmen_2024_wattens_sk_029_t.jpg",
           "path": "high-res/kristallstimmen/kristallstimmen_2024_wattens_sk_029_t.jpg",
-          "size": 490563,
+          "size": 825308,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1339,7 +1339,7 @@ const mediaIndex = {
         {
           "filename": "Kristallstimmen_940x620.jpg",
           "path": "high-res/kristallstimmen/Kristallstimmen_940x620.jpg",
-          "size": 311877,
+          "size": 288617,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1347,7 +1347,7 @@ const mediaIndex = {
         {
           "filename": "Kristallstimmen_Video_1960x800.jpg",
           "path": "high-res/kristallstimmen/Kristallstimmen_Video_1960x800.jpg",
-          "size": 544419,
+          "size": 897791,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1360,7 +1360,7 @@ const mediaIndex = {
         {
           "filename": "5W6A0012.jpg",
           "path": "high-res/listening-forest/5W6A0012.jpg",
-          "size": 101373,
+          "size": 237638,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1368,7 +1368,7 @@ const mediaIndex = {
         {
           "filename": "5W6A0118.jpg",
           "path": "high-res/listening-forest/5W6A0118.jpg",
-          "size": 631467,
+          "size": 1123830,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1400,7 +1400,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220826_021024260.MP.jpg",
           "path": "high-res/listening-forest/PXL_20220826_021024260.MP.jpg",
-          "size": 105521,
+          "size": 193531,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1408,7 +1408,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220828_020129469_exported_874_1661804127337.jpg",
           "path": "high-res/listening-forest/PXL_20220828_020129469_exported_874_1661804127337.jpg",
-          "size": 322737,
+          "size": 543736,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1416,7 +1416,7 @@ const mediaIndex = {
         {
           "filename": "PXL_20220829_011837283.jpg",
           "path": "high-res/listening-forest/PXL_20220829_011837283.jpg",
-          "size": 155695,
+          "size": 304415,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1432,7 +1432,7 @@ const mediaIndex = {
         {
           "filename": "thermal_drift_bentonville_2022_er_003_t.jpg",
           "path": "high-res/listening-forest/thermal_drift_bentonville_2022_er_003_t.jpg",
-          "size": 3897,
+          "size": 13059,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1445,7 +1445,7 @@ const mediaIndex = {
         {
           "filename": "CHD_Nova_Lumina_WEB_1.jpg",
           "path": "high-res/nova-lumina/CHD_Nova_Lumina_WEB_1.jpg",
-          "size": 177863,
+          "size": 384386,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1453,7 +1453,7 @@ const mediaIndex = {
         {
           "filename": "CHD_Nova_Lumina_WEB_25.jpg",
           "path": "high-res/nova-lumina/CHD_Nova_Lumina_WEB_25.jpg",
-          "size": 246165,
+          "size": 474486,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1530,7 +1530,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/ozone/image_3.jpg",
-          "size": 71464,
+          "size": 73558,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1641,7 +1641,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/red-hot-chili-peppers-getaway-tour/image_3.jpg",
-          "size": 48485,
+          "size": 46119,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1649,7 +1649,7 @@ const mediaIndex = {
         {
           "filename": "image_4.jpg",
           "path": "high-res/red-hot-chili-peppers-getaway-tour/image_4.jpg",
-          "size": 130113,
+          "size": 128055,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1659,6 +1659,70 @@ const mediaIndex = {
     "refractions": {
       "name": "Refractions",
       "files": [
+        {
+          "filename": "099.jpg",
+          "path": "high-res/refractions/099.jpg",
+          "size": 281135,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "11_oct-0836.jpg",
+          "path": "high-res/refractions/11_oct-0836.jpg",
+          "size": 264752,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "11_oct-0853.jpg",
+          "path": "high-res/refractions/11_oct-0853.jpg",
+          "size": 185998,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "44149980_2250186691723014_3052303252902117376_o.jpg",
+          "path": "high-res/refractions/44149980_2250186691723014_3052303252902117376_o.jpg",
+          "size": 550757,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "_MG_1158.jpg",
+          "path": "high-res/refractions/_MG_1158.jpg",
+          "size": 585932,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "_MG_1158_1.jpg",
+          "path": "high-res/refractions/_MG_1158_1.jpg",
+          "size": 260692,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "_MG_1158_2.jpg",
+          "path": "high-res/refractions/_MG_1158_2.jpg",
+          "size": 70876,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "_MG_1171.jpg",
+          "path": "high-res/refractions/_MG_1171.jpg",
+          "size": 396888,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
         {
           "filename": "image_1.jpg",
           "path": "high-res/refractions/image_1.jpg",
@@ -1678,7 +1742,7 @@ const mediaIndex = {
         {
           "filename": "image_6.jpg",
           "path": "high-res/refractions/image_6.jpg",
-          "size": 19621,
+          "size": 18034,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1686,7 +1750,15 @@ const mediaIndex = {
         {
           "filename": "image_7.jpg",
           "path": "high-res/refractions/image_7.jpg",
-          "size": 31668,
+          "size": 29455,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res"
+        },
+        {
+          "filename": "IMG_7476_JPG.jpg",
+          "path": "high-res/refractions/IMG_7476_JPG.jpg",
+          "size": 39088,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1747,7 +1819,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/renault-annual-meeting/image_3.jpg",
-          "size": 162525,
+          "size": 93249,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1755,7 +1827,7 @@ const mediaIndex = {
         {
           "filename": "image_4.jpg",
           "path": "high-res/renault-annual-meeting/image_4.jpg",
-          "size": 53131,
+          "size": 30043,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1763,7 +1835,7 @@ const mediaIndex = {
         {
           "filename": "image_5.jpg",
           "path": "high-res/renault-annual-meeting/image_5.jpg",
-          "size": 50319,
+          "size": 18261,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1771,7 +1843,7 @@ const mediaIndex = {
         {
           "filename": "image_6.jpg",
           "path": "high-res/renault-annual-meeting/image_6.jpg",
-          "size": 50520,
+          "size": 19388,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1779,7 +1851,7 @@ const mediaIndex = {
         {
           "filename": "image_7.jpg",
           "path": "high-res/renault-annual-meeting/image_7.jpg",
-          "size": 87888,
+          "size": 33301,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1787,7 +1859,7 @@ const mediaIndex = {
         {
           "filename": "image_8.jpg",
           "path": "high-res/renault-annual-meeting/image_8.jpg",
-          "size": 43225,
+          "size": 14767,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1795,7 +1867,7 @@ const mediaIndex = {
         {
           "filename": "image_9.jpg",
           "path": "high-res/renault-annual-meeting/image_9.jpg",
-          "size": 100670,
+          "size": 104426,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1816,7 +1888,7 @@ const mediaIndex = {
         {
           "filename": "rlh_shadow-tuner_2-683x1024.png",
           "path": "high-res/shadow-tuner/rlh_shadow-tuner_2-683x1024.png",
-          "size": 801703,
+          "size": 62565,
           "type": "image",
           "extension": ".png",
           "hash": "high-res"
@@ -1877,7 +1949,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/sound-tracer/image_3.jpg",
-          "size": 36142,
+          "size": 34980,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -1885,7 +1957,7 @@ const mediaIndex = {
         {
           "filename": "image_4.jpg",
           "path": "high-res/sound-tracer/image_4.jpg",
-          "size": 82725,
+          "size": 85347,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2052,7 +2124,7 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/tabegami-sama/image_1.jpg",
-          "size": 226173,
+          "size": 118279,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2060,7 +2132,7 @@ const mediaIndex = {
         {
           "filename": "image_2.jpg",
           "path": "high-res/tabegami-sama/image_2.jpg",
-          "size": 35083,
+          "size": 12663,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2068,7 +2140,7 @@ const mediaIndex = {
         {
           "filename": "image_3.jpg",
           "path": "high-res/tabegami-sama/image_3.jpg",
-          "size": 35090,
+          "size": 22517,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2076,7 +2148,7 @@ const mediaIndex = {
         {
           "filename": "image_6.jpg",
           "path": "high-res/tabegami-sama/image_6.jpg",
-          "size": 37791,
+          "size": 23533,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2084,7 +2156,7 @@ const mediaIndex = {
         {
           "filename": "image_7.jpg",
           "path": "high-res/tabegami-sama/image_7.jpg",
-          "size": 139084,
+          "size": 25577,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2092,7 +2164,7 @@ const mediaIndex = {
         {
           "filename": "image_8.jpg",
           "path": "high-res/tabegami-sama/image_8.jpg",
-          "size": 40144,
+          "size": 22223,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2100,7 +2172,7 @@ const mediaIndex = {
         {
           "filename": "image_9.jpg",
           "path": "high-res/tabegami-sama/image_9.jpg",
-          "size": 61242,
+          "size": 34573,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2206,7 +2278,7 @@ const mediaIndex = {
         {
           "filename": "image_4.jpg",
           "path": "high-res/thermal-drift/image_4.jpg",
-          "size": 399123,
+          "size": 244257,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2214,7 +2286,7 @@ const mediaIndex = {
         {
           "filename": "image_5.jpg",
           "path": "high-res/thermal-drift/image_5.jpg",
-          "size": 587916,
+          "size": 313083,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
@@ -2238,7 +2310,7 @@ const mediaIndex = {
         {
           "filename": "thermal_drift_madrid_2023_rlh_006_t.jpg",
           "path": "high-res/thermal-drift/thermal_drift_madrid_2023_rlh_006_t.jpg",
-          "size": 5788,
+          "size": 6118,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res"
