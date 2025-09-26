@@ -25,19 +25,15 @@ __pycache__/
 screenshots/
 verification-screenshots/
 
-# Allow all media files in site directory
-!site/media/
-
-# Ignore other image files outside site/media
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.tif
-*.tiff
-*.mov
-*.mp4
-*.webp
+# Media files - only include optimized folders for remote hosting
+!site/media/high-res/
+!site/media/thumbnails/
+!site/media/index.js
+# Ignore all media subdirectories except for high-res and thumbnails
+site/media/*
+!site/media/thumbnails
+!site/media/high-res
+!site/media/index.js
 
 # Output files
 output.txt

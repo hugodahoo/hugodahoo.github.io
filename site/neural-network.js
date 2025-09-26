@@ -229,16 +229,9 @@ function getThumbnail(projectId) {
     
     const originalPath = imageFiles[0].path;
     
-    // Try to use thumbnail version first (smaller file)
-    // Preserve original extension for GIFs, convert others to JPG
-    let thumbnailPath;
-    if (originalPath.toLowerCase().endsWith('.gif')) {
-        thumbnailPath = originalPath; // Keep GIF as GIF
-    } else {
-        thumbnailPath = originalPath.replace(/\.(jpg|jpeg|png|webp)$/i, '.jpg');
-    }
+    // Convert high-res paths to thumbnail paths for main page performance
+    const thumbnailPath = originalPath.replace('high-res/', 'thumbnails/');
     
-    // Use the optimized thumbnail path
     return `media/${thumbnailPath}`;
 }
 
@@ -1233,9 +1226,11 @@ function generateProjectHTML(project, mediaIndex) {
     // Get high-res media files (prefer high-res over thumbnails)
     const highResMedia = extraMedia.map(file => {
         if (typeof file === 'object') {
-            // Replace 'thumbnails/' with 'high-res/' in the path
-            const highResPath = file.path.replace('thumbnails/', 'high-res/');
-            return `media/${highResPath}`;
+            // File already has the correct path - use as-is since it's from high-res folder
+            const highResPath = file.path;
+            const url = `media/${highResPath}`;
+            console.log('Generated high-res URL:', url);
+            return url;
         }
         return file;
     }).filter(url => {
