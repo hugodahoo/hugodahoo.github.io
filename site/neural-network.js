@@ -1283,6 +1283,18 @@ function generateProjectHTML(project, mediaIndex) {
         `);
     }
     
+    // Add impact title section after videos (if exists)
+    const impactTitle = project['impact-title'] || '';
+    if (impactTitle) {
+        contentBlocks.push(`
+            <div class="content-block impact-title-block">
+                <div class="impact-title-section">
+                    <h2 class="impact-title">${impactTitle}</h2>
+                </div>
+            </div>
+        `);
+    }
+    
     // Second block: main description text + first image (or just text if no video)
     if (allMedia.length > 0) {
         contentBlocks.push(`
@@ -1343,14 +1355,6 @@ function generateProjectHTML(project, mediaIndex) {
     const headerBackgroundImage = allMedia.length > 0 ? allMedia[0] : null;
     const headerStyle = headerBackgroundImage ? `style="background-image: url('${headerBackgroundImage}');"` : '';
     
-    // Get impact title for display
-    const impactTitle = project['impact-title'] || '';
-    const impactTitleHtml = impactTitle ? `
-        <div class="impact-title-section">
-            <h2 class="impact-title">${impactTitle}</h2>
-        </div>
-    ` : '';
-
     return `
         <article class="project-article">
             <header class="project-header" ${headerStyle}>
@@ -1361,8 +1365,6 @@ function generateProjectHTML(project, mediaIndex) {
                     <p class="tech">${project.technologies || ""}</p>
                 </div>
             </header>
-            
-            ${impactTitleHtml}
             
             <div class="project-content">
                 ${medias}
