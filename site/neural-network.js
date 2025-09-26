@@ -1552,16 +1552,60 @@ function showProjectOverlay(projectId) {
         // Save scroll position
         const savedScrollPosition = window.pageYOffset;
         
-        // Mobile-specific positioning
+        // Force mobile overlay to be positioned correctly
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
         overlay.style.left = '0';
         overlay.style.width = '100vw';
         overlay.style.height = '100vh';
-        overlay.style.maxWidth = '100vw';
-        overlay.style.maxHeight = '100vh';
-        overlay.style.transform = 'translateZ(0)';  // Hardware acceleration
-        overlay.style.overflowY = 'hidden';  // Let content container handle scrolling
+        overlay.style.zIndex = '10000';
+        overlay.style.display = 'block';
+        overlay.style.opacity = '1';
+        overlay.style.transform = 'translateZ(0)';
+        overlay.style.overflowY = 'hidden';
+        
+        // Ensure the content container is also mobile-positioned
+        const contentElement = overlay.querySelector('.project-overlay-content');
+        if (contentElement) {
+            contentElement.style.height = '100vh';
+            contentElement.style.maxHeight = '100vh';
+            contentElement.style.overflowY = 'auto';
+            contentElement.style.padding = '0.5rem';
+            contentElement.style.width = '100%';
+        }
+        
+        // Ensure main content area is visible
+        const mainElement = main;
+        if (mainElement) {
+            mainElement.style.position = 'relative';
+            mainElement.style.zIndex = '10002';
+            mainElement.style.height = 'auto';
+            mainElement.style.minHeight = '100vh';
+            mainElement.style.overflow = 'visible';
+            mainElement.style.backgroundColor = 'transparent';
+            mainElement.style.opacity = '1';
+            mainElement.style.display = 'block';
+        }
+        
+        // Force the overlay to show content instead of just "darkening"
+        setTimeout(() => {
+            overlay.classList.add('active');
+            overlay.style.opacity = '1';
+            overlay.style.display = 'block';
+            // Debug log for mobile
+            console.log('Mobile overlay positioned:', {
+                overlay: {
+                    width: overlay.offsetWidth,
+                    height: overlay.offsetHeight,
+                    display: overlay.style.display,
+                    zIndex: overlay.style.zIndex
+                },
+                content: contentElement ? {
+                    width: contentElement.offsetWidth,
+                    height: contentElement.offsetHeight
+                } : null
+            });
+        }, 50);
         
         // Prevent body scroll on mobile
         document.body.style.position = 'fixed';

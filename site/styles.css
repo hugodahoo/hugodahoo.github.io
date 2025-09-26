@@ -1279,6 +1279,10 @@ body {
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        /* Ensure content is visible */
+        background: rgba(255, 255, 255, 0.95) !important;
+        position: relative;
+        z-index: 10001;
     }
     
     .project-overlay-header {
