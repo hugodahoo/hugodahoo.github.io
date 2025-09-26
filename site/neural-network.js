@@ -1825,45 +1825,24 @@ function initBackgroundImageHover() {
     document.body.appendChild(mobileOverlay);
     
     if (isMobile) {
-        // Mobile: Handle click events for card expansion
+        // Mobile: Use the same overlay system, not card expansion
         document.addEventListener('click', function(e) {
-            const projectBlock = e.target.closest('.project-block');
-            if (projectBlock) {
-                e.preventDefault(); // Prevent default link behavior
+            const projectLink = e.target.closest('a[href*="project.html"]');
+            if (projectLink) {
+                e.preventDefault();
                 
-                // Toggle expansion
-                if (projectBlock.classList.contains('mobile-expanded')) {
-                    // Close expanded card
-                    projectBlock.classList.remove('mobile-expanded');
-                    mobileOverlay.classList.remove('active');
-                } else {
-                    // Close any other expanded cards first
-                    document.querySelectorAll('.project-block.mobile-expanded').forEach(card => {
-                        card.classList.remove('mobile-expanded');
-                    });
-                    mobileOverlay.classList.remove('active');
+                const projectBlock = projectLink.closest('.project-block');
+                if (projectBlock) {
+                    // Get project ID from URL
+                    const projectUrl = projectLink.getAttribute('href');
+                    const projectId = projectUrl.split('id=')[1];
                     
-                    // Expand this card
-                    setTimeout(() => {
-                        projectBlock.classList.add('mobile-expanded');
-                        mobileOverlay.classList.add('active');
-                    }, 50);
+                    if (projectId) {
+                        // Show instant overlay on mobile (same as desktop)
+                        showProjectOverlay(projectId);
+                    }
                 }
-            } else {
-                // Click outside - close any expanded cards
-                document.querySelectorAll('.project-block.mobile-expanded').forEach(card => {
-                    card.classList.remove('mobile-expanded');
-                });
-                mobileOverlay.classList.remove('active');
             }
-        });
-        
-        // Close expanded cards when clicking overlay
-        mobileOverlay.addEventListener('click', function() {
-            document.querySelectorAll('.project-block.mobile-expanded').forEach(card => {
-                card.classList.remove('mobile-expanded');
-            });
-            mobileOverlay.classList.remove('active');
         });
         
     } else {
