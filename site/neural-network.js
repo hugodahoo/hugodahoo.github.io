@@ -1343,6 +1343,14 @@ function generateProjectHTML(project, mediaIndex) {
     const headerBackgroundImage = allMedia.length > 0 ? allMedia[0] : null;
     const headerStyle = headerBackgroundImage ? `style="background-image: url('${headerBackgroundImage}');"` : '';
     
+    // Get impact title for display
+    const impactTitle = project['impact-title'] || '';
+    const impactTitleHtml = impactTitle ? `
+        <div class="impact-title-section">
+            <h2 class="impact-title">${impactTitle}</h2>
+        </div>
+    ` : '';
+
     return `
         <article class="project-article">
             <header class="project-header" ${headerStyle}>
@@ -1354,6 +1362,7 @@ function generateProjectHTML(project, mediaIndex) {
                 </div>
             </header>
             
+            ${impactTitleHtml}
             
             <div class="project-content">
                 ${medias}
