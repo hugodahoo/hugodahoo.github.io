@@ -1286,10 +1286,17 @@ function generateProjectHTML(project, mediaIndex) {
     // Add impact title section after videos (if exists)
     const impactTitle = project['impact-title'] || '';
     if (impactTitle) {
+        // Extract the description part after " — "
+        let descriptionOnly = impactTitle;
+        const dashIndex = impactTitle.indexOf(' — ');
+        if (dashIndex !== -1) {
+            descriptionOnly = impactTitle.substring(dashIndex + 3); // Skip " — "
+        }
+        
         contentBlocks.push(`
             <div class="content-block impact-title-block">
                 <div class="impact-title-section">
-                    <h2 class="impact-title">${impactTitle}</h2>
+                    <h2 class="impact-title">${descriptionOnly}</h2>
                 </div>
             </div>
         `);

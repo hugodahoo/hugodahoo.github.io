@@ -115,7 +115,7 @@
                         window.projectMedia = JSON.parse(cachedMedia);
                         // Load neural network script
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=29';
+                        neuralScript.src = 'neural-network.js?v=30';
                         neuralScript.onload = () => {
                             setTimeout(() => {
                                 console.log('Cached data path - About to initialize neural network...');
@@ -153,7 +153,7 @@
                         console.log('Data cached in sessionStorage');
                         
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=29';
+                        neuralScript.src = 'neural-network.js?v=30';
                         neuralScript.onload = () => {
                             // Small delay to ensure data is fully loaded
                             setTimeout(() => {
