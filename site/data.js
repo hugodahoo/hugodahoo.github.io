@@ -344,6 +344,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition solo",
     "impact": null,
+    "impact-title": "HACIENDO AGUA — Fluid simulations and projection mapping shaping water-centric narratives",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -405,6 +406,7 @@ window.projects = [
     "technologies": null,
     "description": "Réalité augmentée en direct",
     "impact": null,
+    "impact-title": "LCS OPENING CEREMONY — Live augmented reality presentations integrating gaming and technology",
     "media": [
       "https://www.instagram.com/lolesports/"
     ],
@@ -466,6 +468,7 @@ window.projects = [
     "technologies": null,
     "description": "Création de contenu",
     "impact": null,
+    "impact-title": "MY MORNING JACKET ALBUM LAUNCH — Development of content creation for musical diffusion mediums",
     "media": [
       "https://www.instagram.com/mymorningjacket/"
     ],
@@ -527,6 +530,7 @@ window.projects = [
     "technologies": null,
     "description": "Installation interactive",
     "impact": null,
+    "impact-title": "OCEAN PARK ILLUMINATION — Interactive lighting installations forming immersive visual experiences",
     "media": [
       "https://www.instagram.com/hkoceanpark/"
     ],
@@ -567,6 +571,7 @@ window.projects = [
     "technologies": null,
     "description": "Création de contenu",
     "impact": null,
+    "impact-title": "HALSEY WORLD TOUR — Creating high-impact visual content for global arena tour experiences",
     "media": [
       "https://www.instagram.com/iamhalsey/"
     ],
@@ -586,6 +591,7 @@ window.projects = [
     "technologies": null,
     "description": "Programmation Unity et intégration",
     "impact": null,
+    "impact-title": "BREATHLESS : LONDON ART NOW — Unity programming and integration development for art exhibition projects",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -601,6 +607,7 @@ window.projects = [
     "technologies": null,
     "description": "Contenu génératif",
     "impact": null,
+    "impact-title": "HINES LOUISIANA — Deploying generative content for corporate architectural media",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -616,6 +623,7 @@ window.projects = [
     "technologies": null,
     "description": "Mapping + Tracking en temps réel",
     "impact": null,
+    "impact-title": "ROCK IN RIO — Fusing realtime mapping and tracking for stadium-scale spectacle",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -635,6 +643,7 @@ window.projects = [
     "technologies": null,
     "description": "Architecture + Interactivité",
     "impact": null,
+    "impact-title": "HALTE 00 ÎLES-DE-BOUCHERVILLE — Permanent interactive wayfinding wall combining lidar + CMS integration",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -650,6 +659,7 @@ window.projects = [
     "technologies": null,
     "description": "Installation laser/lumière",
     "impact": null,
+    "impact-title": "D-VERNISSAGE CALDER — Sculpting laser and light as minimal, spatial instrumentation",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -665,6 +675,7 @@ window.projects = [
     "technologies": null,
     "description": "Installation interactive",
     "impact": null,
+    "impact-title": "LE CHOEUR DE GÉANTS — Large-format participation: crowd interaction as choral light/sound",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -680,6 +691,7 @@ window.projects = [
     "technologies": null,
     "description": "Performance laser",
     "impact": null,
+    "impact-title": "DEAD OBIES DOO WOP — TouchDesigner laser cues built directly for camera-ready takes",
     "media": [
       "https://www.instagram.com/deadobies/"
     ],
@@ -700,6 +712,7 @@ window.projects = [
     "technologies": null,
     "description": "Set-Design",
     "impact": null,
+    "impact-title": "RYMZ GTA — Set design implementation for visual media integration",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -715,6 +728,7 @@ window.projects = [
     "technologies": null,
     "description": "Oeuvre laser",
     "impact": null,
+    "impact-title": "REFRACTIONS — Laser volumes mapped to water, smoke, and glass for tactile light geometry",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -731,6 +745,7 @@ window.projects = [
     "technologies": null,
     "description": "Custom photobooth and game development",
     "impact": null,
+    "impact-title": "D.S DESTINY — Shipping a custom photo-booth game with reliable on-site ops",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -750,6 +765,7 @@ window.projects = [
     "technologies": null,
     "description": "Live generative visuals",
     "impact": null,
+    "impact-title": "FESTIVAL MODE & DESIGN — Driving live generative looks for fashion-forward stage media",
     "media": [
       "https://www.instagram.com/madfestivalofficiel/"
     ],
@@ -769,6 +785,7 @@ window.projects = [
     "technologies": null,
     "description": "Visuel en temps réel",
     "impact": null,
+    "impact-title": "COLORS OF BANGKOK — Real-time overlays tailored to a flagship ultra-wide urban canvas",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -789,6 +806,7 @@ window.projects = [
     "technologies": null,
     "description": "Visualisation de données",
     "impact": null,
+    "impact-title": "ED FORNIELES' THE FINILIAR — Animating market data into emotionally reactive characters",
     "media": [
       "https://www.instagram.com/eddfornieles/"
     ],
@@ -809,6 +827,7 @@ window.projects = [
     "technologies": null,
     "description": "Audiovisual instrument for kids",
     "impact": null,
+    "impact-title": "SOUND TRACER — Multiuser drawing surface generating real-time music for kids",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -829,6 +848,7 @@ window.projects = [
     "technologies": null,
     "description": "Capture de mouvement + Visuel en temps réel",
     "impact": null,
+    "impact-title": "RENAULT ANNUAL MEETING — Live mocap driving generative visuals in a zero-downtime corporate show",
     "media": [
       "https://www.instagram.com/renaultgroup/"
     ],
@@ -891,6 +911,7 @@ window.projects = [
     "technologies": null,
     "description": "Visuel en temps réel + Danseur",
     "impact": null,
+    "impact-title": "ORCHESTRE SYMPHONIQUE DE MONTRÉAL — Real-time visual choreography featuring dancers with symphonic integration",
     "media": [
       "https://www.instagram.com/osmconcerts/"
     ],
@@ -910,6 +931,7 @@ window.projects = [
     "technologies": null,
     "description": "R&D Détection de mouvement et installations interactives",
     "impact": null,
+    "impact-title": "UNIVERSAL STUDIOS — R&D for motion detection and interactive installations in theme park environments",
     "media": [
       "https://www.instagram.com/universalorlando/"
     ],
@@ -929,6 +951,7 @@ window.projects = [
     "technologies": null,
     "description": "Visuel en temps réel + Danseur",
     "impact": null,
+    "impact-title": "EY INNOVATION REALIZED — Real-time visual innovations featuring live dancers for corporate presentations",
     "media": [
       "https://www.instagram.com/ey_global/"
     ],
@@ -948,6 +971,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition interactive",
     "impact": null,
+    "impact-title": "TABEGAMI SAMA — Multi-room cultural journey mixing projection mapping and tactile interaction",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -968,6 +992,7 @@ window.projects = [
     "technologies": null,
     "description": "Installation interactive",
     "impact": null,
+    "impact-title": "OZONE — Stretch-fabric haptics generating immediate audio-visual feedback",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -984,6 +1009,7 @@ window.projects = [
     "technologies": null,
     "description": "Visuel en temps réel + Éclairage cinétique",
     "impact": null,
+    "impact-title": "RED HOT CHILI PEPPERS GETAWAY TOUR — Real-time kinetic lighting and visual landscape for global tour",
     "media": [
       "https://www.instagram.com/chilipeppers/"
     ],
@@ -1046,6 +1072,7 @@ window.projects = [
     "technologies": null,
     "description": "Vjing",
     "impact": null,
+    "impact-title": "EN ROUTE VERS LES JUTRAS — Live VJ experimentation exploring music visualization technology",
     "media": [
       "https://www.instagram.com/sat_montreal/"
     ],
@@ -1065,6 +1092,7 @@ window.projects = [
     "technologies": null,
     "description": "Thermal imaging and interactive installations",
     "impact": null,
+    "impact-title": "BASEL 2022 PROJECTS — Refining interactive systems to gallery-grade polish and reliability",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -1085,6 +1113,7 @@ window.projects = [
     "technologies": null,
     "description": "Architecture + Interactivité",
     "impact": null,
+    "impact-title": "HALTE 0 SÉPAQ ÎLES-DE-BOUCHERVILLE — Permanent lidar wall revealing trails and eco-stories at entry",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -1101,6 +1130,7 @@ window.projects = [
     "technologies": null,
     "description": "High Speed Tracking - Using Panasonic high speed projector and tracking system",
     "impact": null,
+    "impact-title": "INTERACTIVE BASKETBALL — High-speed tracking employing Panasonic projection and automated tracking",
     "media": [],
     "instagram": [],
     "cover": null,
@@ -1116,6 +1146,7 @@ window.projects = [
     "technologies": null,
     "description": "Video frame extraction from live performance",
     "impact": null,
+    "impact-title": "MY MORNING JACKET — Video frame extraction implementing performance visualization",
     "media": [],
     "instagram": [],
     "cover": null,
