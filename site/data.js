@@ -8,6 +8,7 @@ window.projects = [
     "technologies": null,
     "description": "Thermographic cameras, projection mapping, Développement d'une carte thermique interactive de l'espace",
     "impact": null,
+    "impact-title": "SPECTRAL SUBJECTS — Turning infrared heat into live, data-driven portraiture",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -28,6 +29,7 @@ window.projects = [
     "technologies": null,
     "description": "Audio-reactive lighting, interactive sound installation, Développement d'une installation sonore et lumineuse interactive",
     "impact": null,
+    "impact-title": "CLIMATE PARLIAMENT — Orchestrating 480+ speaker-lights into a responsive climate soundscape",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -48,6 +50,7 @@ window.projects = [
     "technologies": null,
     "description": "Audio-reactive lighting, immersive sound environment, Développement d'un environnement sonore immersif",
     "impact": null,
+    "impact-title": "FIELD ATMOSPHONIA — Composing at architectural scale with thousands of single-channel speakers",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -68,6 +71,7 @@ window.projects = [
     "technologies": null,
     "description": "Interactive audio installation, Développement d'une installation audio interactive",
     "impact": null,
+    "impact-title": "KRISTALLSTIMMEN — Activating 3,000 crystal-clad speakers with per-visitor audio light states",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -88,6 +92,7 @@ window.projects = [
     "technologies": null,
     "description": "Interactive projection, real-time audio-reactive visuals, Développement d'une projection interactive",
     "impact": null,
+    "impact-title": "SHADOW TUNER — Tuning global radio with human silhouettes in real time",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -108,6 +113,7 @@ window.projects = [
     "technologies": null,
     "description": "Real-time data visualization, cosmic radiation detection, Développement d'une visualisation en temps réel",
     "impact": null,
+    "impact-title": "COLLIDER — Translating cosmic rays into kinetic curtains of light",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -129,6 +135,7 @@ window.projects = [
     "technologies": null,
     "description": "Oeuvre d'art générative",
     "impact": null,
+    "impact-title": "RECURRENT FIRST DREAM — Rendering Sor Juana's poetry as a generative, slow-motion flame",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -149,6 +156,7 @@ window.projects = [
     "technologies": null,
     "description": "Parcours d'art en extérieur",
     "impact": null,
+    "impact-title": "TRANSLATION ISLAND — Building a 2-km interactive trail with AI, sensors, and projection",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -169,6 +177,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition immersive",
     "impact": null,
+    "impact-title": "ATMOSPHERIC MEMORY — Converting voice and breath into immersive, volumetric media architectures",
     "media": [
       "https://www.instagram.com/ey_global/"
     ],
@@ -189,6 +198,7 @@ window.projects = [
     "technologies": null,
     "description": "Performance audio réactive",
     "impact": null,
+    "impact-title": "SYNC — Mapping live drumming to a choreography of 3,000 bulbs across Pulse Topology",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -209,6 +219,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition solo",
     "impact": null,
+    "impact-title": "OPHY BU GAINS / IA GÉNERATIVE — Generative artistic movements",
     "media": [
       "https://www.instagram.com/bitforms/"
     ],
@@ -228,6 +239,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition solo",
     "impact": null,
+    "impact-title": "TECHS MECHS — Procedural robotics and AI driving performative light and motion systems",
     "media": [
       "https://www.instagram.com/grayareaorg/"
     ],
@@ -248,6 +260,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition solo",
     "impact": null,
+    "impact-title": "BIOMETRIC THEATRE — Staging pulse, voice, and movement as audience-driven scenography",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -268,6 +281,7 @@ window.projects = [
     "technologies": null,
     "description": "Oeuvre d'art interactive",
     "impact": null,
+    "impact-title": "THERMAL DRIFT — Transforming body heat into evolving, audio-reactive landscapes",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -283,11 +297,12 @@ window.projects = [
     "id": "listening-forest",
     "title": "LISTENING FOREST",
     "year": null,
-    "client": "Rafael Lozano-Hemmer / CRYSTAL BRIDGES MUSEUM - ARKANSAS",
+    "client": "Rafael Lozano-Hemmer / CRYSTAL BRIDGES MUSEUM - ARKAMSAS",
     "role": null,
     "technologies": null,
     "description": "Parcours d'art en extérieur",
     "impact": null,
+    "impact-title": "LISTENING FOREST — Distributing sensors across a night trail to localize sound and light responses",
     "media": [
       "https://www.instagram.com/crystalbridgesmuseum/"
     ],
@@ -308,6 +323,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition solo",
     "impact": null,
+    "impact-title": "EXCUSE YOU — Curating multi-work media into a cohesive, gallery-grade system",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -347,6 +363,7 @@ window.projects = [
     "technologies": null,
     "description": "Exposition d'oeuvres génératives et interactives",
     "impact": null,
+    "impact-title": "CAUDALES — Curating algorithmic text works into a coherent exhibition grammar",
     "media": [
       "https://www.instagram.com/casademexicoenespana/"
     ],
@@ -367,6 +384,7 @@ window.projects = [
     "technologies": null,
     "description": "Oeuvre d'art générative",
     "impact": null,
+    "impact-title": "HORMONIUM — Visualizing circadian, ultradian, and infradian cycles as airborne text waves",
     "media": [
       "https://www.instagram.com/lozanohemmer/"
     ],
@@ -406,6 +424,7 @@ window.projects = [
     "technologies": null,
     "description": "Mapping",
     "impact": null,
+    "impact-title": "ÉCOSYSTEMES (Ecosystem Alpha) — Projection-mapped terrain reacting to proximity, touch, and regeneration",
     "media": [
       "https://www.instagram.com/audemaeva/"
     ],
@@ -426,6 +445,7 @@ window.projects = [
     "technologies": null,
     "description": "Déambulatoire interactif",
     "impact": null,
+    "impact-title": "ANIMISTIC IMAGERY — Remote-produced AI studio translating visitor motion into generative art",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -465,6 +485,7 @@ window.projects = [
     "technologies": null,
     "description": "Création de contenu temps réel",
     "impact": null,
+    "impact-title": "BILLIE EILISH — 2020 WORLD TOUR — Notch + disguise pipeline delivering adaptive arena visuals",
     "media": [
       "https://www.instagram.com/billieeilish/"
     ],
@@ -485,6 +506,7 @@ window.projects = [
     "technologies": null,
     "description": "R&D",
     "impact": null,
+    "impact-title": "PANASONIC AUGMENTED BASKETBALL COURT — Ultra-low-latency tracking and projection for responsive gameplay",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -524,6 +546,7 @@ window.projects = [
     "technologies": null,
     "description": "Création de contenu",
     "impact": null,
+    "impact-title": "AVETT BROTHERS TOUR — Tour-ready hybrid of precomp and real-time looks tuned per venue",
     "media": [
       "https://www.instagram.com/theavettbrothers/"
     ],
@@ -826,6 +849,7 @@ window.projects = [
     "technologies": null,
     "description": "Système de contrôle + visuel en temps réel",
     "impact": null,
+    "impact-title": "ARCADE FIRE INFINITE CONTENT TOUR — Live camera ingest remixed into arena-scale LED narratives",
     "media": [
       "https://www.instagram.com/arcadefire/"
     ],
@@ -846,6 +870,7 @@ window.projects = [
     "technologies": null,
     "description": "Parcours immersif et installations interactives",
     "impact": null,
+    "impact-title": "KONTINUUM — Kilometer-long tunnel transformed with synchronized light, sound, and scans",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -979,6 +1004,7 @@ window.projects = [
     "technologies": null,
     "description": "Parcours immersif et installation interactive",
     "impact": null,
+    "impact-title": "NOVA LUMINA — Night trail where visitors appear as holograms within a starry forest",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
@@ -999,6 +1025,7 @@ window.projects = [
     "technologies": null,
     "description": "Espace extérieur immersif. Projection architecturale",
     "impact": null,
+    "impact-title": "AURA — TRAVERSÉE IMMERSIVE — Nuit Blanche square reimagined with projection, fiber trees, and touch-reactive mushrooms",
     "media": [
       "https://www.instagram.com/momentfactory/"
     ],
