@@ -1547,6 +1547,36 @@ function showProjectOverlay(projectId) {
     // Set the cached HTML content
     main.innerHTML = cachedProject.html;
     
+    // Mobile viewport fixes
+    if (window.innerWidth <= 768) {
+        // Save scroll position
+        const savedScrollPosition = window.pageYOffset;
+        
+        // Mobile-specific positioning
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.maxWidth = '100vw';
+        overlay.style.maxHeight = '100vh';
+        overlay.style.transform = 'translateZ(0)';  // Hardware acceleration
+        overlay.style.overflowY = 'hidden';  // Let content container handle scrolling
+        
+        // Prevent body scroll on mobile
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.width = '100%';
+        
+        // Restore scroll position when overlay closes
+        overlay.addEventListener('closemobile', function() {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            window.scrollTo(0, savedScrollPosition);
+        });
+    }
+    
     // Show overlay with animation
     overlay.style.display = 'block';
     overlay.classList.add('active');
@@ -1571,6 +1601,11 @@ function showProjectOverlay(projectId) {
 
 function closeProjectOverlay() {
     if (!currentProjectOverlay || !isOverlayOpen) return;
+    
+    // Trigger mobile close event if on mobile
+    if (window.innerWidth <= 768 && currentProjectOverlay) {
+        currentProjectOverlay.dispatchEvent(new Event('closemobile'));
+    }
     
     currentProjectOverlay.classList.remove('active');
     setTimeout(() => {
