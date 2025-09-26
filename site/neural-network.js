@@ -1,5 +1,8 @@
 // Neural Network Portfolio Implementation
+console.log('Neural network script loading...');
+console.log('window.projects:', window.projects);
 const projects = window.projects || [];
+console.log('projects array length:', projects.length);
 
 let positionedCards = [];
 let isNeuralNetworkStyle = true;
@@ -212,7 +215,7 @@ function getCategoryColor(category) {
 
 // Get project thumbnail - optimized for small file sizes
 function getThumbnail(projectId) {
-    const media = window.mediaIndex || {};
+    const media = window.projectMedia || window.mediaIndex || {};
     const project = media.projects?.[projectId];
     
     if (!project) {
@@ -1027,6 +1030,7 @@ function resetPositionedCards() {
 function clearProjectCache() {
     console.log('Clearing project cache...');
     projectCache.clear();
+    console.log('Project cache cleared successfully');
 }
 
 function refreshProjectCache() {
@@ -1038,7 +1042,7 @@ function refreshProjectCache() {
 function preloadProjectContent() {
     console.log('Preloading project content...');
     const projectsToCache = window.projects || projects || [];
-    const mediaIndex = window.mediaIndex || {};
+    const mediaIndex = window.projectMedia || window.mediaIndex || {};
     
     console.log('Media index available:', !!mediaIndex);
     console.log('Media index projects:', Object.keys(mediaIndex.projects || {}));
@@ -1065,8 +1069,10 @@ function generateProjectHTML(project, mediaIndex) {
     const extra = (mediaIndex || {}).projects || {};
     const mainDescription = project.fullDescription || project.description || "";
     
-    // Create description HTML
-    let descHtml;
+    // Separate main description from bullet points
+    let mainDescHtml = '';
+    let bulletPointsHtml = '';
+    
     if (project.fullDescription) {
         const formattedDesc = mainDescription
             .replace(/\\n/g, '\n')
@@ -1074,15 +1080,29 @@ function generateProjectHTML(project, mediaIndex) {
             .map(line => line.trim())
             .filter(line => line.length > 0);
         
-        let html = '';
+        let mainHtml = '';
+        let bulletHtml = '';
         let currentSection = '';
+        let inBulletSection = false;
         
         formattedDesc.forEach(line => {
             // Check for section headers (with ** markdown formatting)
             if (line.startsWith('**') && line.endsWith('**')) {
                 // Section header - remove ** markers
-                if (currentSection) html += '</ul>';
+                if (currentSection) {
+                    if (inBulletSection) {
+                        bulletHtml += '</ul>';
+                    } else {
+                        mainHtml += '</ul>';
+                    }
+                }
                 const sectionTitle = line.substring(2, line.length - 2);
+                
+                // Determine if this is a bullet point section
+                inBulletSection = sectionTitle.includes('Technical details') || 
+                                sectionTitle.includes('Challenges') || 
+                                sectionTitle.includes('Impact') || 
+                                sectionTitle.includes('Process');
                 
                 // Add data attribute for styling
                 let dataSection = '';
@@ -1091,15 +1111,33 @@ function generateProjectHTML(project, mediaIndex) {
                 else if (sectionTitle.includes('Impact')) dataSection = 'impact';
                 else if (sectionTitle.includes('Process')) dataSection = 'process';
                 
-                html += `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
+                const headerHtml = `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += headerHtml;
+                } else {
+                    mainHtml += headerHtml;
+                }
                 currentSection = sectionTitle;
             } else if (line === 'Technical details and implementation' || 
                        line === 'Challenges and solutions' || 
                        line === 'Impact and results' || 
                        line === 'Process and methodology') {
                 // Section header - plain text format
-                if (currentSection) html += '</ul>';
+                if (currentSection) {
+                    if (inBulletSection) {
+                        bulletHtml += '</ul>';
+                    } else {
+                        mainHtml += '</ul>';
+                    }
+                }
                 const sectionTitle = line;
+                
+                // Determine if this is a bullet point section
+                inBulletSection = sectionTitle.includes('Technical details') || 
+                                sectionTitle.includes('Challenges') || 
+                                sectionTitle.includes('Impact') || 
+                                sectionTitle.includes('Process');
                 
                 // Add data attribute for styling
                 let dataSection = '';
@@ -1108,109 +1146,217 @@ function generateProjectHTML(project, mediaIndex) {
                 else if (sectionTitle.includes('Impact')) dataSection = 'impact';
                 else if (sectionTitle.includes('Process')) dataSection = 'process';
                 
-                html += `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
+                const headerHtml = `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += headerHtml;
+                } else {
+                    mainHtml += headerHtml;
+                }
                 currentSection = sectionTitle;
             } else if (line.startsWith('•') || line.startsWith('-')) {
                 // Bullet point
                 const bulletText = line.slice(1).trim();
-                html += `<li>${bulletText}</li>`;
+                const bulletItem = `<li>${bulletText}</li>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += bulletItem;
+                } else {
+                    mainHtml += bulletItem;
+                }
             } else if (line.length > 0) {
                 // Regular paragraph
                 if (currentSection) {
-                    html += '</ul>';
+                    if (inBulletSection) {
+                        bulletHtml += '</ul>';
+                    } else {
+                        mainHtml += '</ul>';
+                    }
                     currentSection = '';
+                    inBulletSection = false;
                 }
-                html += `<p>${line}</p>`;
+                
+                // Check if this should be a prominent statement
+                const isProminent = line.length > 20 && line.length < 120 && 
+                                  (line.includes('transformed') || 
+                                   line.includes('innovative') || 
+                                   line.includes('breakthrough') || 
+                                   line.includes('revolutionary') || 
+                                   line.includes('immersive') || 
+                                   line.includes('interactive') || 
+                                   line.includes('cutting-edge') || 
+                                   line.includes('groundbreaking') ||
+                                   line.includes('multiuser') ||
+                                   line.includes('music-oriented') ||
+                                   line.includes('digital') ||
+                                   line.includes('experience') ||
+                                   line.includes('installation') ||
+                                   line.includes('collaboration'));
+                
+                const paragraph = isProminent ? 
+                    `<p class="prominent-statement">${line}</p>` : 
+                    `<p>${line}</p>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += paragraph;
+                } else {
+                    mainHtml += paragraph;
+                }
             }
         });
         
-        if (currentSection) html += '</ul>';
-        descHtml = html;
+        if (currentSection) {
+            if (inBulletSection) {
+                bulletHtml += '</ul>';
+            } else {
+                mainHtml += '</ul>';
+            }
+        }
+        
+        mainDescHtml = mainHtml;
+        bulletPointsHtml = bulletHtml;
     } else {
-        descHtml = `<p>${mainDescription}</p>`;
+        mainDescHtml = `<p>${mainDescription}</p>`;
     }
     
-    // Get media - take first 3 images from media folder
+    // Get media - prioritize high-res images and video embeds
+    console.log('Looking for media for project:', project.id);
+    console.log('Media index structure:', extra);
+    console.log('Project media entry:', extra[project.id]);
     const extraMedia = (extra[project.id] || {}).files || [];
+    console.log('Extra media files:', extraMedia);
     
-    // Only use local media files, ignore external links
-    const localMedia = extraMedia.map(file => 
-        typeof file === 'object' ? `media/${file.path}` : file
-    ).filter(url => {
+    // Check for video embeds first
+    const hasVideoEmbed = project.videoEmbed && project.videoEmbed.trim();
+    const hasMultipleVideos = project.videoEmbeds && project.videoEmbeds.length > 0;
+    
+    // Get high-res media files (prefer high-res over thumbnails)
+    const highResMedia = extraMedia.map(file => {
+        if (typeof file === 'object') {
+            // Replace 'thumbnails/' with 'high-res/' in the path
+            const highResPath = file.path.replace('thumbnails/', 'high-res/');
+            return `media/${highResPath}`;
+        }
+        return file;
+    }).filter(url => {
         // Only include local media files, no external URLs
         return !url.startsWith('http') && !url.startsWith('https') && !url.startsWith('www.');
     });
     
-    const firstThreeMedia = localMedia.slice(0, 3);
+    // Get thumbnail media files (reliable fallback)
+    const thumbnailMedia = extraMedia.map(file => 
+        typeof file === 'object' ? `media/${file.path}` : file
+    ).filter(url => {
+        return !url.startsWith('http') && !url.startsWith('https') && !url.startsWith('www.');
+    });
     
-    console.log('Media for', project.id, ':', firstThreeMedia);
+    // Use high-res if available, otherwise fallback to thumbnails
+    const localMedia = highResMedia.length > 0 ? highResMedia : thumbnailMedia;
+    const allMedia = localMedia; // Use all available media instead of just first 3
+    
+    console.log('Media for', project.id, ':', allMedia);
     
     // Create content with images integrated
     let contentBlocks = [];
     
-    // Split description into sections for better image placement
-    const descSections = descHtml.split('</ul>').filter(section => section.trim());
+    // Split main description into sections for better image placement
+    const mainDescSections = mainDescHtml.split('</ul>').filter(section => section.trim());
     
-    // First block: text + first image
-    if (firstThreeMedia.length > 0) {
+    // First block: Video embeds (if available) - almost full width
+    if (hasVideoEmbed || hasMultipleVideos) {
+        let videoContent = '';
+        
+        if (hasMultipleVideos) {
+            // Render multiple videos
+            videoContent = project.videoEmbeds.map((videoUrl, index) => `
+                <div class="video-embed-item">
+                    <h4>Video ${index + 1}</h4>
+                    ${renderVideoEmbed(videoUrl)}
+                </div>
+            `).join('');
+        } else if (hasVideoEmbed) {
+            // Render single video
+            videoContent = renderVideoEmbed(project.videoEmbed);
+        }
+        
+        contentBlocks.push(`
+            <div class="content-block video-embed-section">
+                <div class="video-section">
+                    ${videoContent}
+                </div>
+            </div>
+        `);
+    }
+    
+    // Second block: main description text + first image (or just text if no video)
+    if (allMedia.length > 0) {
         contentBlocks.push(`
             <div class="content-block text-with-image">
-                <div class="text-section">
-                    ${descSections[0] || descHtml}
+                <div class="image-section" onclick="openImageFullscreen('${allMedia[0]}')" style="cursor: pointer;">
+                    ${renderMedia(allMedia[0], project.title)}
                 </div>
-                <div class="image-section">
-                    ${renderMedia(firstThreeMedia[0], project.title)}
+                <div class="text-section">
+                    ${mainDescSections[0] || mainDescHtml}
                 </div>
             </div>
         `);
     } else {
-        // No images, just text
+        // No images, just main description text
         contentBlocks.push(`
             <div class="content-block text-only">
                 <div class="text-section">
-                    ${descHtml}
+                    ${mainDescHtml}
                 </div>
             </div>
         `);
     }
     
-    // Second block: second image + remaining text
-    if (firstThreeMedia.length > 1 && descSections.length > 1) {
+    // Additional blocks: display remaining images in a grid layout
+    if (allMedia.length > 1) {
+        // Create image grid for remaining images
+        const remainingImages = allMedia.slice(1);
+        const imageGrid = remainingImages.map(imageUrl => 
+            `<div class="image-grid-item" onclick="openImageFullscreen('${imageUrl}')">${renderMedia(imageUrl, project.title)}</div>`
+        ).join('');
+        
         contentBlocks.push(`
-            <div class="content-block image-with-text">
-                <div class="image-section">
-                    ${renderMedia(firstThreeMedia[1], project.title)}
-                </div>
-                <div class="text-section">
-                    ${descSections[1]}
+            <div class="content-block image-grid-section">
+                <div class="image-grid">
+                    ${imageGrid}
                 </div>
             </div>
         `);
     }
     
-    // Third block: full width image
-    if (firstThreeMedia.length > 2) {
+    // Add bullet points section at the end
+    if (bulletPointsHtml.trim()) {
         contentBlocks.push(`
-            <div class="content-block full-width-image">
-                <div class="image-section">
-                    ${renderMedia(firstThreeMedia[2], project.title)}
+            <div class="content-block bullet-points-section">
+                <div class="text-section bullet-points">
+                    ${bulletPointsHtml}
                 </div>
             </div>
         `);
     }
-    
     
     const medias = contentBlocks.join('');
     
     // Get Instagram links
     const insta = (project.instagram || []).map(u => `<a target="_blank" rel="noopener" href="${u}">Instagram</a>`).join(" · ");
     
+    // Get first media file for header background
+    const headerBackgroundImage = allMedia.length > 0 ? allMedia[0] : null;
+    const headerStyle = headerBackgroundImage ? `style="background-image: url('${headerBackgroundImage}');"` : '';
+    
     return `
         <article class="project-article">
-            <header class="project-header">
-                <h1>${formatTitleWithItalics(project.title)}</h1>
-                <p class="meta">${[project.year, project.client, project.role].filter(Boolean).join(" · ")}</p>
-                <p class="tech">${project.technologies || ""}</p>
+            <header class="project-header" ${headerStyle}>
+                <div class="header-overlay"></div>
+                <div class="header-content">
+                    <h1>${formatTitleWithItalics(project.title)}</h1>
+                    <p class="meta">${[project.year, project.client, project.role].filter(Boolean).join(" · ")}</p>
+                    <p class="tech">${project.technologies || ""}</p>
+                </div>
             </header>
             
             
@@ -1223,6 +1369,43 @@ function generateProjectHTML(project, mediaIndex) {
             </footer>
         </article>
     `;
+}
+
+function renderVideoEmbed(embedUrl) {
+    try {
+        console.log('Rendering video embed:', embedUrl);
+        
+        // Handle different video embed formats
+        let m;
+        
+        // YouTube URLs
+        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/))) {
+            const vid = m[1];
+            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        }
+        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|shorts\/)([\w-]+)/))) {
+            const vid = m[1];
+            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        }
+        
+        // Vimeo URLs
+        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/))) {
+            const vid = m[1];
+            return `<div class="video-embed"><iframe src="https://player.vimeo.com/video/${vid}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+        }
+        
+        // Direct iframe embed code
+        if (embedUrl.includes('<iframe')) {
+            return `<div class="video-embed">${embedUrl}</div>`;
+        }
+        
+        // Fallback for other video URLs
+        return `<div class="video-embed"><video controls width="100%" height="400" src="${embedUrl}" preload="metadata"></video></div>`;
+        
+    } catch (e) {
+        console.error('Error rendering video embed:', embedUrl, e);
+        return `<div class="media-error">Failed to load video: ${embedUrl}</div>`;
+    }
 }
 
 function renderMedia(url, title) {
@@ -1694,13 +1877,17 @@ function initLazyThumbnailLoading() {
 // Initialize
 let isInitialized = false;
 function initializeNeuralNetwork() {
+    console.log('initializeNeuralNetwork called, isInitialized:', isInitialized);
     if (isInitialized) {
         console.log('Neural network already initialized, skipping...');
         return;
     }
     
     console.log('=== NEURAL NETWORK INITIALIZATION START ===');
+    console.log('window.projects:', window.projects);
+    console.log('projects (local):', projects);
     const projectsToUse = window.projects || projects || [];
+    console.log('projectsToUse:', projectsToUse);
     console.log('Initializing neural network with projects:', projectsToUse.length);
     
     isInitialized = true;
@@ -1709,11 +1896,14 @@ function initializeNeuralNetwork() {
     preloadProjectContent();
     
     if (!projectsToUse.length) {
+        console.log('NO PROJECTS FOUND! Showing error message.');
         document.querySelectorAll('.project-grid').forEach(grid => {
             grid.innerHTML = '<p style="padding:16px;color:#9aa">Aucun projet chargé. Vérifiez data.js.</p>';
         });
         return;
     }
+    
+    console.log('Projects found, proceeding with rendering...');
     
     // Show loading state
     const projectGrid = document.getElementById('list-1');
@@ -1978,6 +2168,10 @@ function refreshParallaxEffect() {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Clear project cache to ensure fresh content
+    if (window.clearProjectCache) {
+        window.clearProjectCache();
+    }
     generateConcentricSquares();
     initializeNeuralNetwork();
     initParallaxEffect();
@@ -1997,6 +2191,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // Also initialize if DOM is already loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
+        // Clear project cache to ensure fresh content
+        if (window.clearProjectCache) {
+            window.clearProjectCache();
+        }
         generateConcentricSquares();
         initializeNeuralNetwork();
         initParallaxEffect();
@@ -2027,6 +2225,57 @@ window.addEventListener('resize', function() {
     }, 100);
 });
 
+// Image fullscreen functionality
+function openImageFullscreen(imageUrl) {
+    // Create fullscreen overlay if it doesn't exist
+    let overlay = document.getElementById('image-fullscreen-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'image-fullscreen-overlay';
+        overlay.className = 'image-fullscreen-overlay';
+        overlay.innerHTML = `
+            <img src="${imageUrl}" alt="Fullscreen image">
+            <button class="close-btn" onclick="closeImageFullscreen()">&times;</button>
+        `;
+        document.body.appendChild(overlay);
+    } else {
+        // Update the image source
+        const img = overlay.querySelector('img');
+        img.src = imageUrl;
+    }
+    
+    // Show overlay
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Close on escape key
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeImageFullscreen();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+    
+    // Close on background click
+    overlay.onclick = (e) => {
+        if (e.target === overlay) {
+            closeImageFullscreen();
+        }
+    };
+}
+
+function closeImageFullscreen() {
+    const overlay = document.getElementById('image-fullscreen-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
 // Make functions globally available for project pages
 window.generateConcentricSquares = generateConcentricSquares;
 window.initParallaxEffect = initParallaxEffect;
+window.initializeNeuralNetwork = initializeNeuralNetwork;
+window.openImageFullscreen = openImageFullscreen;
+window.closeImageFullscreen = closeImageFullscreen;

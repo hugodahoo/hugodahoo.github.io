@@ -442,6 +442,9 @@ Process and methodology
 Natural cycles of water, wind, erosion, and the seasons animate the surface, bringing the static relief to life. When visitors approach, pass a hand in front of the projection, or touch the sculpture, the ecosystem reacts with fire and destruction. The more it is disturbed, the longer it takes to regenerate. This mechanic makes each visitor directly responsible for the health of the landscape and the experience of others.
 
 Premiered in 2021 at Never Apart Gallery in Montreal and permanently acquired by Age of Union’s Earth Center in 2022, Écosystemes is both poetic and provocative—raising awareness of our impact on fragile environments by turning every gesture into an ecological choice.
+Natural cycles of water, wind, erosion, and the seasons animate the surface, bringing the static relief to life. When visitors approach, pass a hand in front of the projection, or touch the sculpture, the ecosystem reacts with fire and destruction. The more it is disturbed, the longer it takes to regenerate. This mechanic makes each visitor directly responsible for the health of the landscape and the experience of others.
+
+Premiered in 2021 at Never Apart Gallery in Montreal and permanently acquired by Age of Union’s Earth Center in 2022, Écosystemes is both poetic and provocative—raising awareness of our impact on fragile environments by turning every gesture into an ecological choice.
 Technical details and implementation
 - Large‑format projection mapping onto irregular facades.
 - Visual sequences composed as ecological cycles; adaptive brightness for urban light.
@@ -463,8 +466,11 @@ Process and methodology
 
 ## Animistic Imagery
 
-A walk‑through installation in Beijing reimagining animistic traditions through digital media. Entirely developed **remotely**, with no on‑site testing—demanding precise simulation, documentation, and trust with local teams.
+Animistic Imagery was an immersive AI art experience created by Moment Factory for UCCA Lab at the UCCA Center for Contemporary Art in Beijing. Developed in collaboration with Baidu, the project explored the relationship between humans, artificial intelligence, and art.
 
+At the heart of the exhibition was Duffy, an AI “artist” who invited visitors to collaborate inside her Symbiotic Studio. Through real-time tracking, projection mapping, and interactive technology, guests became muses for the AI. Their movements were captured and transformed into an infinite series of images, as Duffy drew on vast datasets of colors and archetypal forms from the natural world. The result was an ongoing stream of surprising, artificial interpretations of humanity and nature.
+
+Open from September 2020 to January 2021, the exhibition was Moment Factory’s first fully remote production. The Montreal studio designed and directed the experience while UCCA Lab and technical partner Digital Fun supported on-site integration. Despite the pandemic, the project successfully introduced Chinese audiences to a playful collaboration between people and machines.
 Technical details and implementation
 - Multi‑room projections and soundscapes; motion‑driven narrative triggers.
 - Remote production pipelines; delivery of calibrated presets and layouts.
@@ -486,8 +492,11 @@ Process and methodology
 
 ## Billie Eilish 2020 World Tour
 
-Arena‑scale generative visuals built with **Notch** and **Disguise**, developed in collaboration with the lighting designer, video team and live video operator. The system emphasized real‑time flexibility to meet the artist’s dynamic performance.
+Billie Eilish – 2020 World Tour featured large-scale visuals tightly synchronized to the artist’s performance. As part of Moment Factory’s creative team, I contributed to the design and programming of interactive and video content that adapted across arenas worldwide. The show combined bold graphic sequences with immersive effects that responded directly to Eilish’s stage presence, reinforcing her intimate yet cinematic style.
 
+Critics consistently highlighted the show’s immersive visuals and tight music–image sync. Rolling Stone’s coverage around the 2020 run and the Where Do We Go? livestream praised the arena/livestream productions for “moody, immersive visuals” that elevated the performance, while Billboard’s recap called the livestream “one-of-a-kind,” noting how each song’s digital environment amplified Eilish’s presence. Trade outlets documented the behind-the-scenes toolchain—Notch driving real-time looks and disguise handling playback—linking the aesthetic polish fans noticed to a robust real-time pipeline. The tour itself kicked off March 10, 2020, before pandemic shutdowns, with later virtual editions reinforcing the same design ethos that reviewers singled out.
+
+The production made extensive use of Notch for real-time visuals and disguise media servers for content distribution. We worked in close collaboration with the video and lighting teams to ensure seamless integration across departments. Live chroma keying techniques were also used on stage, allowing performers to be composited directly into the visuals during the show.
 Technical details and implementation
 - Notch real‑time effects pipeline; Disguise media servers.
 - Timecode and live operator control for adaptive moments.
@@ -537,8 +546,9 @@ High-Speed Tracking: Basketball Court was an R&D project that merged multiple se
 
 ## Avett Brothers Tour
 
-Concert visuals combining precomposed motion design with real‑time elements. A flexible package traveled well, complementing the band’s narrative‑driven sets without overwhelming them.
+Avett Brothers Tour featured a responsive visual system that amplified the band’s folk-rock performances with real-time imagery. Built in TouchDesigner, the setup mixed pre-rendered motion design with generative elements that reacted to audio and lighting cues. The aim was to create visuals that felt hand-crafted and warm, in tune with the band’s acoustic textures, while still delivering arena-scale impact.
 
+The system was designed to be lightweight and tour-ready, allowing for quick adaptation across venues. By blending subtle interactivity with a strong design language, the visuals supported the Avett Brothers’ stage presence without overwhelming it, adding atmosphere and narrative accents to the live show.
 Technical details and implementation
 - LED wall content plus live camera treatments.
 - Timing strategies for variable setlists; per‑song looks.
@@ -560,8 +570,11 @@ Process and methodology
 
 ## Dead Obies Doo Wop
 
-A **music video** (not a live show) for the Montreal hip hop group. Laser programming was built directly for camera—no rehearsals, just precise cueing to the recorded track and lighting for the lens.
+Dead Obies – Doo Wop was a music video for the Montreal hip hop group. I created laser animations in TouchDesigner that were programmed directly for camera—no rehearsals, just precise cueing to the recorded track and the lighting setup. The lasers were integrated into the shoot to augment the scenography and add a graphic layer to the intimate production.
 
+Réalisation: Jean-François Sauvé
+Production: Samuel Caron – Telescope Films
+Direction photo: Benoît-Jones Vallée
 Technical details and implementation
 - Laser programming tailored to cinematography and shutter angles.
 - Tight sync to master audio; compositing considerations in post.
@@ -719,8 +732,13 @@ Process and methodology
 
 ## Kontinuum
 
-Before Ottawa's light-rail tunnel opened to commuters, it became a kilometer-long media environment where visitors walked through sound, light, and projection. This ambitious project reframed urban infrastructure as a cultural experience, transforming a functional transportation corridor into a temporary art installation that engaged hundreds of thousands of people.
+Kontinuum (2017) was a large-scale interactive installation created in Ottawa’s new Lyon Light Rail Transit (LRT) station, co-produced by Moment Factory and the Ottawa 2017 Bureau for Canada’s 150th anniversary.
 
+Before the station opened to the public, the unfinished underground space was transformed into an immersive environment combining projection mapping, lighting, sound design, and interactivity. Visitors began their journey in a decommissioned cinema, where a body scan generated a unique “personal frequency” in 3D that was later integrated into the visuals. They then moved through the construction site, reimagined as a futuristic audiovisual landscape.
+
+The project required close collaboration with architects and engineers, as the space was still under construction and constantly changing until launch. A multidisciplinary team adapted the stage design, technical systems, and content to fit the evolving environment.
+
+Kontinuum attracted thousands of visitors and received international recognition, including a Merit Award for Experiential Design at the 2018 ADC Awards and an Award of Excellence in the 2017 Communication Arts Interactive Competition.
 **Technical details and implementation**
 - Large-span projection mapping system covering kilometer-long tunnel walls with synchronized content
 - Distributed audio system creating immersive soundscapes throughout the tunnel length
@@ -813,8 +831,11 @@ Process and methodology
 
 ## Nova Lumina
 
-A night walk in Chandler, Québec that narrates a celestial encounter along a riverside trail—light, sound and projection sequenced as stations in a journey.
+Nova Lumina (2016) is a permanent nighttime walking trail created in Parc du Bourg de Pabos, Québec, as part of the Lumina series by Moment Factory.
 
+Along the 1.5-kilometre coastal path, visitors are invited to accompany a fallen star back to the night sky. A key innovation was the use of merged depth sensors to transform visitors into participants in holographic projections, including them in a 3D space and a forest made of stars. These interactive moments responded to music and lighting cues, weaving personal presence directly into the story.
+
+This project marked an innovative use of sensors in an outdoor forest environment, expanding the possibilities of blending natural landscapes with interactive technology.
 Technical details and implementation
 - Distributed outdoor projection/lighting and spatialized sound.
 - Narrative sequencing across multiple stations.
@@ -836,8 +857,11 @@ Process and methodology
 
 ## Aura
 
-Inside Montreal's Notre-Dame Basilica, architecture becomes a living canvas where projection and music articulate the building's sacred forms. This permanent installation honors the basilica's spiritual character while making its ornate architecture newly perceivable through light and sound, creating an immersive experience that has become immensely popular with visitors.
+Aura — Traversée immersive (2016) was a one-night installation presented during Nuit Blanche à Montréal, transforming Place Pasteur on rue Saint-Denis into an illuminated forest.
 
+The project combined projection mapping on the clocher of Place Pasteur with an environment built from fibre-optic light trees and interactive mushrooms that reacted to touch. As visitors walked through, their presence and gestures triggered shifts in light and atmosphere, gradually revealing a lush, animated landscape emerging from the winter setting.
+
+This was my first large-scale projection using TouchDesigner, where I developed the interactive system that linked participant presence to the evolving visuals. Participation was central: each person’s presence “fed” the installation with light, making the forest denser and more alive over time.
 **Technical details and implementation**
 - Large-scale interior projection mapping system designed specifically for the basilica's complex architecture
 - Multi-channel sound system creating immersive audio that complements the visual experience
@@ -887,8 +911,11 @@ Process and methodology
 
 ## Halte 0 Sépaq Îles-de-Boucherville
 
-An outdoor projection along the water that celebrates Québec’s natural heritage. The site itself—wind, water, insects—becomes part of the piece’s motion picture.
+Halte 0, Parc national des Îles-de-Boucherville (2018) is a permanent interactive installation located at the park’s information desk. Designed as an immersive wall, it reveals itself as visitors pass by, giving access to an interactive map of the park’s new trails and natural features. The wall is both informative and playful, aiming to intrigue, entertain, and raise awareness about environmental issues connected to the site.
 
+The installation was realized with lidar sensors and TouchDesigner, supported by a custom content management system that allows the piece to evolve over time. Interactivity is seamlessly integrated into the architecture, creating a durable long-term solution suited to the public setting.
+
+I contributed to the project through interaction concept, creative coding, technology integration, and technical direction, in collaboration with TUX (production), Champagne Club Sandwich (creative direction), and Ottomata (interactive direction, coding, and technical direction).
 Technical details and implementation
 - Projection mapping onto terrain/structures; nature‑recording‑infused sound.
 - Weatherized enclosures; long‑throw projection across water.

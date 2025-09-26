@@ -6,8 +6,8 @@
     <title>Projets — Hugo Daoust</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=7">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=28">
     
     <!-- Preload critical resources with high priority for local development -->
     <link rel="preload" href="data.js" as="script" fetchpriority="high">
@@ -103,15 +103,33 @@
                 const cachedData = sessionStorage.getItem('projectsData');
                 const cachedMedia = sessionStorage.getItem('mediaData');
                 
-                if (cachedData && cachedMedia) {
+                // Clear cache to force fresh load (temporary fix)
+                sessionStorage.removeItem('projectsData');
+                sessionStorage.removeItem('mediaData');
+                console.log('Cache cleared, loading fresh data...');
+                
+                if (false && cachedData && cachedMedia) {
                     console.log('Using cached data from sessionStorage');
                     try {
                         window.projects = JSON.parse(cachedData);
                         window.projectMedia = JSON.parse(cachedMedia);
                         // Load neural network script
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=9';
-                        neuralScript.onload = resolve;
+                        neuralScript.src = 'neural-network.js?v=29';
+                        neuralScript.onload = () => {
+                            setTimeout(() => {
+                                console.log('Cached data path - About to initialize neural network...');
+                                console.log('window.projects at init time (cached):', window.projects);
+                                console.log('window.projects length at init time (cached):', window.projects ? window.projects.length : 'undefined');
+                                if (window.initializeNeuralNetwork) {
+                                    console.log('Calling initializeNeuralNetwork (cached)...');
+                                    window.initializeNeuralNetwork();
+                                } else {
+                                    console.log('initializeNeuralNetwork function not found (cached)!');
+                                }
+                                resolve();
+                            }, 100);
+                        };
                         document.head.appendChild(neuralScript);
                         return;
                     } catch (e) {
@@ -121,24 +139,40 @@
                 
                 // Load fresh data
                 const script = document.createElement('script');
-                script.src = 'data.js?v=7';
+                script.src = 'data.js?v=13';
                 script.onload = () => {
+                    console.log('data.js loaded, window.projects:', window.projects);
+                    console.log('window.projects length:', window.projects ? window.projects.length : 'undefined');
                     const mediaScript = document.createElement('script');
-                    mediaScript.src = 'media/index.js?v=7';
+                    mediaScript.src = 'media/index.js?v=9';
                     mediaScript.onload = () => {
+                        console.log('media/index.js loaded, window.projectMedia:', window.projectMedia);
                         // Cache the data for future use
                         sessionStorage.setItem('projectsData', JSON.stringify(window.projects));
                         sessionStorage.setItem('mediaData', JSON.stringify(window.projectMedia));
                         console.log('Data cached in sessionStorage');
                         
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=9';
+                        neuralScript.src = 'neural-network.js?v=29';
                         neuralScript.onload = () => {
-                            // Refresh project cache to ensure overlay and project pages are synchronized
-                            if (window.refreshProjectCache) {
-                                window.refreshProjectCache();
-                            }
-                            resolve();
+                            // Small delay to ensure data is fully loaded
+                            setTimeout(() => {
+                                console.log('About to initialize neural network...');
+                                console.log('window.projects at init time:', window.projects);
+                                console.log('window.projects length at init time:', window.projects ? window.projects.length : 'undefined');
+                                // Refresh project cache to ensure overlay and project pages are synchronized
+                                if (window.refreshProjectCache) {
+                                    window.refreshProjectCache();
+                                }
+                                // Initialize the neural network after script is loaded
+                                if (window.initializeNeuralNetwork) {
+                                    console.log('Calling initializeNeuralNetwork...');
+                                    window.initializeNeuralNetwork();
+                                } else {
+                                    console.log('initializeNeuralNetwork function not found!');
+                                }
+                                resolve();
+                            }, 100);
                         };
                         document.head.appendChild(neuralScript);
                     };
@@ -157,12 +191,7 @@
             
             try {
                 await loadData();
-                // Small delay to ensure everything is loaded
-                setTimeout(() => {
-                    if (window.projects && window.projects.length > 0) {
-                        initializeNeuralNetwork();
-                    }
-                }, 50);
+                // Neural network is initialized in loadData() after scripts are loaded
             } catch (error) {
                 console.error('Error loading data:', error);
                 if (projectGrid) {

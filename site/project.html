@@ -9,8 +9,8 @@
     <title>Projet — Hugo Daoust</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=13">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=28">
 </head>
 <body>
     <header>
@@ -21,9 +21,9 @@
     <!-- Neural network background with 3 layers -->
     <div class="concentric-squares"></div>
     
-    <script src="data.js?v=7"></script>
-    <script src="media/index.js"></script>
-    <script src="neural-network.js"></script>
+    <script src="data.js?v=13"></script>
+    <script src="media/index.js?v=9"></script>
+    <script src="neural-network.js?v=26"></script>
     <script>
         // Refresh project cache to ensure overlay and project pages are synchronized
         if (window.refreshProjectCache) {
@@ -155,14 +155,24 @@
             // Get Instagram links
             const insta = (p.instagram || []).map(u => `<a target="_blank" rel="noopener" href="${u}">Instagram</a>`).join(" · ");
             
-            // Render the project page - clean version
+            // Get project media (images/videos)
+            const projectMedia = extra[p.id] || [];
+            const mediaHtml = projectMedia.length > 0 ? 
+                `<div class="project-media">
+                    ${projectMedia.slice(0, 3).map(media => renderMedia(media.url, media.title || p.title)).join('')}
+                </div>` : '';
+            
+            // Render the project page with text wrapping around images
             const htmlContent = `
-                <article>
+                <article class="project-article">
                     <h1>${p.title}</h1>
                     <p class="meta">${[p.year, p.client, p.role].filter(Boolean).join(" · ")}</p>
                     <p class="tech">${p.technologies || ""}</p>
-                    <div class="project-content">
-                        ${descHtml}
+                    <div class="project-content-wrapper">
+                        ${mediaHtml}
+                        <div class="project-content">
+                            ${descHtml}
+                        </div>
                     </div>
                     <p class="links">${insta}</p>
                 </article>
