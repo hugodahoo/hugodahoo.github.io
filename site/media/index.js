@@ -1,6 +1,8 @@
-// Media Index - Generated automatically
-// High-res images only
-// Total files: 278
+// Enhanced Media Index - Generated with validation
+// Generated with original/high-res comparison
+// Projects: 38
+// Total files: 267
+// Issues found: Yes
 
 const mediaIndex = {
   "projects": {
@@ -13,7 +15,8 @@ const mediaIndex = {
           "size": 533383,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.111318
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87373696-WS.jpg",
@@ -21,7 +24,8 @@ const mediaIndex = {
           "size": 626389,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.2079256
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87373933-WS.jpg",
@@ -29,7 +33,8 @@ const mediaIndex = {
           "size": 465005,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.300563
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87374695-WS.jpg",
@@ -37,7 +42,8 @@ const mediaIndex = {
           "size": 636309,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.3967104
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87375367-WS.jpg",
@@ -45,7 +51,8 @@ const mediaIndex = {
           "size": 510087,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.4869962
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87375744-WS.jpg",
@@ -53,7 +60,8 @@ const mediaIndex = {
           "size": 438186,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.5730257
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87375795-WS.jpg",
@@ -61,7 +69,8 @@ const mediaIndex = {
           "size": 495967,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.6601553
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87376041-WS.jpg",
@@ -69,7 +78,8 @@ const mediaIndex = {
           "size": 488636,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.7620945
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87376464-WS.jpg",
@@ -77,7 +87,8 @@ const mediaIndex = {
           "size": 526701,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.8583608
         },
         {
           "filename": "Moment_Factory_Cultural_Educational_UCCA_87376693-WS.jpg",
@@ -85,9 +96,13 @@ const mediaIndex = {
           "size": 358898,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.9433467
         }
-      ]
+      ],
+      "total_files": 10,
+      "total_size": 5079561,
+      "has_issues": false
     },
     "arcade-fire-infinite-content-tour": {
       "name": "Arcade Fire Infinite Content Tour",
@@ -98,7 +113,8 @@ const mediaIndex = {
           "size": 313652,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902348.9851594
         },
         {
           "filename": "1X3A8264_JPG.jpg",
@@ -106,7 +122,8 @@ const mediaIndex = {
           "size": 307301,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.0258727
         },
         {
           "filename": "1X3A8368_JPG.jpg",
@@ -114,7 +131,8 @@ const mediaIndex = {
           "size": 312641,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.0656035
         },
         {
           "filename": "21743852_10155516213100168_7047934179910833416_o.jpg",
@@ -122,7 +140,8 @@ const mediaIndex = {
           "size": 257322,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.0935688
         },
         {
           "filename": "DSC00164_JPG.jpg",
@@ -130,7 +149,8 @@ const mediaIndex = {
           "size": 392307,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.1319387
         },
         {
           "filename": "image_1.jpg",
@@ -138,7 +158,8 @@ const mediaIndex = {
           "size": 280817,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.1790304
         },
         {
           "filename": "image_2.jpg",
@@ -146,7 +167,8 @@ const mediaIndex = {
           "size": 313652,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.2188103
         },
         {
           "filename": "image_3.jpg",
@@ -154,7 +176,8 @@ const mediaIndex = {
           "size": 307301,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.256762
         },
         {
           "filename": "image_4.jpg",
@@ -162,7 +185,8 @@ const mediaIndex = {
           "size": 312641,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.2957697
         },
         {
           "filename": "image_5.jpg",
@@ -170,7 +194,8 @@ const mediaIndex = {
           "size": 257322,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.3262162
         },
         {
           "filename": "image_6.jpg",
@@ -178,7 +203,8 @@ const mediaIndex = {
           "size": 392307,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.365962
         },
         {
           "filename": "image_7.jpg",
@@ -186,7 +212,8 @@ const mediaIndex = {
           "size": 688792,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.4126127
         },
         {
           "filename": "image_8.jpg",
@@ -194,7 +221,8 @@ const mediaIndex = {
           "size": 137816,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.433682
         },
         {
           "filename": "Moment_Factory_Infinite_Content_Tour_11-WS.jpg",
@@ -202,7 +230,8 @@ const mediaIndex = {
           "size": 280817,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.4817684
         },
         {
           "filename": "Moment_Factory_Infinite_Content_Tour_8-WS.jpg",
@@ -210,9 +239,13 @@ const mediaIndex = {
           "size": 688792,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.5278301
         }
-      ]
+      ],
+      "total_files": 15,
+      "total_size": 5243480,
+      "has_issues": false
     },
     "atmospheric-memory": {
       "name": "Atmospheric Memory",
@@ -223,7 +256,8 @@ const mediaIndex = {
           "size": 249549,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825311.2064898
         },
         {
           "filename": "chamber 05 - atmospheric memory 2021 UNC by Rafael Lozano-Hemmer photo by Olivier Groulx.jpg",
@@ -231,7 +265,8 @@ const mediaIndex = {
           "size": 154355,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825311.805986
         },
         {
           "filename": "chamber 13 - atmospheric memory 2021 UNC by Rafael Lozano-Hemmer photo by Olivier Groulx.png",
@@ -239,7 +274,8 @@ const mediaIndex = {
           "size": 2809878,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758826775.408693
         },
         {
           "filename": "cloud display 10 - atmospheric 2021 UNC by Rafael Lozano-Hemmer photo by Olivier Groulx.png",
@@ -247,7 +283,8 @@ const mediaIndex = {
           "size": 2715995,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758826776.877277
         },
         {
           "filename": "recognition 06 - atmospheric memory 2021 UNC by Rafael Lozano-Hemmer photo by Olivier Groulx.png",
@@ -255,7 +292,8 @@ const mediaIndex = {
           "size": 3019558,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758826778.2997274
         },
         {
           "filename": "recognition 07 - atmospheric memory 2021 UNC by Rafael Lozano-Hemmer photo by Olivier Groulx.png",
@@ -263,7 +301,8 @@ const mediaIndex = {
           "size": 2691987,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758826779.9447863
         },
         {
           "filename": "recognition 09 - atmospheric memory 2021 UNC by Rafael Lozano-Hemmer photo by Olivier Groulx.png",
@@ -271,9 +310,13 @@ const mediaIndex = {
           "size": 2916803,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758826781.3774178
         }
-      ]
+      ],
+      "total_files": 7,
+      "total_size": 14558125,
+      "has_issues": true
     },
     "aura": {
       "name": "Aura",
@@ -284,7 +327,8 @@ const mediaIndex = {
           "size": 226362,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902349.7928448
         },
         {
           "filename": "Aura-image2.jpg",
@@ -292,7 +336,8 @@ const mediaIndex = {
           "size": 432042,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902350.107065
         },
         {
           "filename": "Aura-image3.jpg",
@@ -300,7 +345,8 @@ const mediaIndex = {
           "size": 154326,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902350.1375315
         },
         {
           "filename": "Aura-image4.jpg",
@@ -308,9 +354,13 @@ const mediaIndex = {
           "size": 256429,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832379.181414
         }
-      ]
+      ],
+      "total_files": 4,
+      "total_size": 1069159,
+      "has_issues": false
     },
     "avett-brothers-tour": {
       "name": "Avett Brothers Tour",
@@ -321,7 +371,8 @@ const mediaIndex = {
           "size": 419822,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902350.231851
         },
         {
           "filename": "Avett-Brothers-10_crop.jpg",
@@ -329,7 +380,8 @@ const mediaIndex = {
           "size": 296888,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902350.2947433
         },
         {
           "filename": "SES-Avett-Greensboro.2.jpg",
@@ -337,9 +389,13 @@ const mediaIndex = {
           "size": 692863,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902350.3493087
         }
-      ]
+      ],
+      "total_files": 3,
+      "total_size": 1409573,
+      "has_issues": false
     },
     "basel-2022": {
       "name": "Basel 2022",
@@ -350,7 +406,8 @@ const mediaIndex = {
           "size": 0,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832379.416943
         },
         {
           "filename": "Hek_thermal_hugoda.png",
@@ -358,7 +415,8 @@ const mediaIndex = {
           "size": 150847,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902351.8279965
         },
         {
           "filename": "PXL_20220607_180818247.MP.jpg",
@@ -366,7 +424,8 @@ const mediaIndex = {
           "size": 568170,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902350.5870981
         },
         {
           "filename": "PXL_20220610_095932062.MP.jpg",
@@ -374,7 +433,8 @@ const mediaIndex = {
           "size": 461124,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832380.1767335
         },
         {
           "filename": "PXL_20220611_130256233.jpg",
@@ -382,7 +442,8 @@ const mediaIndex = {
           "size": 579272,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832380.3750124
         },
         {
           "filename": "PXL_20220611_131643221.jpg",
@@ -390,7 +451,8 @@ const mediaIndex = {
           "size": 675759,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832380.575225
         },
         {
           "filename": "PXL_20220611_173322441.MP.jpg",
@@ -398,7 +460,8 @@ const mediaIndex = {
           "size": 325853,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902350.7222438
         },
         {
           "filename": "PXL_20220613_123035362.MP.jpg",
@@ -406,7 +469,8 @@ const mediaIndex = {
           "size": 429866,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832380.8833306
         },
         {
           "filename": "PXL_20220613_170924610.MP.jpg",
@@ -414,7 +478,8 @@ const mediaIndex = {
           "size": 313528,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832381.0660791
         },
         {
           "filename": "PXL_20220613_190006809.MP.jpg",
@@ -422,7 +487,8 @@ const mediaIndex = {
           "size": 104302,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832381.2364652
         },
         {
           "filename": "PXL_20220614_112906043.MP.jpg",
@@ -430,7 +496,8 @@ const mediaIndex = {
           "size": 559261,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902337.5632277
         },
         {
           "filename": "PXL_20220614_174140800.jpg",
@@ -438,7 +505,8 @@ const mediaIndex = {
           "size": 398305,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902351.1801403
         },
         {
           "filename": "PXL_20220614_192831195.jpg",
@@ -446,7 +514,8 @@ const mediaIndex = {
           "size": 324390,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902351.3956926
         },
         {
           "filename": "PXL_20220615_211334477.MP.jpg",
@@ -454,7 +523,8 @@ const mediaIndex = {
           "size": 223012,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832381.9360712
         },
         {
           "filename": "PXL_20220616_002023800.MP.jpg",
@@ -462,7 +532,8 @@ const mediaIndex = {
           "size": 156898,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902351.5792396
         },
         {
           "filename": "Room_v01.png",
@@ -470,9 +541,13 @@ const mediaIndex = {
           "size": 2585972,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832383.8107264
         }
-      ]
+      ],
+      "total_files": 16,
+      "total_size": 7856559,
+      "has_issues": true
     },
     "billie-eilish-2020-world-tour": {
       "name": "Billie Eilish 2020 World Tour",
@@ -483,9 +558,13 @@ const mediaIndex = {
           "size": 436420,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902351.9236064
         }
-      ]
+      ],
+      "total_files": 1,
+      "total_size": 436420,
+      "has_issues": false
     },
     "biometric-theatre": {
       "name": "Biometric Theatre",
@@ -496,7 +575,8 @@ const mediaIndex = {
           "size": 549616,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902351.9644504
         },
         {
           "filename": "hormonium_hong_kong_2023_WKCDA_002.png",
@@ -504,7 +584,8 @@ const mediaIndex = {
           "size": 2821719,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832384.4166877
         },
         {
           "filename": "thermal_drift_hong_kong_2023_wkcda_002.jpg",
@@ -512,7 +593,8 @@ const mediaIndex = {
           "size": 396595,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902352.017717
         },
         {
           "filename": "thermal_drift_hong_kong_2023_wkcda_002.png",
@@ -520,7 +602,8 @@ const mediaIndex = {
           "size": 494014,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902352.1493275
         },
         {
           "filename": "thermal_drift_hong_kong_2023_wkcda_036.png",
@@ -528,7 +611,8 @@ const mediaIndex = {
           "size": 3579030,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832385.3350925
         },
         {
           "filename": "thermal_drift_hong_kong_2023_wkcda_058.png",
@@ -536,9 +620,13 @@ const mediaIndex = {
           "size": 2815642,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832386.3587902
         }
-      ]
+      ],
+      "total_files": 6,
+      "total_size": 10656616,
+      "has_issues": true
     },
     "caudales": {
       "name": "Caudales",
@@ -549,7 +637,8 @@ const mediaIndex = {
           "size": 374493,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902352.5833037
         },
         {
           "filename": "airborne_newscasts_madrid_2022_rlh_002.png",
@@ -557,7 +646,8 @@ const mediaIndex = {
           "size": 368289,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902352.795113
         },
         {
           "filename": "airborne_newscasts_madrid_2022_rlh_003.png",
@@ -565,7 +655,8 @@ const mediaIndex = {
           "size": 400179,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902352.9846728
         },
         {
           "filename": "CME_CAUDALES_RAFAEL_LOZANO_HEMMER_021-scaled.jpg",
@@ -573,7 +664,8 @@ const mediaIndex = {
           "size": 259825,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902352.2723787
         },
         {
           "filename": "Exposicion-Madrid-gratis-Caudales-de-Rafael-Lozano-Hemmer-en-Casa-de-Mexico-en-Espana-scaled.jpg",
@@ -581,9 +673,13 @@ const mediaIndex = {
           "size": 743422,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902352.3762505
         }
-      ]
+      ],
+      "total_files": 5,
+      "total_size": 2146208,
+      "has_issues": false
     },
     "climate-parliament": {
       "name": "Climate Parliament",
@@ -594,7 +690,8 @@ const mediaIndex = {
           "size": 355859,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902353.0218766
         },
         {
           "filename": "climate_parliament_2024_houston_ar_785.png",
@@ -602,7 +699,8 @@ const mediaIndex = {
           "size": 2802157,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832388.477825
         },
         {
           "filename": "climate_parliament_2024_houston_ar_827.png",
@@ -610,7 +708,8 @@ const mediaIndex = {
           "size": 2722921,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832389.7668865
         },
         {
           "filename": "climate_parliament_houston_2024_fh_015.png",
@@ -618,7 +717,8 @@ const mediaIndex = {
           "size": 65938,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832390.1854134
         },
         {
           "filename": "RLH 3.jpg",
@@ -626,9 +726,13 @@ const mediaIndex = {
           "size": 153281,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902353.0489159
         }
-      ]
+      ],
+      "total_files": 5,
+      "total_size": 6100156,
+      "has_issues": false
     },
     "collider": {
       "name": "Collider",
@@ -639,7 +743,8 @@ const mediaIndex = {
           "size": 141462,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902353.7129097
         },
         {
           "filename": "collider_abu_dhabi_2023_oa_1188.png",
@@ -647,7 +752,8 @@ const mediaIndex = {
           "size": 2532740,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832395.9559686
         },
         {
           "filename": "collider_abu_dhabi_2023_pt_010.png",
@@ -655,7 +761,8 @@ const mediaIndex = {
           "size": 2285440,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832397.6392028
         },
         {
           "filename": "collider_abu_dhabi_2023_rlh_003.png",
@@ -663,7 +770,8 @@ const mediaIndex = {
           "size": 232955,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.0421813
         },
         {
           "filename": "collider_water_mill_2024_rlh_012_t.jpg",
@@ -671,7 +779,8 @@ const mediaIndex = {
           "size": 6439,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902353.0668464
         },
         {
           "filename": "collider_water_mill_2024_rlh_027.png",
@@ -679,7 +788,8 @@ const mediaIndex = {
           "size": 2240240,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757539422.3186536
         },
         {
           "filename": "Muonsensor_Collider-Machine-1400x951.jpg",
@@ -687,7 +797,8 @@ const mediaIndex = {
           "size": 209134,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902353.0946684
         },
         {
           "filename": "Muonsensor_Collider-Machine-1400x951.png",
@@ -695,7 +806,8 @@ const mediaIndex = {
           "size": 267471,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.0902097
         },
         {
           "filename": "RLH_Parrish_2024.jpg",
@@ -703,7 +815,8 @@ const mediaIndex = {
           "size": 311756,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902353.1630383
         },
         {
           "filename": "star_icon.png",
@@ -711,9 +824,13 @@ const mediaIndex = {
           "size": 1310,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.1086788
         }
-      ]
+      ],
+      "total_files": 10,
+      "total_size": 8228947,
+      "has_issues": true
     },
     "colors-of-bangkok": {
       "name": "Colors Of Bangkok",
@@ -724,7 +841,8 @@ const mediaIndex = {
           "size": 193608,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.1331522
         },
         {
           "filename": "2019-04-29_22_54_11-Work_-_Hugo_Daoust_s_Portfolio.png",
@@ -732,7 +850,8 @@ const mediaIndex = {
           "size": 251867,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.3087268
         },
         {
           "filename": "image_1.jpg",
@@ -740,7 +859,8 @@ const mediaIndex = {
           "size": 238933,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.1791384
         },
         {
           "filename": "image_2.jpg",
@@ -748,7 +868,8 @@ const mediaIndex = {
           "size": 0,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901983.0908875
         },
         {
           "filename": "image_3.jpg",
@@ -756,7 +877,8 @@ const mediaIndex = {
           "size": 187712,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.2102766
         },
         {
           "filename": "image_4.jpg",
@@ -764,7 +886,8 @@ const mediaIndex = {
           "size": 251867,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.2423933
         },
         {
           "filename": "image_5.jpg",
@@ -772,9 +895,13 @@ const mediaIndex = {
           "size": 190637,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.2753563
         }
-      ]
+      ],
+      "total_files": 7,
+      "total_size": 1314624,
+      "has_issues": true
     },
     "dead-obies-doo-wop": {
       "name": "Dead Obies Doo Wop",
@@ -785,7 +912,8 @@ const mediaIndex = {
           "size": 7395,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.34931
         },
         {
           "filename": "frame_002.jpg",
@@ -793,7 +921,8 @@ const mediaIndex = {
           "size": 94004,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.3900537
         },
         {
           "filename": "frame_003.jpg",
@@ -801,7 +930,8 @@ const mediaIndex = {
           "size": 50732,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.4286385
         },
         {
           "filename": "frame_004.jpg",
@@ -809,7 +939,8 @@ const mediaIndex = {
           "size": 94755,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.4683855
         },
         {
           "filename": "frame_005.jpg",
@@ -817,7 +948,8 @@ const mediaIndex = {
           "size": 80042,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.5086796
         },
         {
           "filename": "frame_006.jpg",
@@ -825,7 +957,8 @@ const mediaIndex = {
           "size": 127064,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.5495398
         },
         {
           "filename": "frame_007.jpg",
@@ -833,7 +966,8 @@ const mediaIndex = {
           "size": 73991,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.5885994
         },
         {
           "filename": "frame_008.jpg",
@@ -841,7 +975,8 @@ const mediaIndex = {
           "size": 64448,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.6270623
         },
         {
           "filename": "frame_009.jpg",
@@ -849,7 +984,8 @@ const mediaIndex = {
           "size": 58240,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.664298
         },
         {
           "filename": "frame_010.jpg",
@@ -857,7 +993,8 @@ const mediaIndex = {
           "size": 109484,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.70472
         },
         {
           "filename": "frame_011.jpg",
@@ -865,7 +1002,8 @@ const mediaIndex = {
           "size": 102076,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.7414813
         },
         {
           "filename": "frame_012.jpg",
@@ -873,7 +1011,8 @@ const mediaIndex = {
           "size": 143491,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.7820547
         },
         {
           "filename": "frame_013.jpg",
@@ -881,7 +1020,8 @@ const mediaIndex = {
           "size": 96331,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.8190691
         },
         {
           "filename": "frame_014.jpg",
@@ -889,7 +1029,8 @@ const mediaIndex = {
           "size": 70809,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.8573773
         },
         {
           "filename": "frame_015.jpg",
@@ -897,9 +1038,13 @@ const mediaIndex = {
           "size": 34779,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.8925843
         }
-      ]
+      ],
+      "total_files": 15,
+      "total_size": 1207641,
+      "has_issues": false
     },
     "ecosystemes": {
       "name": "Ecosystemes",
@@ -910,7 +1055,8 @@ const mediaIndex = {
           "size": 137976,
           "type": "image",
           "extension": ".gif",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825314.2759695
         },
         {
           "filename": "C0129_1.gif",
@@ -918,7 +1064,8 @@ const mediaIndex = {
           "size": 93571,
           "type": "image",
           "extension": ".gif",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825314.2854261
         },
         {
           "filename": "C0131.gif",
@@ -926,7 +1073,8 @@ const mediaIndex = {
           "size": 14536880,
           "type": "image",
           "extension": ".gif",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757618570.7758756
         },
         {
           "filename": "C0134.gif",
@@ -934,9 +1082,13 @@ const mediaIndex = {
           "size": 9004452,
           "type": "image",
           "extension": ".gif",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757618577.5342407
         }
-      ]
+      ],
+      "total_files": 4,
+      "total_size": 23772879,
+      "has_issues": false
     },
     "ed-fornieles-the-finiliar": {
       "name": "Ed Fornieles The Finiliar",
@@ -947,7 +1099,8 @@ const mediaIndex = {
           "size": 294682,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.9269354
         },
         {
           "filename": "ed_fornieles-install-5.png",
@@ -955,7 +1108,8 @@ const mediaIndex = {
           "size": 378894,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.2317436
         },
         {
           "filename": "ed_fornieles-install-9 (1).jpg",
@@ -963,7 +1117,8 @@ const mediaIndex = {
           "size": 149057,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902354.972532
         },
         {
           "filename": "ed_fornieles-install-9 (1).png",
@@ -971,7 +1126,8 @@ const mediaIndex = {
           "size": 147529,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.2790422
         },
         {
           "filename": "ed_fornieles-install-9.webp",
@@ -979,7 +1135,8 @@ const mediaIndex = {
           "size": 147529,
           "type": "image",
           "extension": ".webp",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.3227613
         },
         {
           "filename": "image_1.jpg",
@@ -987,7 +1144,8 @@ const mediaIndex = {
           "size": 248320,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.018745
         },
         {
           "filename": "image_2.jpg",
@@ -995,7 +1153,8 @@ const mediaIndex = {
           "size": 80079,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.04389
         },
         {
           "filename": "image_3.jpg",
@@ -1003,7 +1162,8 @@ const mediaIndex = {
           "size": 70659,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.0700493
         },
         {
           "filename": "image_4.jpg",
@@ -1011,7 +1171,8 @@ const mediaIndex = {
           "size": 88860,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.0948572
         },
         {
           "filename": "image_5.jpg",
@@ -1019,7 +1180,8 @@ const mediaIndex = {
           "size": 66441,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.1205962
         },
         {
           "filename": "image_6.jpg",
@@ -1027,7 +1189,8 @@ const mediaIndex = {
           "size": 75598,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.144839
         },
         {
           "filename": "image_7.jpg",
@@ -1035,9 +1198,13 @@ const mediaIndex = {
           "size": 195273,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.171414
         }
-      ]
+      ],
+      "total_files": 12,
+      "total_size": 1942921,
+      "has_issues": true
     },
     "excuse-you": {
       "name": "Excuse You",
@@ -1048,7 +1215,8 @@ const mediaIndex = {
           "size": 615630,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.5202804
         },
         {
           "filename": "PXL_20220613_170924610.MP.jpg",
@@ -1056,9 +1224,13 @@ const mediaIndex = {
           "size": 457379,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.7396948
         }
-      ]
+      ],
+      "total_files": 2,
+      "total_size": 1073009,
+      "has_issues": false
     },
     "extra_ignore": {
       "name": "Extra Ignore",
@@ -1069,7 +1241,8 @@ const mediaIndex = {
           "size": 236408,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.78602
         },
         {
           "filename": "basel-2022_PXL_20220607_142841257.jpg",
@@ -1077,9 +1250,13 @@ const mediaIndex = {
           "size": 581348,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902355.9921925
         }
-      ]
+      ],
+      "total_files": 2,
+      "total_size": 817756,
+      "has_issues": true
     },
     "field-atmosphonia": {
       "name": "Field Atmosphonia",
@@ -1090,7 +1267,8 @@ const mediaIndex = {
           "size": 401518,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.0317378
         },
         {
           "filename": "field_atmosphonia_naples_2024_rp_001.png",
@@ -1098,7 +1276,8 @@ const mediaIndex = {
           "size": 2279921,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832399.109293
         },
         {
           "filename": "field_atmosphonia_naples_2024_rp_002.jpg",
@@ -1106,7 +1285,8 @@ const mediaIndex = {
           "size": 330771,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.0675402
         },
         {
           "filename": "field_atmosphonia_naples_2024_rp_002.png",
@@ -1114,7 +1294,8 @@ const mediaIndex = {
           "size": 2141135,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832399.9886642
         },
         {
           "filename": "field_atmosphonia_naples_2024_rp_003.png",
@@ -1122,7 +1303,8 @@ const mediaIndex = {
           "size": 232008,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.1123917
         },
         {
           "filename": "field_atmosphonia_sydney_2023_zw_007.png",
@@ -1130,9 +1312,13 @@ const mediaIndex = {
           "size": 2390732,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832402.3825817
         }
-      ]
+      ],
+      "total_files": 6,
+      "total_size": 7776085,
+      "has_issues": true
     },
     "halte-0-sepaq-iles-de-boucherville": {
       "name": "Halte 0 Sepaq Iles De Boucherville",
@@ -1143,7 +1329,8 @@ const mediaIndex = {
           "size": 315013,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.167045
         },
         {
           "filename": "tdmovieout10.jpg",
@@ -1151,7 +1338,8 @@ const mediaIndex = {
           "size": 298569,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.222234
         },
         {
           "filename": "unnamed.jpg",
@@ -1159,7 +1347,8 @@ const mediaIndex = {
           "size": 350202,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832402.444682
         },
         {
           "filename": "untitled-1.jpg",
@@ -1167,7 +1356,8 @@ const mediaIndex = {
           "size": 261127,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.251106
         },
         {
           "filename": "untitled-3.jpg",
@@ -1175,9 +1365,13 @@ const mediaIndex = {
           "size": 404640,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832402.4848907
         }
-      ]
+      ],
+      "total_files": 5,
+      "total_size": 1629551,
+      "has_issues": false
     },
     "hormonium": {
       "name": "Hormonium",
@@ -1188,7 +1382,8 @@ const mediaIndex = {
           "size": 35781,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.2704709
         },
         {
           "filename": "hormonium_paris_2024_pd_001.jpg",
@@ -1196,7 +1391,8 @@ const mediaIndex = {
           "size": 367230,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.3026426
         },
         {
           "filename": "hormonium_paris_2024_pd_001.png",
@@ -1204,7 +1400,8 @@ const mediaIndex = {
           "size": 2480797,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832404.2949371
         },
         {
           "filename": "mg_4374.png",
@@ -1212,7 +1409,8 @@ const mediaIndex = {
           "size": 342451,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.362975
         },
         {
           "filename": "rafaellozanohemmer_hormonium-2022-1_w.png",
@@ -1220,9 +1418,13 @@ const mediaIndex = {
           "size": 406792,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.417629
         }
-      ]
+      ],
+      "total_files": 5,
+      "total_size": 3633051,
+      "has_issues": true
     },
     "kontinuum": {
       "name": "Kontinuum",
@@ -1233,7 +1435,8 @@ const mediaIndex = {
           "size": 296376,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.4991524
         },
         {
           "filename": "Kontinuum_Signature_Shows_path_1-WS.jpg",
@@ -1241,7 +1444,8 @@ const mediaIndex = {
           "size": 229193,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.5700824
         },
         {
           "filename": "Kontinuum_Signature_Shows_path_2-WS.jpg",
@@ -1249,7 +1453,8 @@ const mediaIndex = {
           "size": 211613,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.6682656
         },
         {
           "filename": "Kontinuum_Signature_Shows_path_4-WS.jpg",
@@ -1257,7 +1462,8 @@ const mediaIndex = {
           "size": 164148,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832404.4257658
         },
         {
           "filename": "Kontinuum_Signature_Shows_path_5-WS.jpg",
@@ -1265,7 +1471,8 @@ const mediaIndex = {
           "size": 318677,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.7424192
         },
         {
           "filename": "Kontinuum_Signature_Shows_path_7-WS_eb0a83d1-6aa4-4006-88af-fc0c59aba15a.jpg",
@@ -1273,7 +1480,8 @@ const mediaIndex = {
           "size": 335080,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832404.5497718
         },
         {
           "filename": "Kontinuum_Signature_Shows_room_2-WS.jpg",
@@ -1281,7 +1489,8 @@ const mediaIndex = {
           "size": 138462,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832404.6098585
         },
         {
           "filename": "Kontinuum_Signature_Shows_room_4-WS.jpg",
@@ -1289,9 +1498,13 @@ const mediaIndex = {
           "size": 165367,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832404.670094
         }
-      ]
+      ],
+      "total_files": 8,
+      "total_size": 1858916,
+      "has_issues": false
     },
     "kristallstimmen": {
       "name": "Kristallstimmen",
@@ -1302,7 +1515,8 @@ const mediaIndex = {
           "size": 812729,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.7958252
         },
         {
           "filename": "454589.png",
@@ -1310,7 +1524,8 @@ const mediaIndex = {
           "size": 4322668,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832405.1852236
         },
         {
           "filename": "Animationmaison.gif",
@@ -1318,7 +1533,8 @@ const mediaIndex = {
           "size": 43209,
           "type": "image",
           "extension": ".gif",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825315.9906397
         },
         {
           "filename": "kristallstimmen_2024_wattens_sk_029_t.jpg",
@@ -1326,7 +1542,8 @@ const mediaIndex = {
           "size": 825308,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.8772256
         },
         {
           "filename": "kristallstimmen_2024_wattens_sk_086.png",
@@ -1334,7 +1551,8 @@ const mediaIndex = {
           "size": 1901282,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832405.9479616
         },
         {
           "filename": "Kristallstimmen_940x620.jpg",
@@ -1342,7 +1560,8 @@ const mediaIndex = {
           "size": 288617,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.9054427
         },
         {
           "filename": "Kristallstimmen_Video_1960x800.jpg",
@@ -1350,9 +1569,13 @@ const mediaIndex = {
           "size": 897791,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902356.9877803
         }
-      ]
+      ],
+      "total_files": 7,
+      "total_size": 9091604,
+      "has_issues": true
     },
     "listening-forest": {
       "name": "Listening Forest",
@@ -1363,7 +1586,8 @@ const mediaIndex = {
           "size": 237638,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902357.6658869
         },
         {
           "filename": "5W6A0118.jpg",
@@ -1371,7 +1595,8 @@ const mediaIndex = {
           "size": 1123830,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902358.8028457
         },
         {
           "filename": "5W6A0158.jpg",
@@ -1379,7 +1604,8 @@ const mediaIndex = {
           "size": 342613,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832410.0347688
         },
         {
           "filename": "5W6A9864.jpg",
@@ -1387,7 +1613,8 @@ const mediaIndex = {
           "size": 374722,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832410.8221107
         },
         {
           "filename": "5W6A9989.jpg",
@@ -1395,7 +1622,8 @@ const mediaIndex = {
           "size": 353630,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832411.5701637
         },
         {
           "filename": "PXL_20220826_021024260.MP.jpg",
@@ -1403,7 +1631,8 @@ const mediaIndex = {
           "size": 193531,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902359.0155551
         },
         {
           "filename": "PXL_20220828_020129469_exported_874_1661804127337.jpg",
@@ -1411,7 +1640,8 @@ const mediaIndex = {
           "size": 543736,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902359.2751613
         },
         {
           "filename": "PXL_20220829_011837283.jpg",
@@ -1419,7 +1649,8 @@ const mediaIndex = {
           "size": 304415,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902359.4737916
         },
         {
           "filename": "PXL_20220829_015849533.jpg",
@@ -1427,7 +1658,8 @@ const mediaIndex = {
           "size": 96000,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832412.2014818
         },
         {
           "filename": "thermal_drift_bentonville_2022_er_003_t.jpg",
@@ -1435,9 +1667,13 @@ const mediaIndex = {
           "size": 13059,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902359.4898224
         }
-      ]
+      ],
+      "total_files": 10,
+      "total_size": 3583174,
+      "has_issues": false
     },
     "nova-lumina": {
       "name": "Nova Lumina",
@@ -1448,7 +1684,8 @@ const mediaIndex = {
           "size": 384386,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902359.5792203
         },
         {
           "filename": "CHD_Nova_Lumina_WEB_25.jpg",
@@ -1456,7 +1693,8 @@ const mediaIndex = {
           "size": 474486,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758902359.6720357
         },
         {
           "filename": "CHD_Nova_Lumina_WEB_26_6a7ec75b-6693-40bb-8822-8c5b9a5da6fb.jpg",
@@ -1464,7 +1702,8 @@ const mediaIndex = {
           "size": 57348,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832412.263152
         },
         {
           "filename": "CHD_Nova_Lumina_WEB_27.jpg",
@@ -1472,7 +1711,8 @@ const mediaIndex = {
           "size": 126763,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832412.3337393
         },
         {
           "filename": "CHD_Nova_Lumina_WEB_28.jpg",
@@ -1480,7 +1720,8 @@ const mediaIndex = {
           "size": 108117,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832412.4036646
         },
         {
           "filename": "CHD_Nova_Lumina_WEB_29.jpg",
@@ -1488,7 +1729,8 @@ const mediaIndex = {
           "size": 134441,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832412.468751
         },
         {
           "filename": "CHD_Nova_Lumina_WEB_31.jpg",
@@ -1496,7 +1738,8 @@ const mediaIndex = {
           "size": 333339,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832412.542443
         },
         {
           "filename": "CHD_Nova_Lumina_WEB_33.jpg",
@@ -1504,9 +1747,13 @@ const mediaIndex = {
           "size": 276316,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832412.6141944
         }
-      ]
+      ],
+      "total_files": 8,
+      "total_size": 1895196,
+      "has_issues": false
     },
     "ozone": {
       "name": "Ozone",
@@ -1517,7 +1764,8 @@ const mediaIndex = {
           "size": 56173,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.1548026
         },
         {
           "filename": "image_2.jpg",
@@ -1525,7 +1773,8 @@ const mediaIndex = {
           "size": 69616,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.1075647
         },
         {
           "filename": "image_3.jpg",
@@ -1533,9 +1782,13 @@ const mediaIndex = {
           "size": 73558,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.1355362
         }
-      ]
+      ],
+      "total_files": 3,
+      "total_size": 199347,
+      "has_issues": false
     },
     "panasonic-augmented-basketball-court": {
       "name": "Panasonic Augmented Basketball Court",
@@ -1546,9 +1799,13 @@ const mediaIndex = {
           "size": 167054,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.1947687
         }
-      ]
+      ],
+      "total_files": 1,
+      "total_size": 167054,
+      "has_issues": true
     },
     "recurrent-first-dream": {
       "name": "Recurrent First Dream",
@@ -1559,7 +1816,8 @@ const mediaIndex = {
           "size": 2302900,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832414.701752
         },
         {
           "filename": "reccurent_first_dream_montreal_2024_rlh_013.png",
@@ -1567,7 +1825,8 @@ const mediaIndex = {
           "size": 2179507,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832416.9324467
         },
         {
           "filename": "Recurrent-First-Dream--1-.jpg",
@@ -1575,7 +1834,8 @@ const mediaIndex = {
           "size": 316985,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825318.408595
         },
         {
           "filename": "Recurrent-First-Dream--1-.png",
@@ -1583,7 +1843,8 @@ const mediaIndex = {
           "size": 2547723,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832417.7878287
         },
         {
           "filename": "Recurrent-First-Dream-1-.jpg",
@@ -1591,7 +1852,8 @@ const mediaIndex = {
           "size": 307011,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825318.552025
         },
         {
           "filename": "Recurrent-First-Dream-1-.png",
@@ -1599,7 +1861,8 @@ const mediaIndex = {
           "size": 2422631,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832418.7459278
         },
         {
           "filename": "recurrent_first_dream_mexico_city_2024_gme_002.png",
@@ -1607,7 +1870,8 @@ const mediaIndex = {
           "size": 2837164,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832419.8290558
         },
         {
           "filename": "recurrent_first_dream_mexico_city_2024_rlh_002.png",
@@ -1615,9 +1879,13 @@ const mediaIndex = {
           "size": 1342416,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832420.4834692
         }
-      ]
+      ],
+      "total_files": 8,
+      "total_size": 14256337,
+      "has_issues": true
     },
     "red-hot-chili-peppers-getaway-tour": {
       "name": "Red Hot Chili Peppers Getaway Tour",
@@ -1628,7 +1896,8 @@ const mediaIndex = {
           "size": 63111,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.3037586
         },
         {
           "filename": "image_2.jpg",
@@ -1636,7 +1905,8 @@ const mediaIndex = {
           "size": 65841,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.2189746
         },
         {
           "filename": "image_3.jpg",
@@ -1644,7 +1914,8 @@ const mediaIndex = {
           "size": 46119,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.2785313
         },
         {
           "filename": "image_4.jpg",
@@ -1652,9 +1923,13 @@ const mediaIndex = {
           "size": 128055,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.2534876
         }
-      ]
+      ],
+      "total_files": 4,
+      "total_size": 303126,
+      "has_issues": false
     },
     "refractions": {
       "name": "Refractions",
@@ -1665,7 +1940,8 @@ const mediaIndex = {
           "size": 281135,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758908812.073139
         },
         {
           "filename": "11_oct-0836.jpg",
@@ -1673,7 +1949,8 @@ const mediaIndex = {
           "size": 264752,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758908790.5406265
         },
         {
           "filename": "11_oct-0853.jpg",
@@ -1681,7 +1958,8 @@ const mediaIndex = {
           "size": 185998,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758908804.483191
         },
         {
           "filename": "44149980_2250186691723014_3052303252902117376_o.jpg",
@@ -1689,7 +1967,8 @@ const mediaIndex = {
           "size": 550757,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758908783.5617883
         },
         {
           "filename": "_MG_1158.jpg",
@@ -1697,23 +1976,8 @@ const mediaIndex = {
           "size": 585932,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "_MG_1158_1.jpg",
-          "path": "high-res/refractions/_MG_1158_1.jpg",
-          "size": 260692,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "_MG_1158_2.jpg",
-          "path": "high-res/refractions/_MG_1158_2.jpg",
-          "size": 70876,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758908775.1845136
         },
         {
           "filename": "_MG_1171.jpg",
@@ -1721,81 +1985,13 @@ const mediaIndex = {
           "size": 396888,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "image_1.jpg",
-          "path": "high-res/refractions/image_1.jpg",
-          "size": 18682,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "image_4.jpg",
-          "path": "high-res/refractions/image_4.jpg",
-          "size": 37497,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "image_6.jpg",
-          "path": "high-res/refractions/image_6.jpg",
-          "size": 18034,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "image_7.jpg",
-          "path": "high-res/refractions/image_7.jpg",
-          "size": 29455,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "IMG_7476_JPG.jpg",
-          "path": "high-res/refractions/IMG_7476_JPG.jpg",
-          "size": 39088,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "refraction_12.jpg",
-          "path": "high-res/refractions/refraction_12.jpg",
-          "size": 109723,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "refraction_15.jpg",
-          "path": "high-res/refractions/refraction_15.jpg",
-          "size": 151453,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "refraction_83.jpg",
-          "path": "high-res/refractions/refraction_83.jpg",
-          "size": 146285,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
-        },
-        {
-          "filename": "refraction_87.jpg",
-          "path": "high-res/refractions/refraction_87.jpg",
-          "size": 307570,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758908798.16476
         }
-      ]
+      ],
+      "total_files": 6,
+      "total_size": 2265462,
+      "has_issues": false
     },
     "renault-annual-meeting": {
       "name": "Renault Annual Meeting",
@@ -1806,7 +2002,8 @@ const mediaIndex = {
           "size": 62503,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.4992251
         },
         {
           "filename": "image_2.jpg",
@@ -1814,7 +2011,8 @@ const mediaIndex = {
           "size": 13674,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.5681493
         },
         {
           "filename": "image_3.jpg",
@@ -1822,7 +2020,8 @@ const mediaIndex = {
           "size": 93249,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.4461772
         },
         {
           "filename": "image_4.jpg",
@@ -1830,7 +2029,8 @@ const mediaIndex = {
           "size": 30043,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.4246626
         },
         {
           "filename": "image_5.jpg",
@@ -1838,7 +2038,8 @@ const mediaIndex = {
           "size": 18261,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.5842123
         },
         {
           "filename": "image_6.jpg",
@@ -1846,7 +2047,8 @@ const mediaIndex = {
           "size": 19388,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.5501497
         },
         {
           "filename": "image_7.jpg",
@@ -1854,7 +2056,8 @@ const mediaIndex = {
           "size": 33301,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.517755
         },
         {
           "filename": "image_8.jpg",
@@ -1862,7 +2065,8 @@ const mediaIndex = {
           "size": 14767,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.5342767
         },
         {
           "filename": "image_9.jpg",
@@ -1870,9 +2074,13 @@ const mediaIndex = {
           "size": 104426,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.4802456
         }
-      ]
+      ],
+      "total_files": 9,
+      "total_size": 389612,
+      "has_issues": false
     },
     "shadow-tuner": {
       "name": "Shadow Tuner",
@@ -1883,7 +2091,8 @@ const mediaIndex = {
           "size": 801703,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757535478.4906373
         },
         {
           "filename": "rlh_shadow-tuner_2-683x1024.png",
@@ -1891,7 +2100,8 @@ const mediaIndex = {
           "size": 62565,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.6346016
         },
         {
           "filename": "shadow_tuner_montreal_2025_rlh_003.jpg",
@@ -1899,7 +2109,8 @@ const mediaIndex = {
           "size": 310042,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825318.68442
         },
         {
           "filename": "shadow_tuner_montreal_2025_rlh_003.png",
@@ -1907,7 +2118,8 @@ const mediaIndex = {
           "size": 3464213,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757539505.7689526
         },
         {
           "filename": "shadow_tuner_montreal_2025_rlh_005.png",
@@ -1915,7 +2127,8 @@ const mediaIndex = {
           "size": 2491982,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757539508.343718
         },
         {
           "filename": "shadow_tuner_montreal_2025_rlh_011.png",
@@ -1923,9 +2136,13 @@ const mediaIndex = {
           "size": 2248431,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757539511.4696207
         }
-      ]
+      ],
+      "total_files": 6,
+      "total_size": 9378936,
+      "has_issues": true
     },
     "sound-tracer": {
       "name": "Sound Tracer",
@@ -1936,7 +2153,8 @@ const mediaIndex = {
           "size": 59367,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.6566195
         },
         {
           "filename": "image_2.jpg",
@@ -1944,7 +2162,8 @@ const mediaIndex = {
           "size": 39674,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.7212415
         },
         {
           "filename": "image_3.jpg",
@@ -1952,7 +2171,8 @@ const mediaIndex = {
           "size": 34980,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.6755667
         },
         {
           "filename": "image_4.jpg",
@@ -1960,9 +2180,13 @@ const mediaIndex = {
           "size": 85347,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.7027743
         }
-      ]
+      ],
+      "total_files": 4,
+      "total_size": 219368,
+      "has_issues": false
     },
     "spectral-subjects": {
       "name": "Spectral Subjects",
@@ -1973,7 +2197,8 @@ const mediaIndex = {
           "size": 0,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832421.0100749
         },
         {
           "filename": "spectral_subjects_jacksonville_2024_de_025.png",
@@ -1981,7 +2206,8 @@ const mediaIndex = {
           "size": 8973530,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757366450.3187432
         },
         {
           "filename": "spectral_subjects_montreal_2025_RLH_001.jpg",
@@ -1989,7 +2215,8 @@ const mediaIndex = {
           "size": 0,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832422.9172957
         },
         {
           "filename": "spectral_subjects_montreal_2025_RLH_001.png",
@@ -1997,7 +2224,8 @@ const mediaIndex = {
           "size": 9140467,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757366451.411538
         },
         {
           "filename": "spectral_subjects_montreal_2025_RLH_002.png",
@@ -2005,9 +2233,13 @@ const mediaIndex = {
           "size": 10257667,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1757366452.4985597
         }
-      ]
+      ],
+      "total_files": 5,
+      "total_size": 28371664,
+      "has_issues": true
     },
     "sync": {
       "name": "Sync",
@@ -2018,7 +2250,8 @@ const mediaIndex = {
           "size": 0,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832427.7311783
         },
         {
           "filename": "1.png",
@@ -2026,7 +2259,8 @@ const mediaIndex = {
           "size": 7023490,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1684442091.4211497
         },
         {
           "filename": "37.jpg",
@@ -2034,7 +2268,8 @@ const mediaIndex = {
           "size": 0,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832428.7815926
         },
         {
           "filename": "37.png",
@@ -2042,7 +2277,8 @@ const mediaIndex = {
           "size": 6578403,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1684444015.5489533
         },
         {
           "filename": "48.png",
@@ -2050,9 +2286,13 @@ const mediaIndex = {
           "size": 10329690,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1684444485.1994455
         }
-      ]
+      ],
+      "total_files": 5,
+      "total_size": 23931583,
+      "has_issues": true
     },
     "tabegami-sama": {
       "name": "Tabegami Sama",
@@ -2063,7 +2303,8 @@ const mediaIndex = {
           "size": 223756,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825319.8904586
         },
         {
           "filename": "D8A4562-WS.jpg",
@@ -2071,7 +2312,8 @@ const mediaIndex = {
           "size": 238088,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825320.0043595
         },
         {
           "filename": "D8A4575-WS.jpg",
@@ -2079,7 +2321,8 @@ const mediaIndex = {
           "size": 223807,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832430.682374
         },
         {
           "filename": "D8A4589-WS.jpg",
@@ -2087,7 +2330,8 @@ const mediaIndex = {
           "size": 163782,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832430.7425177
         },
         {
           "filename": "D8A4612-WS.jpg",
@@ -2095,7 +2339,8 @@ const mediaIndex = {
           "size": 196038,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832430.8062356
         },
         {
           "filename": "D8A5387-WS.jpg",
@@ -2103,7 +2348,8 @@ const mediaIndex = {
           "size": 348547,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832430.867745
         },
         {
           "filename": "D8A5398-WS.jpg",
@@ -2111,7 +2357,8 @@ const mediaIndex = {
           "size": 229545,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832430.928621
         },
         {
           "filename": "D8A9986-WS.jpg",
@@ -2119,7 +2366,8 @@ const mediaIndex = {
           "size": 196330,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832430.9840014
         },
         {
           "filename": "image_1.jpg",
@@ -2127,7 +2375,8 @@ const mediaIndex = {
           "size": 118279,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.783349
         },
         {
           "filename": "image_2.jpg",
@@ -2135,7 +2384,8 @@ const mediaIndex = {
           "size": 12663,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.8000846
         },
         {
           "filename": "image_3.jpg",
@@ -2143,7 +2393,8 @@ const mediaIndex = {
           "size": 22517,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.7614875
         },
         {
           "filename": "image_6.jpg",
@@ -2151,7 +2402,8 @@ const mediaIndex = {
           "size": 23533,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.8358424
         },
         {
           "filename": "image_7.jpg",
@@ -2159,7 +2411,8 @@ const mediaIndex = {
           "size": 25577,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.8196647
         },
         {
           "filename": "image_8.jpg",
@@ -2167,7 +2420,8 @@ const mediaIndex = {
           "size": 22223,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.741484
         },
         {
           "filename": "image_9.jpg",
@@ -2175,9 +2429,13 @@ const mediaIndex = {
           "size": 34573,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.851842
         }
-      ]
+      ],
+      "total_files": 15,
+      "total_size": 2079258,
+      "has_issues": false
     },
     "techs-mechs": {
       "name": "Techs Mechs",
@@ -2188,7 +2446,8 @@ const mediaIndex = {
           "size": 151984,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825320.1970232
         },
         {
           "filename": "airborne_newscasts_san_francisco_2023_bs_001.png",
@@ -2196,7 +2455,8 @@ const mediaIndex = {
           "size": 1893356,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832432.1787913
         },
         {
           "filename": "airborne_newscasts_san_francisco_2023_da_001.jpg",
@@ -2204,7 +2464,8 @@ const mediaIndex = {
           "size": 275619,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825320.5692387
         },
         {
           "filename": "airborne_newscasts_san_francisco_2023_da_001.png",
@@ -2212,7 +2473,8 @@ const mediaIndex = {
           "size": 2930620,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832433.0822735
         },
         {
           "filename": "airborne_newscasts_san_francisco_2023_da_002.png",
@@ -2220,7 +2482,8 @@ const mediaIndex = {
           "size": 2681580,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832433.8902125
         },
         {
           "filename": "thermal_drift_density_map_san_francisco_2023_da_001.png",
@@ -2228,7 +2491,8 @@ const mediaIndex = {
           "size": 1148697,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832434.396151
         },
         {
           "filename": "thermal_drift_density_map_san_francisco_2023_da_003.png",
@@ -2236,7 +2500,8 @@ const mediaIndex = {
           "size": 3136669,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832435.2823815
         },
         {
           "filename": "thermal_drift_density_map_san_francisco_2023_jd_001.png",
@@ -2244,9 +2509,13 @@ const mediaIndex = {
           "size": 2805938,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832436.255512
         }
-      ]
+      ],
+      "total_files": 8,
+      "total_size": 15024463,
+      "has_issues": true
     },
     "thermal-drift": {
       "name": "Thermal Drift",
@@ -2257,7 +2526,8 @@ const mediaIndex = {
           "size": 151838,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901985.0257983
         },
         {
           "filename": "image_2.jpg",
@@ -2265,7 +2535,8 @@ const mediaIndex = {
           "size": 358660,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.8999467
         },
         {
           "filename": "image_3.jpg",
@@ -2273,7 +2544,8 @@ const mediaIndex = {
           "size": 123276,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832436.2889793
         },
         {
           "filename": "image_4.jpg",
@@ -2281,7 +2553,8 @@ const mediaIndex = {
           "size": 244257,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.997793
         },
         {
           "filename": "image_5.jpg",
@@ -2289,7 +2562,8 @@ const mediaIndex = {
           "size": 313083,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.9587579
         },
         {
           "filename": "image_6.jpg",
@@ -2297,7 +2571,8 @@ const mediaIndex = {
           "size": 502350,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832436.3499103
         },
         {
           "filename": "image_7.jpg",
@@ -2305,7 +2580,8 @@ const mediaIndex = {
           "size": 131622,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832436.38388
         },
         {
           "filename": "thermal_drift_madrid_2023_rlh_006_t.jpg",
@@ -2313,9 +2589,13 @@ const mediaIndex = {
           "size": 6118,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758901984.918946
         }
-      ]
+      ],
+      "total_files": 8,
+      "total_size": 1831204,
+      "has_issues": false
     },
     "translation-island": {
       "name": "Translation Island",
@@ -2326,7 +2606,8 @@ const mediaIndex = {
           "size": 114823,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825321.1554396
         },
         {
           "filename": "shadow_tuner_abu_dhabi_2023_lg_045.png",
@@ -2334,7 +2615,8 @@ const mediaIndex = {
           "size": 2422966,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832438.2575283
         },
         {
           "filename": "shadow_tuner_abu_dhabi_2023_lg_047.jpg",
@@ -2342,7 +2624,8 @@ const mediaIndex = {
           "size": 125687,
           "type": "image",
           "extension": ".jpg",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758825321.6462085
         },
         {
           "filename": "shadow_tuner_abu_dhabi_2023_lg_047.png",
@@ -2350,7 +2633,8 @@ const mediaIndex = {
           "size": 1180254,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832439.1781049
         },
         {
           "filename": "shadow_tuner_abu_dhabi_2023_lg_051.png",
@@ -2358,7 +2642,8 @@ const mediaIndex = {
           "size": 2125663,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832445.442943
         },
         {
           "filename": "shadow_tuner_abu_dhabi_2023_oa_746794.png",
@@ -2366,7 +2651,8 @@ const mediaIndex = {
           "size": 2443536,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832447.210667
         },
         {
           "filename": "shadow_tuner_abu_dhabi_2023_pt_004.png",
@@ -2374,7 +2660,8 @@ const mediaIndex = {
           "size": 2613297,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832448.2247362
         },
         {
           "filename": "shadow_tuner_abu_dhabi_2023_pt_010.png",
@@ -2382,7 +2669,8 @@ const mediaIndex = {
           "size": 2383918,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832450.095
         },
         {
           "filename": "transation_stream_abu_dhabi_2023_cr_006.png",
@@ -2390,7 +2678,8 @@ const mediaIndex = {
           "size": 3098838,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832451.5078843
         },
         {
           "filename": "translation_stream_abu_dhabi_2023_lg_003.png",
@@ -2398,7 +2687,8 @@ const mediaIndex = {
           "size": 1078294,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832453.885297
         },
         {
           "filename": "translation_stream_abu_dhabi_2023_lg_005.png",
@@ -2406,7 +2696,8 @@ const mediaIndex = {
           "size": 1376898,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832454.9277706
         },
         {
           "filename": "translation_stream_abu_dhabi_2023_rlh_009.png",
@@ -2414,12 +2705,27 @@ const mediaIndex = {
           "size": 1232961,
           "type": "image",
           "extension": ".png",
-          "hash": "high-res"
+          "hash": "high-res",
+          "last_modified": 1758832458.5915854
         }
-      ]
+      ],
+      "total_files": 12,
+      "total_size": 20197135,
+      "has_issues": true
     }
   }
 };
 
-// Set global variable for neural network
+// Enhanced metadata exports for debugging
+mediaIndex.validation = {
+    "original_media_projects": 37,
+    "high_res_projects": 38,
+    "total_files_in_high_res": 267,
+    "has_consistency_issues": true
+};
+
+// Set global variable for neural network  
 window.projectMedia = mediaIndex;
+
+// Export for debugging
+window.mediaValidation = mediaIndex.validation;
