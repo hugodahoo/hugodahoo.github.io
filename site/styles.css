@@ -24,7 +24,8 @@ body.neural-network-style {
     color: #ffffff;
     min-height: 100vh;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* Layered dot pattern parallax background */
@@ -89,7 +90,8 @@ body.neural-network-style {
 .main-container {
     min-height: 100vh;
     position: relative;
-    overflow: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .project-section {
@@ -106,7 +108,7 @@ body.neural-network-style {
 .project-grid {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    min-height: 300vh; /* Increased height to accommodate all 38 projects (38 projects ÷ 2 columns = 19 rows) */
     display: block;
     padding-bottom: 100px;
 }
@@ -1856,31 +1858,270 @@ body.hover-as-default .project-block .thumbnail-overlay {
     transform: translateY(-2px);
 }
 
-/* Mobile adaptations */
+/* Mobile Header */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(144, 238, 144, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(144, 238, 144, 0.2) 0%, transparent 50%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+    backdrop-filter: blur(15px);
+    border-bottom: 2px solid rgba(144, 238, 144, 0.4);
+    z-index: 100;
+    padding: 16px 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.mobile-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(144, 238, 144, 0.6);
+    box-shadow: 0 0 15px rgba(144, 238, 144, 0.3);
+}
+
+.mobile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mobile-info {
+    flex: 1;
+}
+
+        .mobile-name {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a4a4a;
+            margin: 0 0 4px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .mobile-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+            font-weight: 400;
+        }
+
+.mobile-nav {
+    display: flex;
+    gap: 8px;
+}
+
+        .nav-toggle {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(74, 74, 74, 0.3);
+            border-radius: 8px;
+            color: #4a4a4a;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-toggle.active {
+            background: rgba(144, 238, 144, 0.2);
+            border-color: rgba(144, 238, 144, 0.4);
+            color: #90EE90;
+        }
+
+        .nav-toggle:hover {
+            background: rgba(74, 74, 74, 0.1);
+            color: #2a2a2a;
+        }
+
+        .nav-toggle.active:hover {
+            background: rgba(144, 238, 144, 0.3);
+        }
+
+/* Mobile adaptations - Clean 2-column grid layout */
 @media (max-width: 768px) {
-    .project-block {
-        width: 120px;
-        height: 90px;
-        min-height: 90px;
-        min-width: 120px;
-        padding: 8px;
+    .mobile-header {
+        display: block;
+    }
+    
+    .project-section {
+        padding-top: 180px; /* More space for fixed header */
+    }
+        .project-block {
+            width: var(--mobile-card-width, 180px) !important; /* Narrower cards with more margins */
+            min-width: var(--mobile-card-width, 180px) !important;
+        padding: 0 !important; /* Remove padding to allow thumbnail to fill entire card */
         box-sizing: border-box;
         /* Better touch targets */
         touch-action: manipulation;
+        /* Clean grid design */
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        /* Ensure no overlapping */
+        position: absolute;
+        overflow: visible !important;
     }
+    
+        /* Override desktop size classes on mobile */
+        .project-block.small,
+        .project-block.medium,
+        .project-block.large,
+        .project-block.xlarge {
+            width: var(--mobile-card-width, 180px) !important;
+            min-width: var(--mobile-card-width, 180px) !important;
+        }
     
     .project-block:hover,
     .project-block:active {
-        transform: translateZ(20px) scale(1.3); /* Smaller scale for mobile */
+        transform: translateZ(10px) scale(1.02); /* Subtle scale for mobile */
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         /* Enhanced for touch */
         cursor: pointer;
     }
     
-    /* Ensure touch-friendly spacing */
+    /* Hide neural network connections on mobile grid */
+    .connection-path {
+        display: none !important;
+    }
+    
+    /* Mobile project titles - positioned on top of cards */
+    .project-block .project-title {
+        position: absolute;
+        top: -25px;
+        left: 0;
+        right: 0;
+        font-size: 11px;
+        line-height: 1.2;
+        font-weight: 600;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        color: #2c2c2c;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 4px 8px;
+        border-radius: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        z-index: 10;
+    }
+    
+    /* Mobile thumbnail sizing - fill entire card */
+        .project-block .block-surface {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            /* Preserve category background colors for blend mode effect */
+            background: inherit;
+        }
+    
+    .project-block .thumbnail-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background: transparent;
+        /* Override desktop styles */
+        opacity: 1 !important;
+        mix-blend-mode: normal !important;
+        background-size: unset !important;
+        background-position: unset !important;
+        background-repeat: unset !important;
+    }
+    
+    .project-block .thumbnail-overlay img {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+            border-radius: 12px !important;
+        z-index: 1 !important;
+        max-width: none !important;
+        max-height: none !important;
+        /* Color overlay effect */
+        mix-blend-mode: multiply !important;
+        opacity: 0.8 !important;
+        min-width: 100% !important;
+        min-height: 100% !important;
+    }
+    
+    /* Hide other elements on mobile to let thumbnail fill the card */
+    .project-block .project-hover-text {
+        display: none;
+    }
+    
+    /* Show block titles as project titles above cards */
+        .project-block .block-title {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-size: 10px;
+            line-height: 1.1;
+            font-weight: 600;
+            text-align: left;
+            color: white;
+            background: rgba(144, 238, 144, 0.8);
+            padding: 3px 6px;
+            border-radius: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 25;
+            display: block !important;
+            min-height: 16px;
+        }
+        
+        /* Ensure parent cards have absolute positioning for masonry grid */
+        .project-block {
+            position: absolute !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+            transform: none !important;
+        }
+    
+    /* Ensure touch-friendly spacing and title space */
     .project-section {
-        padding: 15px;
+        padding: 180px 0px 15px 0px; /* Space for mobile header */
         /* Ensure vertical scrolling is accessible */
-        min-height: auto;
+        min-height: 300vh; /* Ensure enough height for all projects */
+        height: auto;
+        overflow: visible;
+    }
+    
+    /* Ensure main container allows scrolling */
+    .main-container {
+        height: auto !important;
+        min-height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
     
     /* Better navigation on mobile */
@@ -1942,8 +2183,8 @@ body.hover-as-default .project-block .thumbnail-overlay {
 
 @media (max-width: 768px) {
     .project-grid {
-        min-height: 150vh;
-        /* Force proper height calculation for grid */
+        /* Let JavaScript calculate the proper height */
+        min-height: auto;
         height: auto;
         /* Ensure grid layout works */
         padding: 30px 15px;

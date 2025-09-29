@@ -27,11 +27,31 @@ function getRandomSize() {
 
 // Get card dimensions with random aspect ratios between 2:1 and 3:1
 function getCardDimensions(sizeClass) {
-    // All cards same size now - smaller to allow more spreading
+    // Return mobile dimensions on mobile, desktop dimensions on desktop
+    if (window.innerWidth <= 768) {
+        // Mobile: Use same calculation as calculateMobileGridPosition
+        const margin = 16;
+        const cardSpacing = 8;
+        const cardWidth = (window.innerWidth - margin * 2 - cardSpacing) / 2;
+        
+        // Use the same height variation logic as calculateMobileGridPosition
+        const baseHeight = 120;
+        const heightVariations = [0, 20, 40, -10, 30, -5, 25, 15];
+        // We need to get the current card index to determine height variation
+        // This will be handled in the calling function
+        const cardHeight = baseHeight; // Default height, will be overridden
+        
+        return {
+            width: cardWidth,
+            height: cardHeight
+        };
+    } else {
+        // Desktop: All cards same size now - smaller to allow more spreading
     return {
         width: 100,
         height: 40
     };
+    }
 }
 
 // Get project category with better distribution
@@ -410,6 +430,8 @@ function changeShape(shapeName) {
                 const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
                 positionCardCircularly(block, sizeClass, positionIndex, allBlocks.length);
             });
+            // Update container height for masonry layout
+            updateMasonryContainerHeight();
         }
     }
 }
@@ -450,6 +472,8 @@ function addShapeKeyboardListener() {
                 const totalCards = allBlocks.length;
                 positionCardCircularly(block, sizeClass, index, totalCards);
             });
+            // Update container height for masonry layout
+            updateMasonryContainerHeight();
         }
     }, 250));
     
@@ -468,6 +492,44 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
+}
+
+// Handle window resize for mobile neural overlay
+window.addEventListener('resize', debounce(() => {
+    // Recreate mobile neural overlay on resize
+    createMobileNeuralOverlay();
+}, 250));
+
+// Mobile navigation functionality
+function initializeMobileNavigation() {
+    if (window.innerWidth > 768) return; // Only for mobile
+    
+    const navToggles = document.querySelectorAll('.nav-toggle');
+    const projectSection = document.querySelector('.project-section');
+    
+    navToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            // Remove active class from all toggles
+            navToggles.forEach(t => t.classList.remove('active'));
+            
+            // Add active class to clicked toggle
+            toggle.classList.add('active');
+            
+            const section = toggle.getAttribute('data-section');
+            
+            if (section === 'portfolio') {
+                // Show portfolio
+                projectSection.style.display = 'block';
+                console.log('📱 Switched to Portfolio view');
+            } else if (section === 'skills') {
+                // Hide portfolio for now (we can add skills content later)
+                projectSection.style.display = 'none';
+                console.log('📱 Switched to Skills view');
+            }
+        });
+    });
+    
+    console.log('📱 Mobile navigation initialized');
 }
 
 // Test function - can be called from browser console
@@ -606,34 +668,101 @@ function positionCardOrganically(index, totalCards) {
     return bestPosition;
 }
 
-// Mobile grid positioning for touch-friendly layout
-function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight) {
-    // Mobile: Grid layout with touch-friendly cards
-    const margin = 30;
-    const padding = 15;
-    const cardWidth = 120;
-    const cardHeight = 90;
+// Mobile grid positioning - true masonry layout with proper spacing
+function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions) {
+    // Mobile: Narrower cards with more margins
+    const margin = 16; // Increased margin for narrower cards
+    const cardSpacing = 8; // Reduced spacing between cards for tighter grid
+    const cardWidth = dimensions.width;
+    const cardHeight = dimensions.height;
     
-    // Calculate columns that fit comfortably
-    const colsPerRow = Math.floor((viewportWidth - margin * 2) / (cardWidth + padding));
-    const rows = Math.ceil(totalCards / colsPerRow);
+    // Debug: Log the parameters
+    if (index === 0) {
+        console.log(`🔧 calculateMobileGridPosition called with: index=${index}, totalCards=${totalCards}, viewport=${viewportWidth}x${viewportHeight}`);
+    }
     
-    // Calculate position within grid
-    const row = Math.floor(index / colsPerRow);
-    const col = index % colsPerRow;
+    // Smart column selection - choose the shorter column to balance the grid
+    let column;
+    if (index === 0) {
+        window.mobileColumnHeights = [margin, margin]; // Start with margin for both columns
+        column = 0;
+        console.log(`🔧 Initialized column heights:`, window.mobileColumnHeights);
+    } else {
+        // Choose the column with the shorter height for better balance
+        column = window.mobileColumnHeights[0] <= window.mobileColumnHeights[1] ? 0 : 1;
+    }
     
-    // Center the grid horizontally
-    const totalGridWidth = colsPerRow * cardWidth + (colsPerRow - 1) * padding;
-    const gridStartX = (viewportWidth - totalGridWidth) / 2;
+    // Calculate X position based on column - ensure exact positioning
+    const x = margin + column * (cardWidth + cardSpacing);
     
-    // Calculate position with staggered rows for better touch accessibility
-    const staggerOffset = row % 2 === 1 ? cardWidth / 4 : 0;
+    // Calculate Y position - true masonry layout with varying heights
     
-    const x = gridStartX + col * (cardWidth + padding) + staggerOffset;
-    const y = margin + row * (cardHeight + padding * 0.8);
+    // Use current column height for Y position (no gaps - direct stacking)
+    const y = window.mobileColumnHeights[column];
+    
+    // Update column height for next card in this column (add the actual height of this card)
+    const newColumnHeight = y + cardHeight;
+    window.mobileColumnHeights[column] = newColumnHeight;
+    
+    console.log(`📐 Card ${index} (column ${column}): y=${y}, height=${cardHeight}, newColumnHeight=${newColumnHeight}, columnHeights=[${window.mobileColumnHeights.join(', ')}]`);
+    
+    // Store the calculated dimensions for CSS consistency
+    window.mobileCardWidth = cardWidth;
+    window.mobileCardHeight = cardHeight;
+    window.mobileCardSpacing = cardSpacing;
+    window.mobileMargin = margin;
+    
+    // Update CSS custom properties for exact positioning
+    if (index === 0) { // Only update once per layout
+        document.documentElement.style.setProperty('--mobile-card-width', `${Math.floor(cardWidth)}px`);
+        document.documentElement.style.setProperty('--mobile-card-spacing', `${cardSpacing}px`);
+        document.documentElement.style.setProperty('--mobile-margin', `${margin}px`);
+        
+        // Container height will be calculated after all cards are processed
+        
+        console.log(`📐 GRID CALCULATION DEBUG:`, {
+            viewportWidth,
+            margin,
+            cardSpacing,
+            cardWidth,
+            cardHeight,
+            totalCards,
+            cssVariables: {
+                '--mobile-card-width': `${cardWidth}px`,
+                '--mobile-card-height': `${cardHeight}px`,
+                '--mobile-card-spacing': `${cardSpacing}px`,
+                '--mobile-margin': `${margin}px`
+            }
+        });
+    }
+    
+    console.log(`📍 Card ${index} masonry calculation:`, {
+        column,
+        x,
+        y,
+        cardWidth,
+        cardHeight,
+        columnHeights: window.mobileColumnHeights,
+        nextColumnHeight: y + cardHeight
+    });
     
     return { x, y };
 }
+
+// Calculate and set container height for masonry layout
+function updateMasonryContainerHeight() {
+    if (window.innerWidth <= 768 && window.mobileColumnHeights) {
+        const margin = 16;
+        const maxColumnHeight = Math.max(...window.mobileColumnHeights);
+        const totalHeight = maxColumnHeight + margin + 100; // Increased padding for proper scroll ending
+        const projectGrid = document.querySelector('.project-grid');
+        if (projectGrid) {
+            projectGrid.style.minHeight = `${totalHeight}px`;
+            console.log(`📏 Set masonry container height to ${totalHeight}px (max column height: ${maxColumnHeight}px)`);
+        }
+    }
+}
+
 
 // Calculate position based on current shape
 function calculateShapePosition(index, totalCards, centerX, centerY, radius) {
@@ -667,15 +796,104 @@ function getRandomSizeClass() {
 
 // Fast static positioning - no collision detection needed
 function positionCardCircularly(card, sizeClass, index, totalCards) {
-    const dimensions = getCardDimensions(sizeClass);
     const viewportWidth = window.innerWidth;
     const viewportHeight = Math.max(window.innerHeight, 1000);
+    
+    // Calculate staggered dimensions for mobile
+    let dimensions;
+    if (window.innerWidth <= 768) {
+        const margin = 16;
+        const cardSpacing = 8;
+        const cardWidth = (viewportWidth - margin * 2 - cardSpacing) / 2;
+        
+        // Staggered heights for natural masonry feel
+        const baseHeight = 120;
+        const heightVariations = [0, 15, 25, -5, 20, -8, 18, 12, 8, -3, 22, 5];
+        const heightVariation = heightVariations[index % heightVariations.length];
+        const cardHeight = baseHeight + heightVariation;
+        
+        dimensions = {
+            width: cardWidth,
+            height: cardHeight
+        };
+    } else {
+        dimensions = getCardDimensions(sizeClass);
+    }
     
     let position;
     
     // Mobile: Use grid layout for all shapes
     if (window.innerWidth <= 768) {
-        position = calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight);
+        position = calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions);
+        console.log(`🔍 Mobile card ${index}: position=${JSON.stringify(position)}, dimensions=${JSON.stringify(dimensions)}`);
+        console.log(`📱 Viewport: ${viewportWidth}x${viewportHeight}, Total cards: ${totalCards}`);
+        
+        // Enhanced debug for card positioning and sizing
+        setTimeout(() => {
+            const allCards = document.querySelectorAll('.project-block');
+            const card = allCards[index];
+            if (card) {
+                const cardRect = card.getBoundingClientRect();
+                const computedStyle = getComputedStyle(card);
+                const thumbnail = card.querySelector('.thumbnail-overlay');
+                const img = thumbnail?.querySelector('img');
+                const blockSurface = card.querySelector('.block-surface');
+                
+                console.log(`🎯 CARD ${index} DETAILED DEBUG:`, {
+                    // Card positioning
+                    cardPosition: {
+                        left: card.style.left,
+                        top: card.style.top,
+                        position: computedStyle.position
+                    },
+                    // Card dimensions
+                    cardDimensions: {
+                        width: card.style.width,
+                        height: card.style.height,
+                        computedWidth: computedStyle.width,
+                        computedHeight: computedStyle.height
+                    },
+                    // Actual rendered size
+                    cardRect: {
+                        x: cardRect.x,
+                        y: cardRect.y,
+                        width: cardRect.width,
+                        height: cardRect.height
+                    },
+                    // CSS variables
+                    cssVariables: {
+                        mobileCardWidth: getComputedStyle(document.documentElement).getPropertyValue('--mobile-card-width'),
+                        mobileCardHeight: getComputedStyle(document.documentElement).getPropertyValue('--mobile-card-height'),
+                        mobileCardSpacing: getComputedStyle(document.documentElement).getPropertyValue('--mobile-card-spacing'),
+                        mobileMargin: getComputedStyle(document.documentElement).getPropertyValue('--mobile-margin')
+                    },
+                    // Thumbnail info
+                    thumbnail: {
+                        rect: thumbnail?.getBoundingClientRect(),
+                        imgRect: img?.getBoundingClientRect(),
+                        imgSrc: img?.src?.split('/').pop()
+                    }
+                });
+                
+                // Check for overlaps with other cards (desktop only - mobile uses perfect grid)
+                if (window.innerWidth > 768) {
+                    const otherCards = Array.from(allCards).filter((c, i) => i !== index);
+                    const overlaps = otherCards.filter(otherCard => {
+                        const otherRect = otherCard.getBoundingClientRect();
+                        return !(cardRect.right <= otherRect.left || 
+                               cardRect.left >= otherRect.right || 
+                               cardRect.bottom <= otherRect.top || 
+                               cardRect.top >= otherRect.bottom);
+                    });
+                    
+                    if (overlaps.length > 0) {
+                        console.warn(`⚠️ CARD ${index} OVERLAPS with cards:`, overlaps.map(c => Array.from(allCards).indexOf(c)));
+                    }
+                }
+            }
+        }, 1000 + index * 100); // Stagger debug logs
+        
+        // No need to store positioned cards for grid layout
     } else if (currentShape === 'random') {
         // Use pre-sorted organic positions (sorted by X coordinate)
         if (window.sortedOrganicPositions && window.sortedOrganicPositions[index]) {
@@ -697,21 +915,47 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
         position = calculateShapePosition(index, totalCards, centerX, centerY, radius);
     }
     
-    // Center the card on the calculated position
-    const x = position.x - dimensions.width / 2;
-    const y = position.y - dimensions.height / 2;
+    // For mobile grid, use exact positioning; for desktop, center the card
+    let x, y;
+    if (window.innerWidth <= 768) {
+        // Mobile: Use exact grid positioning
+        x = position.x;
+        y = position.y;
+    } else {
+        // Desktop: Center the card on the calculated position
+        x = position.x - dimensions.width / 2;
+        y = position.y - dimensions.height / 2;
+    }
     
-    // Ensure cards don't go off-screen
+    // Ensure cards don't go off-screen (desktop only - mobile allows scrolling)
+    let finalX, finalY;
+    if (window.innerWidth <= 768) {
+        // Mobile: Allow cards to extend beyond viewport for scrolling
+        finalX = Math.max(x, 0); // Only prevent negative X
+        finalY = Math.max(y, 0); // Only prevent negative Y
+    } else {
+        // Desktop: Keep cards within viewport
     const maxX = viewportWidth - dimensions.width - 20;
     const maxY = viewportHeight - dimensions.height - 20;
-    
-    const finalX = Math.min(Math.max(x, 20), maxX);
-    const finalY = Math.min(Math.max(y, 20), maxY);
+        finalX = Math.min(Math.max(x, 20), maxX);
+        finalY = Math.min(Math.max(y, 20), maxY);
+    }
     
     card.style.left = finalX + 'px';
     card.style.top = finalY + 'px';
-    card.style.width = dimensions.width + 'px';
+    card.style.width = Math.floor(dimensions.width) + 'px';
     card.style.height = dimensions.height + 'px';
+    
+    // Force mobile dimensions to override any CSS
+    if (window.innerWidth <= 768) {
+        const margin = 16;
+        const cardSpacing = 8;
+        const cardWidth = (window.innerWidth - margin * 2 - cardSpacing) / 2;
+        card.style.width = Math.floor(cardWidth) + 'px';
+        // Don't override height - use the calculated staggered height
+        card.style.minWidth = Math.floor(cardWidth) + 'px';
+        card.style.minHeight = dimensions.height + 'px';
+    }
     
     // Store positioned card info for collision detection (for random layout, desktop only)
     if (currentShape === 'random' && window.innerWidth > 768) {
@@ -932,9 +1176,13 @@ function createConnectionLines() {
 }
 
 function createCurvedLine(start, end, type) {
+    // Skip connection drawing on mobile
+    if (window.innerWidth <= 768) {
+        return;
+    }
+    
     const line = document.createElement('div');
     line.className = 'connection-line';
-    
     
     // Calculate direction and determine curve type
     const deltaX = end.x - start.x;
@@ -944,6 +1192,12 @@ function createCurvedLine(start, end, type) {
     // Calculate perpendicular offset for parallel lines
     const lineSpacing = 12; // Increased spacing between parallel lines
     const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
+    // Prevent division by zero
+    if (length === 0) {
+        return;
+    }
+    
     const perpX = (-deltaY / length) * lineSpacing;
     const perpY = (deltaX / length) * lineSpacing;
     
@@ -1265,7 +1519,7 @@ function generateProjectHTML(project, mediaIndex) {
         if (currentSection) {
             if (inBulletSection) {
                 bulletHtml += '</ul>';
-            } else {
+    } else {
                 mainHtml += '</ul>';
             }
         }
@@ -1431,9 +1685,9 @@ function generateProjectHTML(project, mediaIndex) {
             <header class="project-header" ${headerStyle}>
                 <div class="header-overlay"></div>
                 <div class="header-content">
-                    <h1>${formatTitleWithItalics(project.title)}</h1>
-                    <p class="meta">${[project.year, project.client, project.role].filter(Boolean).join(" · ")}</p>
-                    <p class="tech">${project.technologies || ""}</p>
+                <h1>${formatTitleWithItalics(project.title)}</h1>
+                <p class="meta">${[project.year, project.client, project.role].filter(Boolean).join(" · ")}</p>
+                <p class="tech">${project.technologies || ""}</p>
                 </div>
             </header>
             
@@ -1546,6 +1800,98 @@ function showProjectOverlay(projectId) {
     
     // Set the cached HTML content
     main.innerHTML = cachedProject.html;
+    
+    // Add swipe detection for mobile
+    if (window.innerWidth <= 768) {
+        let startX = 0;
+        let startY = 0;
+        let startTime = 0;
+        let isSwipeGesture = false;
+        
+        console.log('🎯 SWIPE DEBUG: Adding touch event listeners to overlay');
+        
+        overlay.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            startTime = Date.now();
+            isSwipeGesture = false;
+            
+            console.log('🎯 SWIPE DEBUG: touchstart', {
+                startX: startX,
+                startY: startY,
+                startTime: startTime,
+                timestamp: new Date().toISOString()
+            });
+        }, { passive: false });
+        
+        overlay.addEventListener('touchmove', function(e) {
+            if (!startX || !startY) return;
+            
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const deltaX = currentX - startX;
+            const deltaY = currentY - startY;
+            
+            console.log('🎯 SWIPE DEBUG: touchmove', {
+                currentX: currentX,
+                currentY: currentY,
+                deltaX: deltaX,
+                deltaY: deltaY,
+                absDeltaX: Math.abs(deltaX),
+                absDeltaY: Math.abs(deltaY),
+                isHorizontal: Math.abs(deltaX) > Math.abs(deltaY),
+                thresholdMet: Math.abs(deltaX) > 20
+            });
+            
+            // If horizontal movement is significant and more than vertical, prevent default
+            if (Math.abs(deltaX) > 20 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                isSwipeGesture = true;
+                console.log('🎯 SWIPE DEBUG: Preventing default browser behavior');
+                e.preventDefault(); // Prevent browser back gesture
+            }
+        }, { passive: false });
+        
+        overlay.addEventListener('touchend', function(e) {
+            if (!startX || !startY) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const endTime = Date.now();
+            
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            const deltaTime = endTime - startTime;
+            
+            console.log('🎯 SWIPE DEBUG: touchend', {
+                endX: endX,
+                endY: endY,
+                deltaX: deltaX,
+                deltaY: deltaY,
+                deltaTime: deltaTime,
+                isSwipeGesture: isSwipeGesture,
+                rightSwipe: deltaX > 50,
+                horizontalDominant: Math.abs(deltaX) > Math.abs(deltaY),
+                fastGesture: deltaTime < 500,
+                allConditions: isSwipeGesture && deltaX > 50 && Math.abs(deltaX) > Math.abs(deltaY) && deltaTime < 500
+            });
+            
+            // Check for right swipe (deltaX > 50px, horizontal movement > vertical, fast gesture)
+            if (isSwipeGesture && deltaX > 50 && Math.abs(deltaX) > Math.abs(deltaY) && deltaTime < 500) {
+                console.log('🎯 SWIPE DEBUG: ✅ RIGHT SWIPE DETECTED - CLOSING OVERLAY');
+                e.preventDefault();
+                e.stopPropagation();
+                closeProjectOverlay();
+            } else {
+                console.log('🎯 SWIPE DEBUG: ❌ Not a valid right swipe');
+            }
+            
+            // Reset values
+            startX = 0;
+            startY = 0;
+            startTime = 0;
+            isSwipeGesture = false;
+        }, { passive: false });
+    }
     
     // Mobile viewport fixes
     if (window.innerWidth <= 768) {
@@ -1876,7 +2222,7 @@ function initBackgroundImageHover() {
                 e.preventDefault();
                 
                 const projectBlock = projectLink.closest('.project-block');
-                if (projectBlock) {
+            if (projectBlock) {
                     // Get project ID from URL
                     const projectUrl = projectLink.getAttribute('href');
                     const projectId = projectUrl.split('id=')[1];
@@ -2234,6 +2580,8 @@ window.addEventListener('resize', () => {
                     positionCardCircularly(block, sizeClass, positionIndex, allBlocks.length);
                 }
             });
+            // Update container height for masonry layout
+            updateMasonryContainerHeight();
             // Recreate connection lines
             setTimeout(() => {
                 createConnectionLines();
@@ -2344,6 +2692,209 @@ function refreshParallaxEffect() {
     setTimeout(initParallaxEffect, 100);
 }
 
+// Create mobile neural network connections overlay
+function createMobileNeuralOverlay() {
+    if (window.innerWidth > 768) return; // Only for mobile
+    
+    console.log('🧠 Creating mobile neural network overlay...');
+    
+    // Remove existing mobile neural overlay
+    const existingOverlay = document.querySelector('.mobile-neural-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'mobile-neural-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 15;
+        overflow: hidden;
+    `;
+    
+    // Create SVG for connections
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.style.cssText = `
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    `;
+    
+    // Add gradient definition to SVG
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setAttribute('id', 'mobileNeuralGradient');
+    gradient.setAttribute('x1', '0%');
+    gradient.setAttribute('y1', '0%');
+    gradient.setAttribute('x2', '100%');
+    gradient.setAttribute('y2', '0%');
+    
+    // Create gradient stops to match desktop connection paths
+    const stops = [
+        { offset: '0%', color: 'rgba(255,255,255,0.8)' },
+        { offset: '25%', color: 'rgba(255,255,255,0.4)' },
+        { offset: '50%', color: 'rgba(255,255,255,0.1)' },
+        { offset: '75%', color: 'rgba(255,255,255,0.4)' },
+        { offset: '100%', color: 'rgba(255,255,255,0.8)' }
+    ];
+    
+    stops.forEach(stop => {
+        const stopElement = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stopElement.setAttribute('offset', stop.offset);
+        stopElement.setAttribute('stop-color', stop.color);
+        gradient.appendChild(stopElement);
+    });
+    
+    defs.appendChild(gradient);
+    svg.appendChild(defs);
+    
+    overlay.appendChild(svg);
+    document.body.appendChild(overlay);
+    
+    // Generate mobile neural connections
+    generateMobileNeuralConnections(svg);
+    
+    console.log('🧠 Mobile neural network overlay created with', svg.children.length, 'connections');
+    
+    // Add parallax scroll effect
+    window.addEventListener('scroll', () => {
+        const scrollY = window.pageYOffset;
+        const parallaxSpeed = 0.3;
+        overlay.style.transform = `translateY(${scrollY * parallaxSpeed}px)`;
+    });
+}
+
+// Generate mobile neural network connections
+function generateMobileNeuralConnections(svg) {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    console.log('🔴 DEBUG: Viewport dimensions:', { viewportWidth, viewportHeight });
+    console.log('🔴 DEBUG: SVG element:', svg);
+    
+    // Create connection points (nodes)
+    const nodes = [];
+    const nodeCount = 8; // Even fewer nodes for cleaner look
+    
+    for (let i = 0; i < nodeCount; i++) {
+        const node = {
+            x: Math.random() * viewportWidth,
+            y: Math.random() * viewportHeight * 2, // Extend beyond viewport for scroll effect
+            id: i
+        };
+        nodes.push(node);
+    }
+    
+    console.log('🔴 DEBUG: Created nodes:', nodes);
+    
+    // Create connections between nearby nodes
+    const connections = [];
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            const distance = Math.sqrt(
+                Math.pow(nodes[i].x - nodes[j].x, 2) + 
+                Math.pow(nodes[i].y - nodes[j].y, 2)
+            );
+            
+            // Connect nodes that are reasonably close - more selective for cleaner look
+            if (distance < Math.min(viewportWidth, viewportHeight) * 0.4) {
+                connections.push({
+                    from: nodes[i],
+                    to: nodes[j],
+                    distance: distance
+                });
+            }
+        }
+    }
+    
+    console.log('🔴 DEBUG: Created connections:', connections.length);
+    console.log('🔴 DEBUG: Connection threshold:', Math.min(viewportWidth, viewportHeight) * 0.6);
+    
+    // Remove the ugly test line - no longer needed
+    console.log('✅ Clean mobile neural network created');
+    
+    // Draw connections
+    connections.forEach((connection, index) => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        
+        // Create smooth rounded path like desktop version
+        const startX = connection.from.x;
+        const startY = connection.from.y;
+        const endX = connection.to.x;
+        const endY = connection.to.y;
+        
+        // Calculate smooth rounded path with multiple control points
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Create smooth rounded angles with multiple curves
+        const controlOffset = distance * 0.3; // Larger offset for smoother curves
+        const angle = Math.atan2(dy, dx);
+        
+        // Add some organic variation but keep it smooth
+        const variation = (Math.random() - 0.5) * 0.2;
+        const controlAngle1 = angle + variation;
+        const controlAngle2 = angle - variation;
+        
+        const control1X = startX + Math.cos(controlAngle1) * controlOffset;
+        const control1Y = startY + Math.sin(controlAngle1) * controlOffset;
+        const control2X = endX - Math.cos(controlAngle2) * controlOffset;
+        const control2Y = endY - Math.sin(controlAngle2) * controlOffset;
+        
+        // Use cubic Bézier curve for smooth rounded angles
+        const pathData = `M ${startX} ${startY} C ${control1X} ${control1Y}, ${control2X} ${control2Y}, ${endX} ${endY}`;
+        line.setAttribute('d', pathData);
+        
+        // Style the connection to match desktop - white gradient with subtle glow
+        const opacity = Math.max(0.5, 0.8 - (connection.distance / (viewportWidth * 0.6)) * 0.2);
+        line.style.cssText = `
+            stroke: url(#mobileNeuralGradient);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-opacity: ${opacity};
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
+            animation: mobileNeuralPulse 4s ease-in-out infinite;
+            animation-delay: ${index * 0.1}s;
+        `;
+        
+        console.log(`🔴 DEBUG: Created connection ${index}:`, {
+            from: { x: connection.from.x, y: connection.from.y },
+            to: { x: connection.to.x, y: connection.to.y },
+            distance: connection.distance,
+            pathData: pathData
+        });
+        
+        svg.appendChild(line);
+    });
+    
+    // Add pulsing animation
+    if (!document.querySelector('#mobile-neural-styles')) {
+        const style = document.createElement('style');
+        style.id = 'mobile-neural-styles';
+        style.textContent = `
+            @keyframes mobileNeuralPulse {
+                0%, 100% { 
+                    stroke-opacity: 0.4; 
+                    filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+                }
+                50% { 
+                    stroke-opacity: 0.7; 
+                    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
@@ -2354,6 +2905,12 @@ document.addEventListener('DOMContentLoaded', function() {
     generateConcentricSquares();
     initializeNeuralNetwork();
     initParallaxEffect();
+    
+    // Create mobile neural overlay
+    createMobileNeuralOverlay();
+    
+    // Initialize mobile navigation
+    initializeMobileNavigation();
     
     // Add keyboard controls for shape cycling
     addShapeKeyboardListener();
@@ -2377,12 +2934,24 @@ if (document.readyState === 'loading') {
         generateConcentricSquares();
         initializeNeuralNetwork();
         initParallaxEffect();
+        
+        // Create mobile neural overlay
+        createMobileNeuralOverlay();
+        
+        // Initialize mobile navigation
+        initializeMobileNavigation();
     });
 } else {
     generateConcentricSquares();
     // Don't initialize immediately - let the HTML script handle it
     // initializeNeuralNetwork();
     initParallaxEffect();
+    
+    // Create mobile neural overlay
+    createMobileNeuralOverlay();
+    
+    // Initialize mobile navigation
+    initializeMobileNavigation();
     
     // Add keyboard controls for shape cycling
     addShapeKeyboardListener();

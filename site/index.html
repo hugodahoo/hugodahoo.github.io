@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=31">
+    <link rel="stylesheet" href="styles.css?v=68">
     
     <!-- Preload critical resources with high priority for local development -->
     <link rel="preload" href="data.js" as="script" fetchpriority="high">
@@ -30,6 +30,23 @@
     </div>
     
     <div class="main-container">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="mobile-profile">
+                <div class="mobile-photo">
+                    <img src="media/hugo-photo.jpg" alt="Hugo Daoust" />
+                </div>
+                <div class="mobile-info">
+                    <h1 class="mobile-name">Hugo Daoust</h1>
+                    <p class="mobile-title">Interactive Media Artist</p>
+                </div>
+            </div>
+            <nav class="mobile-nav">
+                <button class="nav-toggle active" data-section="portfolio">Portfolio</button>
+                <button class="nav-toggle" data-section="skills">Skills</button>
+            </nav>
+        </header>
+        
         <section class="project-section" id="section-1">
             <main id="list-1" class="project-grid"></main>
         </section>
@@ -115,7 +132,7 @@
                         window.projectMedia = JSON.parse(cachedMedia);
                         // Load neural network script
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=30';
+                        neuralScript.src = 'neural-network.js?v=87';
                         neuralScript.onload = () => {
                             setTimeout(() => {
                                 console.log('Cached data path - About to initialize neural network...');
@@ -153,7 +170,7 @@
                         console.log('Data cached in sessionStorage');
                         
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=30';
+                        neuralScript.src = 'neural-network.js?v=87';
                         neuralScript.onload = () => {
                             // Small delay to ensure data is fully loaded
                             setTimeout(() => {
