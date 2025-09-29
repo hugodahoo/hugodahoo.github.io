@@ -1612,6 +1612,50 @@ function showProjectOverlay(projectId) {
         document.body.style.top = `-${savedScrollPosition}px`;
         document.body.style.width = '100%';
         
+        // Add swipe gesture support for mobile
+        let startX = 0;
+        let startY = 0;
+        let isSwipeGesture = false;
+        
+        overlay.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isSwipeGesture = false;
+        }, { passive: true });
+        
+        overlay.addEventListener('touchmove', function(e) {
+            if (!startX || !startY) return;
+            
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            
+            const diffX = startX - currentX;
+            const diffY = startY - currentY;
+            
+            // Check if this is a horizontal swipe (more horizontal than vertical movement)
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                isSwipeGesture = true;
+            }
+        }, { passive: true });
+        
+        overlay.addEventListener('touchend', function(e) {
+            if (!startX || !startY) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const diffX = startX - endX;
+            
+            // Left swipe detected (swipe left to go back)
+            if (isSwipeGesture && diffX > 100) {
+                console.log('Left swipe detected - closing overlay');
+                closeProjectOverlay();
+            }
+            
+            // Reset values
+            startX = 0;
+            startY = 0;
+            isSwipeGesture = false;
+        }, { passive: true });
+        
         // Restore scroll position when overlay closes
         overlay.addEventListener('closemobile', function() {
             document.body.style.position = '';
