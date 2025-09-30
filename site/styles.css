@@ -20,7 +20,7 @@ body {
 
 /* Neural Network Style */
 body.neural-network-style {
-    background: #f5f5f5;
+    background: #2d7054;
     color: #ffffff;
     min-height: 100vh;
     position: relative;
@@ -1965,17 +1965,25 @@ body.hover-as-default .project-block .thumbnail-overlay {
     
     .project-section {
         padding-top: 180px; /* More space for fixed header */
+        overflow-x: hidden; /* Hide horizontal scrollbar from offscreen cards */
+        position: relative;
+    }
+    
+    .project-grid {
+        overflow: visible; /* Allow cards to extend beyond container */
+        position: relative;
     }
         .project-block {
-            width: var(--mobile-card-width, 180px) !important; /* Narrower cards with more margins */
-            min-width: var(--mobile-card-width, 180px) !important;
+            /* Allow JavaScript to control width for dynamic offscreen sizing */
+            max-width: none !important;
         padding: 0 !important; /* Remove padding to allow thumbnail to fill entire card */
         box-sizing: border-box;
         /* Better touch targets */
         touch-action: manipulation;
         /* Clean grid design */
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 0px;
+        box-shadow: none;
+        border: none;
         transition: all 0.2s ease;
         /* Ensure no overlapping */
         position: absolute;
@@ -1987,8 +1995,8 @@ body.hover-as-default .project-block .thumbnail-overlay {
         .project-block.medium,
         .project-block.large,
         .project-block.xlarge {
-            width: var(--mobile-card-width, 180px) !important;
-            min-width: var(--mobile-card-width, 180px) !important;
+            /* Allow JavaScript to control width for dynamic offscreen sizing */
+            max-width: none !important;
         }
     
     .project-block:hover,
@@ -2030,7 +2038,7 @@ body.hover-as-default .project-block .thumbnail-overlay {
             position: relative;
             width: 100%;
             height: 100%;
-            border-radius: 12px;
+            border-radius: 0px;
             overflow: hidden;
             /* Preserve category background colors for blend mode effect */
             background: inherit;
@@ -2059,7 +2067,7 @@ body.hover-as-default .project-block .thumbnail-overlay {
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-            border-radius: 12px !important;
+            border-radius: 0px !important;
         z-index: 1 !important;
         max-width: none !important;
         max-height: none !important;
@@ -2078,24 +2086,37 @@ body.hover-as-default .project-block .thumbnail-overlay {
     /* Show block titles as project titles above cards */
         .project-block .block-title {
             position: absolute;
-            top: 4px;
-            left: 4px;
-            right: 4px;
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            font-size: 10px;
-            line-height: 1.1;
-            font-weight: 600;
+            top: 16px;
+            left: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.2;
+            font-weight: 400;
             text-align: left;
-            color: white;
-            background: rgba(144, 238, 144, 0.8);
-            padding: 3px 6px;
-            border-radius: 8px;
+            color: #ffffff;
+            background: transparent;
+            padding: 0;
+            border-radius: 0px;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            overflow: visible;
+            text-overflow: clip;
             z-index: 25;
             display: block !important;
-            min-height: 16px;
+            min-height: auto;
+            border-left: none;
+            box-shadow: none;
+        }
+        
+        .project-block .block-title::before {
+            content: attr(data-number);
+            display: inline-block;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+        
+        /* Smooth transition for JavaScript-controlled position */
+        .project-block {
+            transition: transform 0.1s ease-out;
         }
         
         /* Ensure parent cards have absolute positioning for masonry grid */
