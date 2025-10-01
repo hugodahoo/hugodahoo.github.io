@@ -10,12 +10,31 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=28">
+    <link rel="stylesheet" href="styles.css?v=94">
 </head>
 <body>
-    <header>
-        <a href="index.html">← Tous les projets</a>
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="hamburger-menu" id="hamburger-menu">
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+            <div class="hamburger-line"></div>
+        </div>
+        <div class="vertical-name" id="vertical-name">
+            <span>HUGO DAOUST</span>
+        </div>
     </header>
+    
+    <!-- Mobile Navigation Menu -->
+    <nav class="mobile-nav-menu" id="mobile-nav-menu">
+        <div class="nav-line"></div>
+        <div class="nav-items">
+            <a href="index.html" class="nav-item">INDEX</a>
+            <a href="#" class="nav-item">ABOUT</a>
+            <a href="#" class="nav-item">JOURNAL</a>
+        </div>
+        <div class="nav-line"></div>
+    </nav>
     <main id="project"></main>
     
     <!-- Neural network background with 3 layers -->
@@ -29,6 +48,33 @@
         if (window.refreshProjectCache) {
             window.refreshProjectCache();
         }
+    </script>
+    
+    <script>
+        // Mobile hamburger menu functionality for project page
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerMenu = document.getElementById('hamburger-menu');
+            const mobileNavMenu = document.getElementById('mobile-nav-menu');
+            const verticalName = document.getElementById('vertical-name');
+            
+            if (hamburgerMenu && mobileNavMenu) {
+                hamburgerMenu.addEventListener('click', function() {
+                    hamburgerMenu.classList.toggle('active');
+                    mobileNavMenu.classList.toggle('open');
+                });
+            }
+            
+            // Close any open overlays when clicking on name
+            if (verticalName) {
+                verticalName.addEventListener('click', function() {
+                    // Close mobile navigation menu if open
+                    if (mobileNavMenu && mobileNavMenu.classList.contains('open')) {
+                        mobileNavMenu.classList.remove('open');
+                        hamburgerMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
     </script>
     <script>
         console.log('Script starting...');

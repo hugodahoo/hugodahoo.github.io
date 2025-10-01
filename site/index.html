@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles.css?v=79">
+        <link rel="stylesheet" href="styles.css?v=104">
     
     <!-- Preload critical resources with high priority for local development -->
     <link rel="preload" href="data.js" as="script" fetchpriority="high">
@@ -32,20 +32,26 @@
     <div class="main-container">
         <!-- Mobile Header -->
         <header class="mobile-header">
-            <div class="mobile-profile">
-                <div class="mobile-photo">
-                    <img src="media/hugo-photo.jpg" alt="Hugo Daoust" />
-                </div>
-                <div class="mobile-info">
-                    <h1 class="mobile-name">Hugo Daoust</h1>
-                    <p class="mobile-title">Interactive Media Artist</p>
-                </div>
+            <div class="hamburger-menu" id="hamburger-menu">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
             </div>
-            <nav class="mobile-nav">
-                <button class="nav-toggle active" data-section="portfolio">Portfolio</button>
-                <button class="nav-toggle" data-section="skills">Skills</button>
-            </nav>
+            <div class="vertical-name" id="vertical-name">
+                <span>HUGO DAOUST</span>
+            </div>
         </header>
+        
+        <!-- Mobile Navigation Menu -->
+        <nav class="mobile-nav-menu" id="mobile-nav-menu">
+            <div class="nav-line"></div>
+            <div class="nav-items">
+                <a href="#" class="nav-item">INDEX</a>
+                <a href="#" class="nav-item">ABOUT</a>
+                <a href="#" class="nav-item">JOURNAL</a>
+            </div>
+            <div class="nav-line"></div>
+        </nav>
         
         <section class="project-section" id="section-1">
             <main id="list-1" class="project-grid"></main>
@@ -132,7 +138,7 @@
                         window.projectMedia = JSON.parse(cachedMedia);
                         // Load neural network script
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=150';
+                        neuralScript.src = 'neural-network.js?v=162';
                         neuralScript.onload = () => {
                             setTimeout(() => {
                                 console.log('Cached data path - About to initialize neural network...');
@@ -170,7 +176,7 @@
                         console.log('Data cached in sessionStorage');
                         
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=150';
+                        neuralScript.src = 'neural-network.js?v=162';
                         neuralScript.onload = () => {
                             // Small delay to ensure data is fully loaded
                             setTimeout(() => {
@@ -217,7 +223,38 @@
             }
         });
     </script>
-
+    
+    <script>
+        // Mobile hamburger menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerMenu = document.getElementById('hamburger-menu');
+            const mobileNavMenu = document.getElementById('mobile-nav-menu');
+            const verticalName = document.getElementById('vertical-name');
+            
+            if (hamburgerMenu && mobileNavMenu) {
+                hamburgerMenu.addEventListener('click', function() {
+                    hamburgerMenu.classList.toggle('active');
+                    mobileNavMenu.classList.toggle('open');
+                });
+            }
+            
+            // Close any open overlays when clicking on name
+            if (verticalName) {
+                verticalName.addEventListener('click', function() {
+                    // Close mobile navigation menu if open
+                    if (mobileNavMenu && mobileNavMenu.classList.contains('open')) {
+                        mobileNavMenu.classList.remove('open');
+                        hamburgerMenu.classList.remove('active');
+                    }
+                    
+                    // Close any project overlays if open
+                    if (typeof closeProjectOverlay === 'function') {
+                        closeProjectOverlay();
+                    }
+                });
+            }
+        });
+    </script>
     
 </body>
 </html>

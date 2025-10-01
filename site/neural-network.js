@@ -670,7 +670,7 @@ function positionCardOrganically(index, totalCards) {
 // Mobile grid positioning - true masonry layout with proper spacing
 function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions) {
     // Mobile: Single column with comfortable spacing
-    const margin = 25; // Top/bottom margin
+    const margin = 0; // No top margin - cards start right after header
     const cardSpacing = 25; // Spacing between cards
     const cardWidth = dimensions.width;
     const cardHeight = dimensions.height;
@@ -1283,7 +1283,18 @@ function createMobileSVGConnection(start, end, type) {
         text.setAttribute('text-anchor', 'middle');
         text.setAttribute('dominant-baseline', 'middle');
         text.setAttribute('font-family', 'JetBrains Mono');
-        text.setAttribute('font-size', '40');
+        
+        // Varied scale: 40% to 100% of base size
+        const baseSize = 40;
+        const scaleVariation = 0.4 + (Math.random() * 0.6); // 0.4 to 1.0
+        const fontSize = Math.round(baseSize * scaleVariation);
+        text.setAttribute('font-size', fontSize.toString());
+        
+        // 30% chance of italic
+        if (Math.random() < 0.3) {
+            text.setAttribute('font-style', 'italic');
+        }
+        
         text.setAttribute('font-weight', '200');
         text.setAttribute('fill', 'rgba(144,238,144,0.8)');
         text.setAttribute('opacity', '0.7');
@@ -2032,7 +2043,7 @@ function showProjectOverlay(projectId) {
         overlay.style.zIndex = '10000';
         overlay.style.display = 'block';
         overlay.style.opacity = '1';
-        overlay.style.transform = 'translateZ(0)';
+        // Remove transform override to allow CSS animation
         overlay.style.overflowY = 'hidden';
         
         // Ensure the content container is also mobile-positioned
@@ -2060,9 +2071,46 @@ function showProjectOverlay(projectId) {
         
         // Force the overlay to show content instead of just "darkening"
         setTimeout(() => {
-            overlay.classList.add('active');
-            overlay.style.opacity = '1';
             overlay.style.display = 'block';
+            
+            // Force initial state for animation
+            overlay.style.transform = 'translateX(100%)';
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden';
+            
+            // Debug animation states for mobile
+            console.log('🎬 MOBILE ANIMATION DEBUG: Before adding active class');
+            console.log('  - transform:', overlay.style.transform);
+            console.log('  - opacity:', overlay.style.opacity);
+            console.log('  - visibility:', overlay.style.visibility);
+            console.log('  - computed transform:', getComputedStyle(overlay).transform);
+            console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+            
+            // Force a reflow to ensure the initial state is applied
+            overlay.offsetHeight;
+            
+            // Now add the active class to trigger animation
+            overlay.classList.add('active');
+            
+            // Remove inline styles to allow CSS to take over
+            setTimeout(() => {
+                overlay.style.transform = '';
+                overlay.style.opacity = '';
+                overlay.style.visibility = '';
+            }, 10);
+            
+            // Debug after adding active class
+            setTimeout(() => {
+                console.log('🎬 MOBILE ANIMATION DEBUG: After adding active class');
+                console.log('  - transform:', overlay.style.transform);
+                console.log('  - opacity:', overlay.style.opacity);
+                console.log('  - visibility:', overlay.style.visibility);
+                console.log('  - computed transform:', getComputedStyle(overlay).transform);
+                console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+                console.log('  - has active class:', overlay.classList.contains('active'));
+            }, 100);
+            
+            // Allow CSS animation to work
             // Debug log for mobile
             console.log('Mobile overlay positioned:', {
                 overlay: {
@@ -2138,7 +2186,44 @@ function showProjectOverlay(projectId) {
     
     // Show overlay with animation
     overlay.style.display = 'block';
+    
+    // Force initial state for animation
+    overlay.style.transform = 'translateX(100%)';
+    overlay.style.opacity = '0';
+    overlay.style.visibility = 'hidden';
+    
+    // Debug animation states
+    console.log('🎬 ANIMATION DEBUG: Before adding active class');
+    console.log('  - transform:', overlay.style.transform);
+    console.log('  - opacity:', overlay.style.opacity);
+    console.log('  - visibility:', overlay.style.visibility);
+    console.log('  - computed transform:', getComputedStyle(overlay).transform);
+    console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+    
+    // Force a reflow to ensure the initial state is applied
+    overlay.offsetHeight;
+    
+    // Now add the active class to trigger animation
     overlay.classList.add('active');
+    
+    // Remove inline styles to allow CSS to take over
+    setTimeout(() => {
+        overlay.style.transform = '';
+        overlay.style.opacity = '';
+        overlay.style.visibility = '';
+    }, 10);
+    
+    // Debug after adding active class
+    setTimeout(() => {
+        console.log('🎬 ANIMATION DEBUG: After adding active class');
+        console.log('  - transform:', overlay.style.transform);
+        console.log('  - opacity:', overlay.style.opacity);
+        console.log('  - visibility:', overlay.style.visibility);
+        console.log('  - computed transform:', getComputedStyle(overlay).transform);
+        console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+        console.log('  - has active class:', overlay.classList.contains('active'));
+    }, 100);
+    
     isOverlayOpen = true;
     
     // Add click-outside-to-close functionality
@@ -2166,13 +2251,33 @@ function closeProjectOverlay() {
         currentProjectOverlay.dispatchEvent(new Event('closemobile'));
     }
     
+    // Ensure overlay is in the correct state for slide-out
+    currentProjectOverlay.style.transform = '';
+    currentProjectOverlay.style.opacity = '';
+    currentProjectOverlay.style.visibility = '';
+    
+    // Force a reflow to ensure styles are applied
+    currentProjectOverlay.offsetHeight;
+    
+    // Start slide-out animation
     currentProjectOverlay.classList.remove('active');
+    
+    // Wait for animation to complete, then hide
     setTimeout(() => {
         currentProjectOverlay.style.display = 'none';
         isOverlayOpen = false;
-    }, 300);
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        document.body.style.width = '';
+        
+        // Restore scroll position
+        if (typeof savedScrollPosition !== 'undefined' && savedScrollPosition !== null) {
+            window.scrollTo(0, savedScrollPosition);
+        }
+    }, 400); // Match the CSS transition duration (0.4s)
     
-    console.log('Project overlay closed');
+    console.log('Project overlay closed with slide-out animation');
 }
 
 // Make functions globally available
@@ -2710,35 +2815,10 @@ initLazyThumbnailLoading();
         
         console.log('Neural network initialization complete');
         
-        // Initialize mobile scroll listeners after cards are positioned
+        // Mobile positioning complete - no animations
         console.log(`📱 Screen width: ${window.innerWidth}, mobile check: ${window.innerWidth <= 768}`);
         if (window.innerWidth <= 768) {
-            // Wait for cards to be positioned before starting scroll listeners
-            const waitForCards = () => {
-                const cards = document.querySelectorAll('.project-block');
-                const cardsWithData = Array.from(cards).filter(card => 
-                    card.dataset.initialX && card.dataset.cardWidth
-                );
-                
-                console.log(`🎬 Found ${cardsWithData.length}/${cards.length} cards with positioning data`);
-                
-                if (cardsWithData.length >= cards.length * 0.8) { // Wait for at least 80% of cards
-                    console.log('🎬 Cards positioned, starting scroll listeners');
-                    initMobileScrollListeners(); // Start scroll listeners now
-                    
-                    // Run initial animation at top
-                    console.log('🎬 Running initial scroll animation from top');
-                    window.scrollTo(0, 0); // Ensure we're at the top
-                    setTimeout(() => {
-                        handleMobileScroll(); // Run animation at scroll position 0
-                    }, 50);
-                } else {
-                    console.log('⚠️ Not enough cards positioned yet, retrying in 100ms...');
-                    setTimeout(waitForCards, 100);
-                }
-            };
-            
-            setTimeout(waitForCards, 200);
+            console.log('📱 Mobile layout complete - cards positioned statically');
         }
     });
     
@@ -2953,7 +3033,8 @@ function createMobileNeuralOverlay() {
 }
 
 // Animate connection text labels on scroll (mobile only)
-function animateConnectionTextOnScroll() {
+// Mobile scroll animations removed
+function removed_animateConnectionTextOnScroll() {
     if (window.innerWidth > 768) return;
     
     const textLabels = document.querySelectorAll('.mobile-connections-svg text');
@@ -2996,7 +3077,7 @@ function animateConnectionTextOnScroll() {
 }
 
 // Animate card positions on scroll - cards move toward center as you scroll down
-function animateCardPositionsOnScroll() {
+function removed_animateCardPositionsOnScroll() {
     if (window.innerWidth > 768) return;
     
     const cards = document.querySelectorAll('.project-block');
@@ -3063,7 +3144,7 @@ function animateCardPositionsOnScroll() {
 let scrollAnimationFrame = null;
 let scrollEventCount = 0;
 
-function handleMobileScroll() {
+function removed_handleMobileScroll() {
     scrollEventCount++;
     console.log(`🔄 SCROLL #${scrollEventCount}: scrollY=${window.pageYOffset}, viewport=${window.innerWidth}x${window.innerHeight}`);
     
@@ -3080,7 +3161,7 @@ function handleMobileScroll() {
 }
 
 // Initialize mobile scroll listeners
-function initMobileScrollListeners() {
+function removed_initMobileScrollListeners() {
     if (window.innerWidth > 768) return;
     
     console.log(`📱 Initializing mobile scroll listeners...`);
