@@ -677,21 +677,20 @@ function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportH
     
     // Debug: Log the parameters
     if (index === 0) {
-        console.log(`🔧 calculateMobileGridPosition called with: index=${index}, totalCards=${totalCards}, viewport=${viewportWidth}x${viewportHeight}`);
-        console.log(`🔧 Card dimensions: width=${cardWidth}, height=${cardHeight}`);
+        // Debug removed for performance
     }
     
     // Single column layout - all cards with dramatic horizontal offset
     if (index === 0) {
         window.mobileColumnY = margin; // Start with top margin
-        console.log(`🔧 Initialized column Y position:`, window.mobileColumnY);
+        // Debug removed
     }
     
     // Calculate controlled horizontal offset - alternating left/right with max 2 consecutive
     const availableSpace = viewportWidth - cardWidth; // Space when card is fully visible (~36% of viewport)
     
     if (index === 0) {
-        console.log(`🔧 Offset calculation: cardWidth=${cardWidth.toFixed(0)}px, viewportWidth=${viewportWidth}px, availableSpace=${availableSpace.toFixed(0)}px`);
+        // Debug removed
         window.mobileOffsetHistory = []; // Track last 2 positions
     }
     
@@ -735,9 +734,7 @@ function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportH
     // Update Y position for next card (add height of this card + spacing)
     window.mobileColumnY = y + cardHeight + cardSpacing;
     
-    const offsetDirection = position === 'left' ? 'OFFSCREEN LEFT ←' : 'OFFSCREEN RIGHT →';
-    const historyStr = window.mobileOffsetHistory.slice(-3).join('-');
-    console.log(`📐 Card ${index}: x=${x.toFixed(0)}, y=${y}, position=${position} (${offsetDirection}), history=[${historyStr}], height=${cardHeight}, nextY=${window.mobileColumnY}`);
+    // Debug logging removed for performance
     
     // Store the calculated dimensions for CSS consistency
     window.mobileCardWidth = cardWidth;
@@ -753,20 +750,7 @@ function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportH
         
         // Container height will be calculated after all cards are processed
         
-        console.log(`📐 GRID CALCULATION DEBUG:`, {
-            viewportWidth,
-            margin,
-            cardSpacing,
-            cardWidth,
-            cardHeight,
-            totalCards,
-            cssVariables: {
-                '--mobile-card-width': `${cardWidth}px`,
-                '--mobile-card-height': `${cardHeight}px`,
-                '--mobile-card-spacing': `${cardSpacing}px`,
-                '--mobile-margin': `${margin}px`
-            }
-        });
+        // Debug removed for performance
     }
     
     return { x, y };
@@ -781,7 +765,7 @@ function updateMasonryContainerHeight() {
         const projectGrid = document.querySelector('.project-grid');
         if (projectGrid) {
             projectGrid.style.minHeight = `${totalHeight}px`;
-            console.log(`📏 Set masonry container height to ${totalHeight}px (max column height: ${maxColumnHeight}px)`);
+            // Debug removed
         }
     }
 }
@@ -844,8 +828,7 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
     // Mobile: Use grid layout for all shapes
     if (window.innerWidth <= 768) {
         position = calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions);
-        console.log(`🔍 Mobile card ${index}: position=${JSON.stringify(position)}, dimensions=${JSON.stringify(dimensions)}`);
-        console.log(`📱 Viewport: ${viewportWidth}x${viewportHeight}, Total cards: ${totalCards}`);
+    // Debug removed for performance
         
         // Enhanced debug for card positioning and sizing
         setTimeout(() => {
@@ -858,41 +841,7 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
                 const img = thumbnail?.querySelector('img');
                 const blockSurface = card.querySelector('.block-surface');
                 
-                console.log(`🎯 CARD ${index} DETAILED DEBUG:`, {
-                    // Card positioning
-                    cardPosition: {
-                        left: card.style.left,
-                        top: card.style.top,
-                        position: computedStyle.position
-                    },
-                    // Card dimensions
-                    cardDimensions: {
-                        width: card.style.width,
-                        height: card.style.height,
-                        computedWidth: computedStyle.width,
-                        computedHeight: computedStyle.height
-                    },
-                    // Actual rendered size
-                    cardRect: {
-                        x: cardRect.x,
-                        y: cardRect.y,
-                        width: cardRect.width,
-                        height: cardRect.height
-                    },
-                    // CSS variables
-                    cssVariables: {
-                        mobileCardWidth: getComputedStyle(document.documentElement).getPropertyValue('--mobile-card-width'),
-                        mobileCardHeight: getComputedStyle(document.documentElement).getPropertyValue('--mobile-card-height'),
-                        mobileCardSpacing: getComputedStyle(document.documentElement).getPropertyValue('--mobile-card-spacing'),
-                        mobileMargin: getComputedStyle(document.documentElement).getPropertyValue('--mobile-margin')
-                    },
-                    // Thumbnail info
-                    thumbnail: {
-                        rect: thumbnail?.getBoundingClientRect(),
-                        imgRect: img?.getBoundingClientRect(),
-                        imgSrc: img?.src?.split('/').pop()
-                    }
-                });
+                // Debug removed for performance
                 
                 // Check for overlaps with other cards (desktop only - mobile uses perfect grid)
                 if (window.innerWidth > 768) {
@@ -906,7 +855,7 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
                     });
                     
                     if (overlaps.length > 0) {
-                        console.warn(`⚠️ CARD ${index} OVERLAPS with cards:`, overlaps.map(c => Array.from(allCards).indexOf(c)));
+                        // Debug removed
                     }
                 }
             }
@@ -917,7 +866,7 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
         // Use pre-sorted organic positions (sorted by X coordinate)
         if (window.sortedOrganicPositions && window.sortedOrganicPositions[index]) {
             position = { x: window.sortedOrganicPositions[index].x, y: window.sortedOrganicPositions[index].y };
-            console.log(`Project ${index} using position:`, position);
+            // Debug removed
         } else {
             position = positionCardOrganically(index, totalCards);
         }
@@ -977,7 +926,7 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
         card.dataset.finalY = finalY;
         card.dataset.cardWidth = Math.floor(dimensions.width);
         
-        console.log(`📏 Applied mobile card dimensions: ${dimensions.width}px x ${dimensions.height}px`);
+        // Debug removed for performance
     }
     
     // Store positioned card info for collision detection (for random layout, desktop only)
@@ -1176,7 +1125,7 @@ function createConnectionLines() {
                     y: y + height / 2
                 };
                 
-                console.log(`📍 Card ${index} center: ${cardCenter.x.toFixed(0)},${cardCenter.y.toFixed(0)} (from style: ${x},${y} + ${width}x${height})`);
+                // Debug removed
             } else {
                 const cardRect = card.getBoundingClientRect();
                 cardCenter = {
@@ -1253,10 +1202,10 @@ function createMobileSVGConnection(start, end, type) {
         const projectGrid = document.querySelector('.project-grid');
         if (projectGrid) {
             projectGrid.appendChild(svg);
-            console.log('🔗 SVG container added to project-grid');
+            // Debug removed
         } else {
             document.body.appendChild(svg);
-            console.log('🔗 SVG container added to body (fallback)');
+            // Debug removed
         }
     }
     
@@ -1349,7 +1298,7 @@ function createMobileSVGConnection(start, end, type) {
         svg.appendChild(text);
     }
     
-    console.log(`🔗 Mobile connection: ${start.x.toFixed(0)},${start.y.toFixed(0)} → ${end.x.toFixed(0)},${end.y.toFixed(0)}, color: ${color}, text: ${connectionText}`);
+    // Debug removed
 }
 
 function createCurvedLine(start, end, type) {
@@ -1709,11 +1658,9 @@ function generateProjectHTML(project, mediaIndex) {
     }
     
     // Get media - prioritize high-res images and video embeds
-    console.log('Looking for media for project:', project.id);
-    console.log('Media index structure:', extra);
-    console.log('Project media entry:', extra[project.id]);
+    // Media debug removed
     const extraMedia = (extra[project.id] || {}).files || [];
-    console.log('Extra media files:', extraMedia);
+    // Debug removed
     
     // Check for video embeds first
     const hasVideoEmbed = project.videoEmbed && project.videoEmbed.trim();
@@ -1725,7 +1672,7 @@ function generateProjectHTML(project, mediaIndex) {
             // File already has the correct path - use as-is since it's from high-res folder
             const highResPath = file.path;
             const url = `media/${highResPath}`;
-            console.log('Generated high-res URL:', url);
+            // Debug removed
             return url;
         }
         return file;
@@ -1882,7 +1829,7 @@ function generateProjectHTML(project, mediaIndex) {
 
 function renderVideoEmbed(embedUrl) {
     try {
-        console.log('Rendering video embed:', embedUrl);
+        // Debug removed
         
         // Handle different video embed formats
         let m;
@@ -1919,7 +1866,7 @@ function renderVideoEmbed(embedUrl) {
 
 function renderMedia(url, title) {
     try {
-        console.log('Rendering media:', url, 'for title:', title);
+        // Debug removed
         
         let m;
         if ((m = url.match(/^https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/))) {
@@ -2260,7 +2207,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
     // Generate HTML for project blocks
     console.log('Creating project blocks HTML...');
     const htmlContent = projectsWithMedia.map((p, index) => {
-        console.log(`Processing project ${index + 1}: ${p.title}`);
+        // Debug removed
         
         const shortTitle = p.title || p.id || 'Untitled Project';
         
@@ -2271,7 +2218,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         
         const className = `project-block category-${category} variation-${variation}`;
         const projectNumber = String(index + 1).padStart(2, '0'); // Format as 01, 02, etc.
-        console.log(`Project ${index + 1} classes: ${className}`);
+        // Debug removed
         return `<article class="${className}" data-project-title="${p.title}" data-project-id="${p.id}">
             <a href="project.html?id=${p.id}" class="project-link">
                 <div class="block-surface">
@@ -2541,7 +2488,7 @@ function initLazyThumbnailLoading() {
                                 const cardHeight = cardWidth / aspectRatio; // Match image's aspect ratio
                                 card.style.height = cardHeight + 'px';
                                 
-                                console.log(`📸 Card ${projectId}: aspect=${aspectRatio.toFixed(2)}, width=${cardWidth}px, height=${cardHeight.toFixed(0)}px`);
+                                // Debug removed
                             }
                         };
                         
@@ -2762,18 +2709,40 @@ initLazyThumbnailLoading();
         // }
         
         console.log('Neural network initialization complete');
+        
+        // Initialize mobile scroll listeners after cards are positioned
+        console.log(`📱 Screen width: ${window.innerWidth}, mobile check: ${window.innerWidth <= 768}`);
+        if (window.innerWidth <= 768) {
+            // Wait for cards to be positioned before starting scroll listeners
+            const waitForCards = () => {
+                const cards = document.querySelectorAll('.project-block');
+                const cardsWithData = Array.from(cards).filter(card => 
+                    card.dataset.initialX && card.dataset.cardWidth
+                );
+                
+                console.log(`🎬 Found ${cardsWithData.length}/${cards.length} cards with positioning data`);
+                
+                if (cardsWithData.length >= cards.length * 0.8) { // Wait for at least 80% of cards
+                    console.log('🎬 Cards positioned, starting scroll listeners');
+                    initMobileScrollListeners(); // Start scroll listeners now
+                    
+                    // Run initial animation at top
+                    console.log('🎬 Running initial scroll animation from top');
+                    window.scrollTo(0, 0); // Ensure we're at the top
+                    setTimeout(() => {
+                        handleMobileScroll(); // Run animation at scroll position 0
+                    }, 50);
+                } else {
+                    console.log('⚠️ Not enough cards positioned yet, retrying in 100ms...');
+                    setTimeout(waitForCards, 100);
+                }
+            };
+            
+            setTimeout(waitForCards, 200);
+        }
     });
     
-    // Debug: Check if titles are in DOM
-    setTimeout(() => {
-        const titles = document.querySelectorAll('.block-title');
-        console.log(`Found ${titles.length} titles in DOM`);
-        titles.forEach((title, index) => {
-            console.log(`Title ${index}: "${title.textContent}"`);
-            console.log(`  Computed styles:`, window.getComputedStyle(title));
-            console.log(`  Position:`, title.getBoundingClientRect());
-        });
-    }, 100);
+    // Debug removed for performance
 }
 
 // Handle window resize
@@ -2908,7 +2877,7 @@ function refreshParallaxEffect() {
 function createMobileNeuralOverlay() {
     if (window.innerWidth > 768) return; // Only for mobile
     
-    console.log('🧠 Creating mobile neural network overlay...');
+    // Debug removed
     
     // Remove existing mobile neural overlay
     const existingOverlay = document.querySelector('.mobile-neural-overlay');
@@ -2973,7 +2942,7 @@ function createMobileNeuralOverlay() {
     // Generate mobile neural connections
     generateMobileNeuralConnections(svg);
     
-    console.log('🧠 Mobile neural network overlay created with', svg.children.length, 'connections');
+    // Debug removed
     
     // Add parallax scroll effect
     window.addEventListener('scroll', () => {
@@ -2990,99 +2959,150 @@ function animateConnectionTextOnScroll() {
     const textLabels = document.querySelectorAll('.mobile-connections-svg text');
     if (textLabels.length === 0) return;
     
-    // Get scroll progress (0 to 1)
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrollProgress = Math.min(scrollTop / docHeight, 1);
+    const viewportCenter = window.innerHeight / 2;
     
-    // Update each text position based on scroll
+    // Update each text based on its proximity to viewport center
     textLabels.forEach(text => {
         const initialX = parseFloat(text.dataset.initialX);
         const initialY = parseFloat(text.dataset.initialY);
         const offsetX = parseFloat(text.dataset.offsetX);
         const offsetY = parseFloat(text.dataset.offsetY);
         
-        // Move from initial position to initial + offset as we scroll
-        const newX = initialX + (offsetX * scrollProgress);
-        const newY = initialY + (offsetY * scrollProgress);
+        if (isNaN(initialX) || isNaN(initialY)) return;
+        
+        // Get text's position relative to viewport
+        const textYInViewport = initialY - scrollTop;
+        
+        // Calculate proximity to viewport center (0-1)
+        // Using full viewport height as range
+        const maxDistance = window.innerHeight;
+        const distanceFromCenter = Math.abs(textYInViewport - viewportCenter);
+        const progress = Math.max(0, 1 - (distanceFromCenter / maxDistance));
+        
+        // Move along the connection line based on proximity
+        const newX = initialX + (offsetX * progress);
+        const newY = initialY + (offsetY * progress);
         
         text.setAttribute('x', newX);
         text.setAttribute('y', newY);
         
-        // Also add scale and opacity effects for more drama
-        const scale = 1 + (scrollProgress * 0.5); // Grow 50% larger
-        const opacity = 0.7 + (scrollProgress * 0.3); // Get more visible
+        // Scale and opacity based on proximity (dramatic effect)
+        const scale = 1 + (progress * 0.5); // Grow 50% at center
+        const opacity = 0.7 + (progress * 0.3); // Brighter at center
         text.setAttribute('transform', `scale(${scale})`);
         text.setAttribute('opacity', opacity);
     });
 }
 
-// Animate card positions on scroll - reduce offset when near viewport center
+// Animate card positions on scroll - cards move toward center as you scroll down
 function animateCardPositionsOnScroll() {
     if (window.innerWidth > 768) return;
     
     const cards = document.querySelectorAll('.project-block');
-    if (cards.length === 0) return;
+    if (cards.length === 0) {
+        console.log(`⚠️ No cards found for animation`);
+        return;
+    }
     
-    const viewportCenter = window.innerHeight / 2;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const viewportWidth = window.innerWidth;
-    const margin = 25;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
     
-    let debugCount = 0;
+    // Calculate scroll progress (0 at top, 1 at bottom)
+    const scrollProgress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+    
+    // Debug scroll calculation - show for first 20 scroll events
+    if (scrollEventCount <= 20) {
+        console.log(`   📏 Scroll debug: scrollTop=${scrollTop}, docHeight=${docHeight}, scrollProgress=${scrollProgress.toFixed(3)}`);
+        console.log(`   📏 Document: scrollHeight=${document.documentElement.scrollHeight}, innerHeight=${window.innerHeight}`);
+    }
+    
+    let cardsWithData = 0;
+    let cardsAnimated = 0;
     
     cards.forEach((card, index) => {
-        const offsetX = parseFloat(card.dataset.initialX); // The original offset position
-        const finalY = parseFloat(card.dataset.finalY); // Card's Y position in document
+        const initialX = parseFloat(card.dataset.initialX); // The original offset position
         const cardWidth = parseFloat(card.dataset.cardWidth);
-        const cardHeight = parseFloat(card.style.height) || 112.5;
         
         // Validate data
-        if (isNaN(offsetX) || isNaN(finalY) || isNaN(cardWidth)) {
-            if (index < 3) console.warn(`⚠️ Card ${index}: Missing data - offsetX=${offsetX}, finalY=${finalY}, cardWidth=${cardWidth}`);
+        if (isNaN(initialX) || isNaN(cardWidth)) {
+            if (index < 3) {
+                console.log(`⚠️ Card ${index}: Missing data - initialX=${card.dataset.initialX}, cardWidth=${card.dataset.cardWidth}`);
+            }
             return;
         }
         
-        // Get card's position relative to viewport center
-        const cardTopInViewport = finalY - scrollTop;
-        const cardCenterInViewport = cardTopInViewport + (cardHeight / 2);
-        
-        // Distance from viewport center (0 = at center, 1+ = at/beyond edge)
-        const distanceFromCenter = Math.abs(cardCenterInViewport - viewportCenter) / viewportCenter;
-        const centerProximity = Math.max(0, Math.min(1, 1 - distanceFromCenter)); // Clamp 0-1: 1 = at center, 0 = far away
+        cardsWithData++;
         
         // Calculate centered position
         const centeredX = (viewportWidth - cardWidth) / 2;
         
-        // Interpolate between offset position and centered position based on proximity
-        // When far: use offsetX, When at center: use centeredX
-        const newX = offsetX + (centeredX - offsetX) * centerProximity;
+        // Move from initial offset position toward center based on scroll progress
+        const translateX = (centeredX - initialX) * scrollProgress;
         
-        card.style.left = `${newX}px`;
+        // Apply transform
+        card.style.transform = `translateX(${translateX}px)`;
+        card.style.transition = 'transform 0.1s ease-out';
         
-        // Debug cards in viewport
-        if (cardTopInViewport > -cardHeight && cardTopInViewport < window.innerHeight && debugCount < 3) {
-            console.log(`📍 Card ${index}: scrollTop=${scrollTop.toFixed(0)}, cardY=${finalY}, viewportY=${cardTopInViewport.toFixed(0)}, proximity=${centerProximity.toFixed(2)}, offsetX=${offsetX.toFixed(0)}, newX=${newX.toFixed(0)}`);
-            debugCount++;
+        cardsAnimated++;
+        
+        // Debug first 3 cards - show for first 20 scroll events
+        if (index < 3 && scrollEventCount <= 20) {
+            console.log(`   🎯 Card ${index}: progress=${scrollProgress.toFixed(3)}, initialX=${initialX.toFixed(0)}, centeredX=${centeredX.toFixed(0)}, translateX=${translateX.toFixed(0)}`);
         }
+    });
+    
+    // Summary log
+    if (scrollEventCount <= 3) {
+        console.log(`   📊 Animated ${cardsAnimated}/${cards.length} cards (${cardsWithData} have data)`);
+    }
+}
+
+// Throttle scroll animations with requestAnimationFrame
+let scrollAnimationFrame = null;
+let scrollEventCount = 0;
+
+function handleMobileScroll() {
+    scrollEventCount++;
+    console.log(`🔄 SCROLL #${scrollEventCount}: scrollY=${window.pageYOffset}, viewport=${window.innerWidth}x${window.innerHeight}`);
+    
+    if (scrollAnimationFrame) {
+        return; // Already scheduled
+    }
+    
+    scrollAnimationFrame = requestAnimationFrame(() => {
+        console.log(`   ✅ Animating text and cards for scroll #${scrollEventCount}`);
+        animateConnectionTextOnScroll();
+        animateCardPositionsOnScroll();
+        scrollAnimationFrame = null;
     });
 }
 
-// Add scroll listener for mobile animations
-if (window.innerWidth <= 768) {
-    window.addEventListener('scroll', () => {
-        animateConnectionTextOnScroll();
-        animateCardPositionsOnScroll();
-    }, { passive: true });
+// Initialize mobile scroll listeners
+function initMobileScrollListeners() {
+    if (window.innerWidth > 768) return;
+    
+    console.log(`📱 Initializing mobile scroll listeners...`);
+    
+    // Remove any existing listeners to avoid duplicates
+    window.removeEventListener('scroll', handleMobileScroll);
+    
+    // Add fresh listener
+    window.addEventListener('scroll', handleMobileScroll, { passive: true });
+    
     // Also run on resize
     window.addEventListener('resize', () => {
         if (window.innerWidth <= 768) {
-            animateConnectionTextOnScroll();
-            animateCardPositionsOnScroll();
+            handleMobileScroll();
         }
     });
+    
     // Run initial animation
-    animateCardPositionsOnScroll();
+    console.log(`🎬 Running initial scroll animation`);
+    setTimeout(() => {
+        handleMobileScroll();
+    }, 500); // Wait for cards to be positioned
 }
 
 // Generate mobile neural network connections
@@ -3090,8 +3110,7 @@ function generateMobileNeuralConnections(svg) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    console.log('🔴 DEBUG: Viewport dimensions:', { viewportWidth, viewportHeight });
-    console.log('🔴 DEBUG: SVG element:', svg);
+    // Debug removed
     
     // Create connection points (nodes)
     const nodes = [];
@@ -3106,7 +3125,7 @@ function generateMobileNeuralConnections(svg) {
         nodes.push(node);
     }
     
-    console.log('🔴 DEBUG: Created nodes:', nodes);
+    // Debug removed
     
     // Create connections between nearby nodes
     const connections = [];
@@ -3128,11 +3147,7 @@ function generateMobileNeuralConnections(svg) {
         }
     }
     
-    console.log('🔴 DEBUG: Created connections:', connections.length);
-    console.log('🔴 DEBUG: Connection threshold:', Math.min(viewportWidth, viewportHeight) * 0.6);
-    
-    // Remove the ugly test line - no longer needed
-    console.log('✅ Clean mobile neural network created');
+    // Debug removed
     
     // Draw connections
     connections.forEach((connection, index) => {
@@ -3179,12 +3194,7 @@ function generateMobileNeuralConnections(svg) {
             animation-delay: ${index * 0.1}s;
         `;
         
-        console.log(`🔴 DEBUG: Created connection ${index}:`, {
-            from: { x: connection.from.x, y: connection.from.y },
-            to: { x: connection.to.x, y: connection.to.y },
-            distance: connection.distance,
-            pathData: pathData
-        });
+        // Debug removed
         
         svg.appendChild(line);
     });
