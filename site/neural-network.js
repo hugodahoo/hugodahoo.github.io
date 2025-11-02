@@ -2350,7 +2350,6 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
                     <div class="thumbnail-overlay lazy-thumbnail" data-project-id="${p.id}"></div>
                     <div class="project-hover-text">
                         <div class="project-title">${shortTitle}</div>
-                        ${category ? `<div class="project-category">${category.toUpperCase()}</div>` : ''}
                         ${p.client && p.client !== 'N/A' ? `<div class="project-artist">${p.client}</div>` : ''}
                         ${p.year ? `<div class="project-year">${p.year}</div>` : ''}
                     </div>
