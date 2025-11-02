@@ -590,10 +590,11 @@ function positionCardOrganically(index, totalCards) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = Math.max(window.innerHeight, 1000);
     
-    // Define safe margins
+    // Define safe margins - positions are applied directly, no sidebar offset needed
     const margin = 80;
-    const minX = margin;
-    const maxX = viewportWidth - margin;
+    const sidebarOffset = 0; // Match the offset used in positionCardCircularly
+    const minX = 0; // Zero left padding - cards can start right at sidebar edge
+    const maxX = viewportWidth - sidebarOffset - margin; // Account for sidebar offset
     const minY = margin;
     const maxY = viewportHeight - margin;
     
@@ -606,10 +607,15 @@ function positionCardOrganically(index, totalCards) {
         let x, y;
         
         if (attempt < 10) {
-            // First 10 attempts: try center-biased positions
+            // First 10 attempts: try center-biased positions within available space
             const centerBias = 0.3;
-            x = (viewportWidth / 2) + (Math.random() - 0.5) * viewportWidth * centerBias;
-            y = (viewportHeight / 2) + (Math.random() - 0.5) * viewportHeight * centerBias;
+            const availableWidth = maxX - minX;
+            const availableHeight = maxY - minY;
+            const centerX = minX + availableWidth / 2;
+            const centerY = minY + availableHeight / 2;
+            
+            x = centerX + (Math.random() - 0.5) * availableWidth * centerBias;
+            y = centerY + (Math.random() - 0.5) * availableHeight * centerBias;
         } else {
             // Remaining attempts: full random
             x = Math.random() * (maxX - minX) + minX;
@@ -909,7 +915,13 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
         finalY = Math.min(Math.max(y, 20), maxY);
     }
     
+    // Apply sidebar offset for desktop
+    if (window.innerWidth > 768) {
+        const sidebarWidth = 200; // Desktop sidebar width
+        card.style.left = (finalX + sidebarWidth) + 'px';
+    } else {
     card.style.left = finalX + 'px';
+    }
     card.style.top = finalY + 'px';
     card.style.width = Math.floor(dimensions.width) + 'px';
     card.style.height = dimensions.height + 'px';
@@ -1032,7 +1044,14 @@ function positionCardRandomly(card, sizeClass, index) {
     
     positionedCards.push(position);
     
-    card.style.left = position.x + 'px';
+    // Apply sidebar offset for desktop when using organic positioning
+    let finalX = position.x;
+    if (window.innerWidth > 768 && currentShape === 'random') {
+        const sidebarWidth = 0; // No offset - cards start right at sidebar edge
+        finalX = position.x + sidebarWidth;
+    }
+    
+    card.style.left = finalX + 'px';
     card.style.top = position.y + 'px';
     card.style.zIndex = 20 + index;
     
@@ -1127,11 +1146,11 @@ function createConnectionLines() {
                 
                 // Debug removed
             } else {
-                const cardRect = card.getBoundingClientRect();
+            const cardRect = card.getBoundingClientRect();
                 cardCenter = {
-                    x: cardRect.left + cardRect.width / 2,
-                    y: cardRect.top + cardRect.height / 2
-                };
+                x: cardRect.left + cardRect.width / 2,
+                y: cardRect.top + cardRect.height / 2
+            };
             }
             
             
@@ -1168,11 +1187,11 @@ function createConnectionLines() {
                         y: y + height / 2
                     };
                 } else {
-                    const targetRect = targetCard.getBoundingClientRect();
+                const targetRect = targetCard.getBoundingClientRect();
                     targetCenter = {
-                        x: targetRect.left + targetRect.width / 2,
-                        y: targetRect.top + targetRect.height / 2
-                    };
+                    x: targetRect.left + targetRect.width / 2,
+                    y: targetRect.top + targetRect.height / 2
+                };
                 }
                 
                 createCurvedLine(cardCenter, targetCenter, 'card');
@@ -2330,10 +2349,10 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
                     <div class="block-title" data-number="${projectNumber}">${shortTitle}</div>
                     <div class="thumbnail-overlay lazy-thumbnail" data-project-id="${p.id}"></div>
                     <div class="project-hover-text">
-                        <div class="project-name">${shortTitle}</div>
-                        <div class="project-type">${p.type || 'Installation'}</div>
-                        <div class="project-client">${p.client || 'N/A'}</div>
-                        <div class="project-location">${p.location || 'N/A'}</div>
+                        <div class="project-title">${shortTitle}</div>
+                        ${category ? `<div class="project-category">${category.toUpperCase()}</div>` : ''}
+                        ${p.client && p.client !== 'N/A' ? `<div class="project-artist">${p.client}</div>` : ''}
+                        ${p.year ? `<div class="project-year">${p.year}</div>` : ''}
                     </div>
                 </div>
             </a>
@@ -2434,10 +2453,7 @@ function initBackgroundImageHover() {
     backgroundOverlay.className = 'project-background-image';
     document.body.appendChild(backgroundOverlay);
     
-    // Create the side panel for image preview (desktop only)
-    const sidePanel = document.createElement('div');
-    sidePanel.className = 'image-preview-panel';
-    document.body.appendChild(sidePanel);
+    // Side panel for image preview removed - functionality disabled
     
     // Create mobile overlay background
     const mobileOverlay = document.createElement('div');
@@ -2599,7 +2615,8 @@ function initLazyThumbnailLoading() {
                         
                         img.style.width = '100%';
                         img.style.height = '100%';
-                        img.style.objectFit = 'contain';
+                        img.style.objectFit = 'cover';
+                        img.style.objectPosition = 'center';
                         img.style.position = 'absolute';
                         img.style.top = '0';
                         img.style.left = '0';
@@ -2648,7 +2665,8 @@ function initLazyThumbnailLoading() {
                 
                 img.style.width = '100%';
                 img.style.height = '100%';
-                img.style.objectFit = 'contain';
+                img.style.objectFit = 'cover';
+                img.style.objectPosition = 'center';
                 img.style.position = 'absolute';
                 img.style.top = '0';
                 img.style.left = '0';
@@ -2720,8 +2738,9 @@ function initializeNeuralNetwork() {
         const viewportWidth = window.innerWidth;
         const viewportHeight = Math.max(window.innerHeight, 1000);
         const margin = 80;
-        const minX = margin;
-        const maxX = viewportWidth - margin;
+        const sidebarOffset = 0; // Match the offset used in positionCardCircularly
+        const minX = 0; // Zero left padding - cards can start right at sidebar edge
+        const maxX = viewportWidth - sidebarOffset - margin; // Account for sidebar offset
         const minY = margin;
         const maxY = viewportHeight - margin;
         
@@ -2737,10 +2756,15 @@ function initializeNeuralNetwork() {
                 let x, y;
                 
                 if (attempt < 10) {
-                    // First 10 attempts: try center-biased positions
+                    // First 10 attempts: try center-biased positions within available space
                     const centerBias = 0.3;
-                    x = (viewportWidth / 2) + (Math.random() - 0.5) * viewportWidth * centerBias;
-                    y = (viewportHeight / 2) + (Math.random() - 0.5) * viewportHeight * centerBias;
+                    const availableWidth = maxX - minX;
+                    const availableHeight = maxY - minY;
+                    const centerX = minX + availableWidth / 2;
+                    const centerY = minY + availableHeight / 2;
+                    
+                    x = centerX + (Math.random() - 0.5) * availableWidth * centerBias;
+                    y = centerY + (Math.random() - 0.5) * availableHeight * centerBias;
                 } else {
                     // Remaining attempts: full random
                     x = Math.random() * (maxX - minX) + minX;
