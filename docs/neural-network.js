@@ -1,8 +1,16 @@
 // Neural Network Portfolio Implementation
+console.log('Neural network script loading...');
+console.log('window.projects:', window.projects);
 const projects = window.projects || [];
+console.log('projects array length:', projects.length);
 
 let positionedCards = [];
 let isNeuralNetworkStyle = true;
+
+// Caching system for instant project navigation
+let projectCache = new Map();
+let currentProjectOverlay = null;
+let isOverlayOpen = false;
 
 // Get random size for blocks
 function getRandomSize() {
@@ -19,11 +27,30 @@ function getRandomSize() {
 
 // Get card dimensions with random aspect ratios between 2:1 and 3:1
 function getCardDimensions(sizeClass) {
-    // All cards same size now - smaller to allow more spreading
+    // Return mobile dimensions on mobile, desktop dimensions on desktop
+    if (window.innerWidth <= 768) {
+        // Mobile: Single column - 25% smaller, but can extend offscreen
+        const margin = 20; // Small side margins
+        const cardWidth = window.innerWidth * 0.85 * 0.75; // 85% of viewport, then reduce by 25% = 63.75% of viewport
+        
+        // Use varied heights for visual interest - reduced by 25%
+        const baseHeight = 120 * 1.25 * 0.75; // 112.5px (reduce by 25%)
+        const heightVariations = [0, 15, 25, -8, 20, -5, 23, 13].map(v => v * 1.25 * 0.75); // Reduce variations by 25%
+        // We need to get the current card index to determine height variation
+        // This will be handled in the calling function
+        const cardHeight = baseHeight; // Default height, will be overridden
+        
+        return {
+            width: cardWidth,
+            height: cardHeight
+        };
+    } else {
+        // Desktop: All cards same size now - smaller to allow more spreading
     return {
         width: 100,
         height: 40
     };
+    }
 }
 
 // Get project category with better distribution
@@ -205,9 +232,9 @@ function getCategoryColor(category) {
     return `category-${category} ${randomVariation}`;
 }
 
-// Get project thumbnail
+// Get project thumbnail - optimized for small file sizes
 function getThumbnail(projectId) {
-    const media = window.mediaIndex || {};
+    const media = window.projectMedia || window.mediaIndex || {};
     const project = media.projects?.[projectId];
     
     if (!project) {
@@ -215,10 +242,553 @@ function getThumbnail(projectId) {
     }
     
     const imageFiles = project.files.filter(f => f.type === 'image');
-    return imageFiles.length > 0 ? `media/${imageFiles[0].path}` : null;
+    if (imageFiles.length === 0) {
+        return null;
+    }
+    
+    const originalPath = imageFiles[0].path;
+    
+    // Convert high-res paths to thumbnail paths for main page performance
+    const thumbnailPath = originalPath.replace('high-res/', 'thumbnails/');
+    
+    return `media/${thumbnailPath}`;
 }
 
-// Calculate overlap between cards
+// Shape bank for different project card arrangements
+const SHAPE_BANK = {
+    circle: {
+        name: 'Circle',
+        calculatePosition: (index, totalCards, centerX, centerY, radius) => {
+            const angle = (index / totalCards) * 2 * Math.PI - Math.PI / 2;
+            return {
+                x: centerX + radius * Math.cos(angle),
+                y: centerY + radius * Math.sin(angle)
+            };
+        }
+    },
+    
+    cube: {
+        name: 'Cube',
+        calculatePosition: (index, totalCards, centerX, centerY, radius) => {
+            // Create a cube outline with 8 vertices
+            const cubeVertices = [
+                { x: -1, y: -1, z: -1 }, { x: 1, y: -1, z: -1 },
+                { x: 1, y: 1, z: -1 }, { x: -1, y: 1, z: -1 },
+                { x: -1, y: -1, z: 1 }, { x: 1, y: -1, z: 1 },
+                { x: 1, y: 1, z: 1 }, { x: -1, y: 1, z: 1 }
+            ];
+            
+            const vertexIndex = index % cubeVertices.length;
+            const vertex = cubeVertices[vertexIndex];
+            
+            // Simple 2D projection (ignoring z for now) - doubled scale
+            return {
+                x: centerX + vertex.x * radius * 1.4, // Doubled from 0.7 to 1.4
+                y: centerY + vertex.y * radius * 1.4  // Doubled from 0.7 to 1.4
+            };
+        }
+    },
+    
+    hand: {
+        name: 'Hand',
+        calculatePosition: (index, totalCards, centerX, centerY, radius) => {
+            // Create a hand-like shape with 5 "fingers"
+            const fingers = 5;
+            const cardsPerFinger = Math.ceil(totalCards / fingers);
+            const fingerIndex = Math.floor(index / cardsPerFinger);
+            const positionInFinger = index % cardsPerFinger;
+            
+            const fingerAngle = (fingerIndex / fingers) * Math.PI * 0.8 - Math.PI * 0.4; // Spread fingers
+            const fingerLength = radius * 1.6; // Doubled from 0.8 to 1.6
+            const progress = positionInFinger / Math.max(cardsPerFinger - 1, 1);
+            
+            return {
+                x: centerX + Math.cos(fingerAngle) * fingerLength * progress,
+                y: centerY + Math.sin(fingerAngle) * fingerLength * progress
+            };
+        }
+    },
+    
+    sineWave: {
+        name: 'Sine Wave',
+        calculatePosition: (index, totalCards, centerX, centerY, radius) => {
+            const progress = index / Math.max(totalCards - 1, 1);
+            const x = centerX + (progress - 0.5) * radius * 3.0; // Doubled from 1.5 to 3.0
+            const y = centerY + Math.sin(progress * Math.PI * 3) * radius * 0.8; // Doubled from 0.4 to 0.8
+            
+            return { x, y };
+        }
+    },
+    
+    spiral: {
+        name: 'Spiral',
+        calculatePosition: (index, totalCards, centerX, centerY, radius) => {
+            const turns = 2;
+            const angle = (index / totalCards) * turns * 2 * Math.PI;
+            const spiralRadius = (index / totalCards) * radius;
+            
+            return {
+                x: centerX + spiralRadius * Math.cos(angle),
+                y: centerY + spiralRadius * Math.sin(angle)
+            };
+        }
+    },
+    
+    diamond: {
+        name: 'Diamond',
+        calculatePosition: (index, totalCards, centerX, centerY, radius) => {
+            // Create diamond outline with 4 sides
+            const sides = 4;
+            const cardsPerSide = Math.ceil(totalCards / sides);
+            const sideIndex = Math.floor(index / cardsPerSide);
+            const positionInSide = index % cardsPerSide;
+            const progress = positionInSide / Math.max(cardsPerSide - 1, 1);
+            
+            let x, y;
+            switch (sideIndex) {
+                case 0: // Top to right
+                    x = centerX + progress * radius * 2; // Doubled
+                    y = centerY - radius * 2 + progress * radius * 2; // Doubled
+                    break;
+                case 1: // Right to bottom
+                    x = centerX + radius * 2 - progress * radius * 2; // Doubled
+                    y = centerY + progress * radius * 2; // Doubled
+                    break;
+                case 2: // Bottom to left
+                    x = centerX - progress * radius * 2; // Doubled
+                    y = centerY + radius * 2 - progress * radius * 2; // Doubled
+                    break;
+                case 3: // Left to top
+                    x = centerX - radius * 2 + progress * radius * 2; // Doubled
+                    y = centerY - progress * radius * 2; // Doubled
+                    break;
+            }
+            
+            return { x, y };
+        }
+    },
+    
+    random: {
+        name: 'Random (Alphabetical)',
+        calculatePosition: (index, totalCards, centerX, centerY, radius) => {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = Math.max(window.innerHeight, 1000);
+            
+            // Mobile-first layout: use grid on small screens
+            if (window.innerWidth <= 768) {
+                return calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight);
+            }
+            
+            // Desktop: Random positioning with some structure
+            const margin = 100;
+            const availableWidth = viewportWidth - (margin * 2);
+            const availableHeight = viewportHeight - (margin * 2);
+            
+            // Add some horizontal bias for alphabetical flow
+            const horizontalBias = (index / Math.max(totalCards - 1, 1)) * 0.3; // 30% bias toward left-to-right
+            const randomX = Math.random() * availableWidth + margin;
+            const randomY = Math.random() * availableHeight + margin;
+            
+            // Blend random position with alphabetical flow
+            const x = randomX + (horizontalBias * availableWidth * 0.5);
+            const y = randomY;
+            
+            return { x, y };
+        }
+    }
+};
+
+// Current shape (can be changed)
+let currentShape = 'random';
+
+// Function to change the current shape
+function changeShape(shapeName) {
+    if (SHAPE_BANK[shapeName]) {
+        currentShape = shapeName;
+        console.log(`Switched to ${SHAPE_BANK[shapeName].name} layout`);
+        
+        // Reposition all cards with new shape
+        if (isNeuralNetworkStyle) {
+            resetPositionedCards();
+            const allBlocks = document.querySelectorAll('.project-block');
+            console.log(`Repositioning ${allBlocks.length} cards with ${shapeName} shape`);
+            
+            allBlocks.forEach((block, index) => {
+                // Get size class from classList or generate one
+                let sizeClass = block.getAttribute('data-size');
+                if (!sizeClass) {
+                    // Extract from classList or generate random
+                    const classes = Array.from(block.classList);
+                    const sizeClasses = ['small', 'medium', 'large', 'xlarge'];
+                    sizeClass = classes.find(cls => sizeClasses.includes(cls)) || getRandomSizeClass();
+                    block.setAttribute('data-size', sizeClass);
+                }
+                
+                console.log(`Repositioning card ${index + 1} with size: ${sizeClass}`);
+                // Use shuffled position mapping for random layout to maintain alphabetical order
+                const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
+                positionCardCircularly(block, sizeClass, positionIndex, allBlocks.length);
+            });
+            // Update container height for masonry layout
+            updateMasonryContainerHeight();
+        }
+    }
+}
+
+// Function to cycle through all shapes
+function cycleShape() {
+    const shapeNames = Object.keys(SHAPE_BANK);
+    const currentIndex = shapeNames.indexOf(currentShape);
+    const nextIndex = (currentIndex + 1) % shapeNames.length;
+    changeShape(shapeNames[nextIndex]);
+}
+
+// Global keyboard listener for shape cycling
+let keyboardListenerAdded = false;
+function addShapeKeyboardListener() {
+    if (keyboardListenerAdded) return;
+    
+    document.addEventListener('keydown', function(e) {
+        // Only trigger if not typing in an input field
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            if (e.key === 's' || e.key === 'S') {
+                e.preventDefault();
+                console.log('🔄 Cycling to next shape...');
+                cycleShape();
+            }
+        }
+    });
+    
+    // Add window resize listener for responsive repositioning
+    window.addEventListener('resize', debounce(function() {
+        console.log('📱 Window resized - repositioning for current device type');
+        if (isNeuralNetworkStyle) {
+            // Re-layout all cards on resize
+            resetPositionedCards();
+            const allBlocks = document.querySelectorAll('.project-block');
+            allBlocks.forEach((block, index) => {
+                const sizeClass = block.getAttribute('data-size') || getRandomSizeClass();
+                const totalCards = allBlocks.length;
+                positionCardCircularly(block, sizeClass, index, totalCards);
+            });
+            // Update container height for masonry layout
+            updateMasonryContainerHeight();
+        }
+    }, 250));
+    
+    keyboardListenerAdded = true;
+    console.log('⌨️ Shape cycling keyboard listener added');
+}
+
+// Debounce function for resize events
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Handle window resize for mobile neural overlay
+window.addEventListener('resize', debounce(() => {
+    // Recreate mobile neural overlay on resize
+    createMobileNeuralOverlay();
+}, 250));
+
+// Mobile navigation functionality
+function initializeMobileNavigation() {
+    if (window.innerWidth > 768) return; // Only for mobile
+    
+    const navToggles = document.querySelectorAll('.nav-toggle');
+    const projectSection = document.querySelector('.project-section');
+    
+    navToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            // Remove active class from all toggles
+            navToggles.forEach(t => t.classList.remove('active'));
+            
+            // Add active class to clicked toggle
+            toggle.classList.add('active');
+            
+            const section = toggle.getAttribute('data-section');
+            
+            if (section === 'portfolio') {
+                // Show portfolio
+                projectSection.style.display = 'block';
+                console.log('📱 Switched to Portfolio view');
+            } else if (section === 'skills') {
+                // Hide portfolio for now (we can add skills content later)
+                projectSection.style.display = 'none';
+                console.log('📱 Switched to Skills view');
+            }
+        });
+    });
+    
+    console.log('📱 Mobile navigation initialized');
+}
+
+// Test function - can be called from browser console
+function testShapes() {
+    console.log('🧪 Testing all shapes...');
+    const shapeNames = Object.keys(SHAPE_BANK);
+    
+    let index = 0;
+    const interval = setInterval(() => {
+        if (index >= shapeNames.length) {
+            clearInterval(interval);
+            console.log('✅ Shape testing complete!');
+            return;
+        }
+        
+        const shapeName = shapeNames[index];
+        console.log(`Testing shape: ${shapeName}`);
+        changeShape(shapeName);
+        index++;
+    }, 2000);
+}
+
+// Quick test function for immediate shape switching
+function quickTest() {
+    console.log('🚀 Quick shape test...');
+    const shapes = ['random', 'circle', 'cube', 'hand', 'sineWave', 'spiral', 'diamond'];
+    let currentIndex = 0;
+    
+    const testInterval = setInterval(() => {
+        if (currentIndex >= shapes.length) {
+            clearInterval(testInterval);
+            console.log('✅ Quick test complete!');
+            return;
+        }
+        
+        const shape = shapes[currentIndex];
+        console.log(`🔄 Switching to: ${shape}`);
+        changeShape(shape);
+        currentIndex++;
+    }, 1000);
+}
+
+// Function to return to default random layout
+function resetToRandom() {
+    changeShape('random');
+    console.log('🎲 Reset to default Random (Alphabetical) layout');
+}
+
+// Make functions available globally for console testing
+window.changeShape = changeShape;
+window.cycleShape = cycleShape;
+window.testShapes = testShapes;
+window.quickTest = quickTest;
+window.resetToRandom = resetToRandom;
+window.SHAPE_BANK = SHAPE_BANK;
+
+// Original organic positioning function (restored for random layout)
+function positionCardOrganically(index, totalCards) {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = Math.max(window.innerHeight, 1000);
+    
+    // Define safe margins - positions are applied directly, no sidebar offset needed
+    const margin = 80;
+    const sidebarOffset = 0; // Match the offset used in positionCardCircularly
+    const minX = 0; // Zero left padding - cards can start right at sidebar edge
+    const maxX = viewportWidth - sidebarOffset - margin; // Account for sidebar offset
+    const minY = margin;
+    const maxY = viewportHeight - margin;
+    
+    // Try multiple positions to find a good organic placement
+    let bestPosition = null;
+    let bestScore = -1;
+    
+    for (let attempt = 0; attempt < 50; attempt++) {
+        // Generate random position with some structure
+        let x, y;
+        
+        if (attempt < 10) {
+            // First 10 attempts: try center-biased positions within available space
+            const centerBias = 0.3;
+            const availableWidth = maxX - minX;
+            const availableHeight = maxY - minY;
+            const centerX = minX + availableWidth / 2;
+            const centerY = minY + availableHeight / 2;
+            
+            x = centerX + (Math.random() - 0.5) * availableWidth * centerBias;
+            y = centerY + (Math.random() - 0.5) * availableHeight * centerBias;
+        } else {
+            // Remaining attempts: full random
+            x = Math.random() * (maxX - minX) + minX;
+            y = Math.random() * (maxY - minY) + minY;
+        }
+        
+        // Ensure position is within bounds
+        x = Math.max(minX, Math.min(maxX, x));
+        y = Math.max(minY, Math.min(maxY, y));
+        
+        // Calculate score based on distance from other cards and edge proximity
+        let score = 0;
+        
+        // Prefer positions away from edges
+        const edgeDistance = Math.min(
+            x - minX,
+            maxX - x,
+            y - minY,
+            maxY - y
+        );
+        score += edgeDistance * 0.1;
+        
+        // Check distance from existing positioned cards
+        let minDistance = Infinity;
+        for (const existingCard of positionedCards) {
+            const distance = Math.sqrt(
+                Math.pow(x - existingCard.x, 2) + Math.pow(y - existingCard.y, 2)
+            );
+            minDistance = Math.min(minDistance, distance);
+        }
+        
+        if (minDistance > 120) { // Minimum distance between cards
+            score += minDistance * 0.5;
+        } else {
+            score -= 1000; // Heavy penalty for too close
+        }
+        
+        // Add some randomness to avoid perfect patterns
+        score += Math.random() * 50;
+        
+        if (score > bestScore) {
+            bestScore = score;
+            bestPosition = { x, y };
+        }
+    }
+    
+    // Fallback to simple random if no good position found
+    if (!bestPosition) {
+        bestPosition = {
+            x: Math.random() * (maxX - minX) + minX,
+            y: Math.random() * (maxY - minY) + minY
+        };
+    }
+    
+    return bestPosition;
+}
+
+// Mobile grid positioning - true masonry layout with proper spacing
+function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions) {
+    // Mobile: Single column with comfortable spacing
+    const margin = 0; // No top margin - cards start right after header
+    const cardSpacing = 25; // Spacing between cards
+    const cardWidth = dimensions.width;
+    const cardHeight = dimensions.height;
+    
+    // Debug: Log the parameters
+    if (index === 0) {
+        // Debug removed for performance
+    }
+    
+    // Single column layout - all cards with dramatic horizontal offset
+    if (index === 0) {
+        window.mobileColumnY = margin; // Start with top margin
+        // Debug removed
+    }
+    
+    // Calculate controlled horizontal offset - alternating left/right with max 2 consecutive
+    const availableSpace = viewportWidth - cardWidth; // Space when card is fully visible (~36% of viewport)
+    
+    if (index === 0) {
+        // Debug removed
+        window.mobileOffsetHistory = []; // Track last 2 positions
+    }
+    
+    // Determine if we can repeat the same position (max 2 in a row)
+    const lastTwo = window.mobileOffsetHistory.slice(-2);
+    const canGoLeft = !(lastTwo.length === 2 && lastTwo[0] === 'left' && lastTwo[1] === 'left');
+    const canGoRight = !(lastTwo.length === 2 && lastTwo[0] === 'right' && lastTwo[1] === 'right');
+    
+    let randomOffset;
+    let position;
+    
+    // Choose left or right, avoiding 3 in a row
+    if (!canGoLeft && canGoRight) {
+        // Must go right (already 2 lefts in a row)
+        position = 'right';
+    } else if (!canGoRight && canGoLeft) {
+        // Must go left (already 2 rights in a row)
+        position = 'left';
+    } else {
+        // Can go either way - random choice
+        position = Math.random() > 0.5 ? 'left' : 'right';
+    }
+    
+    if (position === 'left') {
+        // Extend beyond LEFT edge (negative X)
+        randomOffset = -(30 + Math.random() * 60); // -30 to -90px (goes offscreen left)
+    } else {
+        // Extend beyond RIGHT edge (large positive X)
+        randomOffset = availableSpace + (30 + Math.random() * 60); // Push card right so it extends offscreen
+    }
+    
+    // Track this position
+    window.mobileOffsetHistory.push(position);
+    
+    // Calculate X position - offset directly
+    const x = randomOffset;
+    
+    // Calculate Y position - stack vertically with spacing
+    const y = window.mobileColumnY;
+    
+    // Update Y position for next card (add height of this card + spacing)
+    window.mobileColumnY = y + cardHeight + cardSpacing;
+    
+    // Debug logging removed for performance
+    
+    // Store the calculated dimensions for CSS consistency
+    window.mobileCardWidth = cardWidth;
+    window.mobileCardHeight = cardHeight;
+    window.mobileCardSpacing = cardSpacing;
+    window.mobileMargin = margin;
+    
+    // Update CSS custom properties for exact positioning
+    if (index === 0) { // Only update once per layout
+        document.documentElement.style.setProperty('--mobile-card-width', `${Math.floor(cardWidth)}px`);
+        document.documentElement.style.setProperty('--mobile-card-spacing', `${cardSpacing}px`);
+        document.documentElement.style.setProperty('--mobile-margin', `${margin}px`);
+        
+        // Container height will be calculated after all cards are processed
+        
+        // Debug removed for performance
+    }
+    
+    return { x, y };
+}
+
+// Calculate and set container height for masonry layout
+function updateMasonryContainerHeight() {
+    if (window.innerWidth <= 768 && window.mobileColumnHeights) {
+        const margin = 16;
+        const maxColumnHeight = Math.max(...window.mobileColumnHeights);
+        const totalHeight = maxColumnHeight + margin + 100; // Increased padding for proper scroll ending
+        const projectGrid = document.querySelector('.project-grid');
+        if (projectGrid) {
+            projectGrid.style.minHeight = `${totalHeight}px`;
+            // Debug removed
+        }
+    }
+}
+
+
+// Calculate position based on current shape
+function calculateShapePosition(index, totalCards, centerX, centerY, radius) {
+    if (currentShape === 'random') {
+        // For random layout, use the original organic positioning approach
+        return positionCardOrganically(index, totalCards);
+    } else {
+        const shape = SHAPE_BANK[currentShape];
+        return shape.calculatePosition(index, totalCards, centerX, centerY, radius);
+    }
+}
+
+// Calculate overlap between cards (simplified for circular layout)
 function calculateOverlap(newCard, existingCards) {
     let totalOverlap = 0;
     
@@ -238,6 +808,152 @@ function getRandomSizeClass() {
 }
 
 // Fast static positioning - no collision detection needed
+function positionCardCircularly(card, sizeClass, index, totalCards) {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = Math.max(window.innerHeight, 1000);
+    
+    // Get card dimensions
+    let dimensions = getCardDimensions(sizeClass);
+    
+    // Override height for mobile staggered masonry
+    if (window.innerWidth <= 768) {
+        // Staggered heights for natural masonry feel - reduced by 25%
+        const baseHeight = 120 * 1.25 * 0.75; // 112.5px
+        const heightVariations = [0, 15, 25, -8, 20, -5, 23, 13].map(v => v * 1.25 * 0.75);
+        const heightVariation = heightVariations[index % heightVariations.length];
+        const cardHeight = baseHeight + heightVariation;
+        
+        dimensions = {
+            width: dimensions.width, // Use the 2x viewport width from getCardDimensions
+            height: cardHeight
+        };
+    }
+    
+    let position;
+    
+    // Mobile: Use grid layout for all shapes
+    if (window.innerWidth <= 768) {
+        position = calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions);
+    // Debug removed for performance
+        
+        // Enhanced debug for card positioning and sizing
+        setTimeout(() => {
+            const allCards = document.querySelectorAll('.project-block');
+            const card = allCards[index];
+            if (card) {
+                const cardRect = card.getBoundingClientRect();
+                const computedStyle = getComputedStyle(card);
+                const thumbnail = card.querySelector('.thumbnail-overlay');
+                const img = thumbnail?.querySelector('img');
+                const blockSurface = card.querySelector('.block-surface');
+                
+                // Debug removed for performance
+                
+                // Check for overlaps with other cards (desktop only - mobile uses perfect grid)
+                if (window.innerWidth > 768) {
+                    const otherCards = Array.from(allCards).filter((c, i) => i !== index);
+                    const overlaps = otherCards.filter(otherCard => {
+                        const otherRect = otherCard.getBoundingClientRect();
+                        return !(cardRect.right <= otherRect.left || 
+                               cardRect.left >= otherRect.right || 
+                               cardRect.bottom <= otherRect.top || 
+                               cardRect.top >= otherRect.bottom);
+                    });
+                    
+                    if (overlaps.length > 0) {
+                        // Debug removed
+                    }
+                }
+            }
+        }, 1000 + index * 100); // Stagger debug logs
+        
+        // No need to store positioned cards for grid layout
+    } else if (currentShape === 'random') {
+        // Use pre-sorted organic positions (sorted by X coordinate)
+        if (window.sortedOrganicPositions && window.sortedOrganicPositions[index]) {
+            position = { x: window.sortedOrganicPositions[index].x, y: window.sortedOrganicPositions[index].y };
+            // Debug removed
+        } else {
+            position = positionCardOrganically(index, totalCards);
+        }
+    } else {
+        // Use geometric shapes for other layouts on desktop
+        const centerX = viewportWidth / 2;
+        const centerY = viewportHeight / 2;
+        
+        // Adjust radius based on viewport size and number of cards (doubled for larger shapes)
+        const baseRadius = Math.min(viewportWidth, viewportHeight) * 0.5; // Doubled from 0.25 to 0.5
+        const radius = Math.max(baseRadius, 400); // Doubled minimum radius from 200 to 400
+        
+        // Get shape-based position
+        position = calculateShapePosition(index, totalCards, centerX, centerY, radius);
+    }
+    
+    // For mobile grid, use exact positioning; for desktop, center the card
+    let x, y;
+    if (window.innerWidth <= 768) {
+        // Mobile: Use exact grid positioning
+        x = position.x;
+        y = position.y;
+    } else {
+        // Desktop: Center the card on the calculated position
+        x = position.x - dimensions.width / 2;
+        y = position.y - dimensions.height / 2;
+    }
+    
+    // Ensure cards don't go off-screen (desktop only - mobile allows scrolling)
+    let finalX, finalY;
+    if (window.innerWidth <= 768) {
+        // Mobile: Allow cards to extend beyond viewport (including negative X for left-cropping)
+        finalX = x; // Allow negative X for left-side cropping!
+        finalY = Math.max(y, 0); // Only prevent negative Y
+    } else {
+        // Desktop: Keep cards within viewport
+    const maxX = viewportWidth - dimensions.width - 20;
+    const maxY = viewportHeight - dimensions.height - 20;
+        finalX = Math.min(Math.max(x, 20), maxX);
+        finalY = Math.min(Math.max(y, 20), maxY);
+    }
+    
+    // Apply sidebar offset for desktop
+    if (window.innerWidth > 768) {
+        const sidebarWidth = 200; // Desktop sidebar width
+        card.style.left = (finalX + sidebarWidth) + 'px';
+    } else {
+    card.style.left = finalX + 'px';
+    }
+    card.style.top = finalY + 'px';
+    card.style.width = Math.floor(dimensions.width) + 'px';
+    card.style.height = dimensions.height + 'px';
+    
+    // Force mobile dimensions to override any CSS
+    if (window.innerWidth <= 768) {
+        // Use the calculated dimensions directly - no overrides!
+        card.style.width = Math.floor(dimensions.width) + 'px';
+        card.style.minWidth = Math.floor(dimensions.width) + 'px';
+        card.style.minHeight = dimensions.height + 'px';
+        
+        // Store offset data for scroll animation
+        card.dataset.initialX = finalX;
+        card.dataset.finalY = finalY;
+        card.dataset.cardWidth = Math.floor(dimensions.width);
+        
+        // Debug removed for performance
+    }
+    
+    // Store positioned card info for collision detection (for random layout, desktop only)
+    if (currentShape === 'random' && window.innerWidth > 768) {
+        positionedCards.push({
+            x: finalX + dimensions.width / 2,
+            y: finalY + dimensions.height / 2,
+            width: dimensions.width,
+            height: dimensions.height
+        });
+    }
+    
+    return { x: finalX, y: finalY, width: dimensions.width, height: dimensions.height };
+}
+
 function positionCardStatically(card, sizeClass, index) {
     const dimensions = getCardDimensions(sizeClass);
     const viewportWidth = window.innerWidth;
@@ -328,7 +1044,14 @@ function positionCardRandomly(card, sizeClass, index) {
     
     positionedCards.push(position);
     
-    card.style.left = position.x + 'px';
+    // Apply sidebar offset for desktop when using organic positioning
+    let finalX = position.x;
+    if (window.innerWidth > 768 && currentShape === 'random') {
+        const sidebarWidth = 0; // No offset - cards start right at sidebar edge
+        finalX = position.x + sidebarWidth;
+    }
+    
+    card.style.left = finalX + 'px';
     card.style.top = position.y + 'px';
     card.style.zIndex = 20 + index;
     
@@ -393,22 +1116,42 @@ function createSimpleLine(start, end) {
 
 function createConnectionLines() {
     const projectCards = document.querySelectorAll('.project-block');
+    const isMobile = window.innerWidth <= 768;
+    
     const viewportCenter = {
         x: window.innerWidth / 2,
         y: window.innerHeight / 2
     };
     
-    // Clear existing lines
+    // Clear existing lines and mobile SVG
     document.querySelectorAll('.connection-line').forEach(line => line.remove());
+    document.querySelectorAll('.mobile-connections-svg').forEach(svg => svg.remove());
     
     // Wait to ensure all cards are positioned with the new algorithm
     setTimeout(() => {
         projectCards.forEach((card, index) => {
+            let cardCenter;
+            
+            // Mobile: use absolute position from style, Desktop: use viewport position
+            if (isMobile) {
+                const x = parseFloat(card.style.left) || 0;
+                const y = parseFloat(card.style.top) || 0;
+                const width = parseFloat(card.style.width) || card.offsetWidth;
+                const height = parseFloat(card.style.height) || card.offsetHeight;
+                
+                cardCenter = {
+                    x: x + width / 2,
+                    y: y + height / 2
+                };
+                
+                // Debug removed
+            } else {
             const cardRect = card.getBoundingClientRect();
-            const cardCenter = {
+                cardCenter = {
                 x: cardRect.left + cardRect.width / 2,
                 y: cardRect.top + cardRect.height / 2
             };
+            }
             
             
             // Create lines to viewport center (50% chance)
@@ -432,21 +1175,171 @@ function createConnectionLines() {
                     matchingCards[Math.floor(Math.random() * matchingCards.length)] :
                     otherCards[Math.floor(Math.random() * otherCards.length)];
                 
+                let targetCenter;
+                if (isMobile) {
+                    const x = parseFloat(targetCard.style.left) || 0;
+                    const y = parseFloat(targetCard.style.top) || 0;
+                    const width = parseFloat(targetCard.style.width) || targetCard.offsetWidth;
+                    const height = parseFloat(targetCard.style.height) || targetCard.offsetHeight;
+                    
+                    targetCenter = {
+                        x: x + width / 2,
+                        y: y + height / 2
+                    };
+                } else {
                 const targetRect = targetCard.getBoundingClientRect();
-                const targetCenter = {
+                    targetCenter = {
                     x: targetRect.left + targetRect.width / 2,
                     y: targetRect.top + targetRect.height / 2
                 };
+                }
+                
                 createCurvedLine(cardCenter, targetCenter, 'card');
             }
         });
     }, 150); // Delay to ensure positioning is complete
 }
 
+function createMobileSVGConnection(start, end, type) {
+    // Get or create SVG container for mobile connections (absolute positioned, scrolls with content)
+    let svg = document.querySelector('.mobile-connections-svg');
+    if (!svg) {
+        svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.classList.add('mobile-connections-svg');
+        svg.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+            overflow: visible;
+        `;
+        
+        // Add to project-grid so it scrolls with cards
+        const projectGrid = document.querySelector('.project-grid');
+        if (projectGrid) {
+            projectGrid.appendChild(svg);
+            // Debug removed
+        } else {
+            document.body.appendChild(svg);
+            // Debug removed
+        }
+    }
+    
+    // Coordinates are already absolute (from card.style.left/top), no conversion needed
+    const deltaX = end.x - start.x;
+    const deltaY = end.y - start.y;
+    const curveRadius = Math.min(Math.abs(deltaX), Math.abs(deltaY)) * 0.25;
+    const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
+    if (length === 0) return;
+    
+    // Create single center path (simplified for mobile - no triple paths)
+    let pathData;
+    
+    // Use same rounded corner logic as desktop
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal first (L-shape)
+        if (deltaX > 0 && deltaY > 0) {
+            pathData = `M ${start.x} ${start.y} L ${end.x - curveRadius} ${start.y} Q ${end.x} ${start.y}, ${end.x} ${start.y + curveRadius} L ${end.x} ${end.y}`;
+        } else if (deltaX > 0 && deltaY < 0) {
+            pathData = `M ${start.x} ${start.y} L ${end.x - curveRadius} ${start.y} Q ${end.x} ${start.y}, ${end.x} ${start.y - curveRadius} L ${end.x} ${end.y}`;
+        } else if (deltaX < 0 && deltaY > 0) {
+            pathData = `M ${start.x} ${start.y} L ${end.x + curveRadius} ${start.y} Q ${end.x} ${start.y}, ${end.x} ${start.y + curveRadius} L ${end.x} ${end.y}`;
+        } else {
+            pathData = `M ${start.x} ${start.y} L ${end.x + curveRadius} ${start.y} Q ${end.x} ${start.y}, ${end.x} ${start.y - curveRadius} L ${end.x} ${end.y}`;
+        }
+    } else {
+        // Vertical first (Z-shape)
+        if (deltaX > 0 && deltaY > 0) {
+            pathData = `M ${start.x} ${start.y} L ${start.x} ${end.y - curveRadius} Q ${start.x} ${end.y}, ${start.x + curveRadius} ${end.y} L ${end.x} ${end.y}`;
+        } else if (deltaX > 0 && deltaY < 0) {
+            pathData = `M ${start.x} ${start.y} L ${start.x} ${end.y + curveRadius} Q ${start.x} ${end.y}, ${start.x + curveRadius} ${end.y} L ${end.x} ${end.y}`;
+        } else if (deltaX < 0 && deltaY > 0) {
+            pathData = `M ${start.x} ${start.y} L ${start.x} ${end.y - curveRadius} Q ${start.x} ${end.y}, ${start.x - curveRadius} ${end.y} L ${end.x} ${end.y}`;
+        } else {
+            pathData = `M ${start.x} ${start.y} L ${start.x} ${end.y + curveRadius} Q ${start.x} ${end.y}, ${start.x - curveRadius} ${end.y} L ${end.x} ${end.y}`;
+        }
+    }
+    
+    // Use same color scheme as desktop: green, grey, pale grey
+    const colors = [
+        'rgba(144,238,144,1.0)', // Pastel green
+        'rgba(128,128,128,1.0)', // Grey
+        'rgba(200,200,200,1.0)'  // Pale grey
+    ];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    
+    // Create path with desktop styling
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', pathData);
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '1'); // Match desktop
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('opacity', '0.6'); // Match desktop
+    
+    svg.appendChild(path);
+    
+    // Add text label (same as desktop)
+    const connectionText = getConnectionText(start, end, type);
+    if (connectionText) {
+        const midPoint = {
+            x: (start.x + end.x) / 2,
+            y: (start.y + end.y) / 2
+        };
+        
+        // Calculate offset direction along the line
+        const offsetDistance = 500; // pixels to travel along the line (much more dramatic)
+        const offsetX = deltaX !== 0 ? (deltaX / length) * offsetDistance : 0;
+        const offsetY = deltaY !== 0 ? (deltaY / length) * offsetDistance : 0;
+        
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', midPoint.x);
+        text.setAttribute('y', midPoint.y);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('dominant-baseline', 'middle');
+        text.setAttribute('font-family', 'JetBrains Mono');
+        
+        // Varied scale: 40% to 100% of base size
+        const baseSize = 40;
+        const scaleVariation = 0.4 + (Math.random() * 0.6); // 0.4 to 1.0
+        const fontSize = Math.round(baseSize * scaleVariation);
+        text.setAttribute('font-size', fontSize.toString());
+        
+        // 30% chance of italic
+        if (Math.random() < 0.3) {
+            text.setAttribute('font-style', 'italic');
+        }
+        
+        text.setAttribute('font-weight', '200');
+        text.setAttribute('fill', 'rgba(144,238,144,0.8)');
+        text.setAttribute('opacity', '0.7');
+        text.textContent = connectionText;
+        
+        // Store initial position and offset for scroll animation
+        text.dataset.initialX = midPoint.x;
+        text.dataset.initialY = midPoint.y;
+        text.dataset.offsetX = offsetX;
+        text.dataset.offsetY = offsetY;
+        
+        svg.appendChild(text);
+    }
+    
+    // Debug removed
+}
+
 function createCurvedLine(start, end, type) {
+    // Create mobile SVG paths or desktop div lines
+    if (window.innerWidth <= 768) {
+        createMobileSVGConnection(start, end, type);
+        return;
+    }
+    
     const line = document.createElement('div');
     line.className = 'connection-line';
-    
     
     // Calculate direction and determine curve type
     const deltaX = end.x - start.x;
@@ -456,6 +1349,12 @@ function createCurvedLine(start, end, type) {
     // Calculate perpendicular offset for parallel lines
     const lineSpacing = 12; // Increased spacing between parallel lines
     const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    
+    // Prevent division by zero
+    if (length === 0) {
+        return;
+    }
+    
     const perpX = (-deltaY / length) * lineSpacing;
     const perpY = (deltaX / length) * lineSpacing;
     
@@ -595,20 +1494,829 @@ function resetPositionedCards() {
     positionedCards = [];
 }
 
+// Caching system for instant project navigation
+function clearProjectCache() {
+    console.log('Clearing project cache...');
+    projectCache.clear();
+    console.log('Project cache cleared successfully');
+}
+
+function refreshProjectCache() {
+    console.log('Refreshing project cache...');
+    clearProjectCache();
+    preloadProjectContent();
+}
+
+function preloadProjectContent() {
+    console.log('Preloading project content...');
+    const projectsToCache = window.projects || projects || [];
+    const mediaIndex = window.projectMedia || window.mediaIndex || {};
+    
+    console.log('Media index available:', !!mediaIndex);
+    console.log('Media index projects:', Object.keys(mediaIndex.projects || {}));
+    
+    projectsToCache.forEach(project => {
+        // Always regenerate content to ensure it's up-to-date
+        const projectHTML = generateProjectHTML(project, mediaIndex);
+        projectCache.set(project.id, {
+            html: projectHTML,
+            project: project,
+            loaded: true
+        });
+    });
+    
+    console.log(`Cached ${projectCache.size} projects`);
+}
+
+// Simple title formatting - just return the title as-is
+function formatTitleWithItalics(title) {
+    return title;
+}
+
+function generateProjectHTML(project, mediaIndex) {
+    const extra = (mediaIndex || {}).projects || {};
+    const mainDescription = project.fullDescription || project.description || "";
+    
+    // Separate main description from bullet points
+    let mainDescHtml = '';
+    let bulletPointsHtml = '';
+    
+    if (project.fullDescription) {
+        const formattedDesc = mainDescription
+            .replace(/\\n/g, '\n')
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line.length > 0);
+        
+        let mainHtml = '';
+        let bulletHtml = '';
+        let currentSection = '';
+        let inBulletSection = false;
+        
+        formattedDesc.forEach(line => {
+            // Check for section headers (with ** markdown formatting)
+            if (line.startsWith('**') && line.endsWith('**')) {
+                // Section header - remove ** markers
+                if (currentSection) {
+                    if (inBulletSection) {
+                        bulletHtml += '</ul>';
+                    } else {
+                        mainHtml += '</ul>';
+                    }
+                }
+                const sectionTitle = line.substring(2, line.length - 2);
+                
+                // Determine if this is a bullet point section
+                inBulletSection = sectionTitle.includes('Technical details') || 
+                                sectionTitle.includes('Challenges') || 
+                                sectionTitle.includes('Impact') || 
+                                sectionTitle.includes('Process');
+                
+                // Add data attribute for styling
+                let dataSection = '';
+                if (sectionTitle.includes('Technical details')) dataSection = 'technical';
+                else if (sectionTitle.includes('Challenges')) dataSection = 'challenges';
+                else if (sectionTitle.includes('Impact')) dataSection = 'impact';
+                else if (sectionTitle.includes('Process')) dataSection = 'process';
+                
+                const headerHtml = `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += headerHtml;
+                } else {
+                    mainHtml += headerHtml;
+                }
+                currentSection = sectionTitle;
+            } else if (line === 'Technical details and implementation' || 
+                       line === 'Challenges and solutions' || 
+                       line === 'Impact and results' || 
+                       line === 'Process and methodology') {
+                // Section header - plain text format
+                if (currentSection) {
+                    if (inBulletSection) {
+                        bulletHtml += '</ul>';
+                    } else {
+                        mainHtml += '</ul>';
+                    }
+                }
+                const sectionTitle = line;
+                
+                // Determine if this is a bullet point section
+                inBulletSection = sectionTitle.includes('Technical details') || 
+                                sectionTitle.includes('Challenges') || 
+                                sectionTitle.includes('Impact') || 
+                                sectionTitle.includes('Process');
+                
+                // Add data attribute for styling
+                let dataSection = '';
+                if (sectionTitle.includes('Technical details')) dataSection = 'technical';
+                else if (sectionTitle.includes('Challenges')) dataSection = 'challenges';
+                else if (sectionTitle.includes('Impact')) dataSection = 'impact';
+                else if (sectionTitle.includes('Process')) dataSection = 'process';
+                
+                const headerHtml = `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += headerHtml;
+                } else {
+                    mainHtml += headerHtml;
+                }
+                currentSection = sectionTitle;
+            } else if (line.startsWith('•') || line.startsWith('-')) {
+                // Bullet point
+                const bulletText = line.slice(1).trim();
+                const bulletItem = `<li>${bulletText}</li>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += bulletItem;
+                } else {
+                    mainHtml += bulletItem;
+                }
+            } else if (line.length > 0) {
+                // Regular paragraph
+                if (currentSection) {
+                    if (inBulletSection) {
+                        bulletHtml += '</ul>';
+                    } else {
+                        mainHtml += '</ul>';
+                    }
+                    currentSection = '';
+                    inBulletSection = false;
+                }
+                
+                // Check if this should be a prominent statement
+                const isProminent = line.length > 20 && line.length < 120 && 
+                                  (line.includes('transformed') || 
+                                   line.includes('innovative') || 
+                                   line.includes('breakthrough') || 
+                                   line.includes('revolutionary') || 
+                                   line.includes('immersive') || 
+                                   line.includes('interactive') || 
+                                   line.includes('cutting-edge') || 
+                                   line.includes('groundbreaking') ||
+                                   line.includes('multiuser') ||
+                                   line.includes('music-oriented') ||
+                                   line.includes('digital') ||
+                                   line.includes('experience') ||
+                                   line.includes('installation') ||
+                                   line.includes('collaboration'));
+                
+                const paragraph = isProminent ? 
+                    `<p class="prominent-statement">${line}</p>` : 
+                    `<p>${line}</p>`;
+                
+                if (inBulletSection) {
+                    bulletHtml += paragraph;
+                } else {
+                    mainHtml += paragraph;
+                }
+            }
+        });
+        
+        if (currentSection) {
+            if (inBulletSection) {
+                bulletHtml += '</ul>';
+    } else {
+                mainHtml += '</ul>';
+            }
+        }
+        
+        mainDescHtml = mainHtml;
+        bulletPointsHtml = bulletHtml;
+    } else {
+        mainDescHtml = `<p>${mainDescription}</p>`;
+    }
+    
+    // Get media - prioritize high-res images and video embeds
+    // Media debug removed
+    const extraMedia = (extra[project.id] || {}).files || [];
+    // Debug removed
+    
+    // Check for video embeds first
+    const hasVideoEmbed = project.videoEmbed && project.videoEmbed.trim();
+    const hasMultipleVideos = project.videoEmbeds && project.videoEmbeds.length > 0;
+    
+    // Get high-res media files (prefer high-res over thumbnails)
+    const highResMedia = extraMedia.map(file => {
+        if (typeof file === 'object') {
+            // File already has the correct path - use as-is since it's from high-res folder
+            const highResPath = file.path;
+            const url = `media/${highResPath}`;
+            // Debug removed
+            return url;
+        }
+        return file;
+    }).filter(url => {
+        // Only include local media files, no external URLs
+        return !url.startsWith('http') && !url.startsWith('https') && !url.startsWith('www.');
+    });
+    
+    // Get thumbnail media files (reliable fallback)
+    const thumbnailMedia = extraMedia.map(file => 
+        typeof file === 'object' ? `media/${file.path}` : file
+    ).filter(url => {
+        return !url.startsWith('http') && !url.startsWith('https') && !url.startsWith('www.');
+    });
+    
+    // Use high-res if available, otherwise fallback to thumbnails
+    const localMedia = highResMedia.length > 0 ? highResMedia : thumbnailMedia;
+    const allMedia = localMedia; // Use all available media instead of just first 3
+    
+    console.log('Media for', project.id, ':', allMedia);
+    
+    // Create content with images integrated
+    let contentBlocks = [];
+    
+    // Split main description into sections for better image placement
+    const mainDescSections = mainDescHtml.split('</ul>').filter(section => section.trim());
+    
+    // First block: Video embeds (if available) - almost full width
+    if (hasVideoEmbed || hasMultipleVideos) {
+        let videoContent = '';
+        
+        if (hasMultipleVideos) {
+            // Render multiple videos
+            videoContent = project.videoEmbeds.map((videoUrl, index) => `
+                <div class="video-embed-item">
+                    <h4>Video ${index + 1}</h4>
+                    ${renderVideoEmbed(videoUrl)}
+                </div>
+            `).join('');
+        } else if (hasVideoEmbed) {
+            // Render single video
+            videoContent = renderVideoEmbed(project.videoEmbed);
+        }
+        
+        contentBlocks.push(`
+            <div class="content-block video-embed-section">
+                <div class="video-section">
+                    ${videoContent}
+                </div>
+            </div>
+        `);
+    }
+    
+    // Add impact title section after videos (if exists)
+    const impactTitle = project['impact-title'] || '';
+    if (impactTitle) {
+        // Extract the description part after " — "
+        let descriptionOnly = impactTitle;
+        const dashIndex = impactTitle.indexOf(' — ');
+        if (dashIndex !== -1) {
+            descriptionOnly = impactTitle.substring(dashIndex + 3); // Skip " — "
+        }
+        
+        contentBlocks.push(`
+            <div class="content-block impact-title-block">
+                <div class="impact-title-section">
+                    <h2 class="impact-title">${descriptionOnly}</h2>
+                </div>
+            </div>
+        `);
+    }
+    
+    // Second block: main description text + first image (or just text if no video)
+    if (allMedia.length > 0) {
+        contentBlocks.push(`
+            <div class="content-block text-with-image">
+                <div class="image-section" onclick="openImageFullscreen('${allMedia[0]}')" style="cursor: pointer;">
+                    ${renderMedia(allMedia[0], project.title)}
+                </div>
+                <div class="text-section">
+                    ${mainDescSections[0] || mainDescHtml}
+                </div>
+            </div>
+        `);
+    } else {
+        // No images, just main description text
+        contentBlocks.push(`
+            <div class="content-block text-only">
+                <div class="text-section">
+                    ${mainDescHtml}
+                </div>
+            </div>
+        `);
+    }
+    
+    // Additional blocks: display remaining images in a grid layout
+    if (allMedia.length > 1) {
+        // Create image grid for remaining images
+        const remainingImages = allMedia.slice(1);
+        const imageGrid = remainingImages.map(imageUrl => 
+            `<div class="image-grid-item" onclick="openImageFullscreen('${imageUrl}')">${renderMedia(imageUrl, project.title)}</div>`
+        ).join('');
+        
+        contentBlocks.push(`
+            <div class="content-block image-grid-section">
+                <div class="image-grid">
+                    ${imageGrid}
+                </div>
+            </div>
+        `);
+    }
+    
+    // Add bullet points section at the end
+    if (bulletPointsHtml.trim()) {
+        contentBlocks.push(`
+            <div class="content-block bullet-points-section">
+                <div class="text-section bullet-points">
+                    ${bulletPointsHtml}
+                </div>
+            </div>
+        `);
+    }
+    
+    const medias = contentBlocks.join('');
+    
+    // Get Instagram links
+    const insta = (project.instagram || []).map(u => `<a target="_blank" rel="noopener" href="${u}">Instagram</a>`).join(" · ");
+    
+    // Get first media file for header background
+    const headerBackgroundImage = allMedia.length > 0 ? allMedia[0] : null;
+    const headerStyle = headerBackgroundImage ? `style="background-image: url('${headerBackgroundImage}');"` : '';
+    
+    return `
+        <article class="project-article">
+            <header class="project-header" ${headerStyle}>
+                <div class="header-overlay"></div>
+                <div class="header-content">
+                <h1>${formatTitleWithItalics(project.title)}</h1>
+                <p class="meta">${[project.year, project.client, project.role].filter(Boolean).join(" · ")}</p>
+                <p class="tech">${project.technologies || ""}</p>
+                </div>
+            </header>
+            
+            <div class="project-content">
+                ${medias}
+            </div>
+            
+            <footer class="project-footer">
+                <p class="links">${insta}</p>
+            </footer>
+        </article>
+    `;
+}
+
+function renderVideoEmbed(embedUrl) {
+    try {
+        // Debug removed
+        
+        // Handle different video embed formats
+        let m;
+        
+        // YouTube URLs
+        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/))) {
+            const vid = m[1];
+            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        }
+        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|shorts\/)([\w-]+)/))) {
+            const vid = m[1];
+            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        }
+        
+        // Vimeo URLs
+        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/))) {
+            const vid = m[1];
+            return `<div class="video-embed"><iframe src="https://player.vimeo.com/video/${vid}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+        }
+        
+        // Direct iframe embed code
+        if (embedUrl.includes('<iframe')) {
+            return `<div class="video-embed">${embedUrl}</div>`;
+        }
+        
+        // Fallback for other video URLs
+        return `<div class="video-embed"><video controls width="100%" height="400" src="${embedUrl}" preload="metadata"></video></div>`;
+        
+    } catch (e) {
+        console.error('Error rendering video embed:', embedUrl, e);
+        return `<div class="media-error">Failed to load video: ${embedUrl}</div>`;
+    }
+}
+
+function renderMedia(url, title) {
+    try {
+        // Debug removed
+        
+        let m;
+        if ((m = url.match(/^https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/))) {
+            const vid = m[1];
+            return `<div class="media"><iframe width="560" height="315" src="https://www.youtube.com/embed/${vid}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        }
+        if ((m = url.match(/^https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|shorts\/)([\w-]+)/))) {
+            const vid = m[1];
+            return `<div class="media"><iframe width="560" height="315" src="https://www.youtube.com/embed/${vid}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+        }
+        if ((m = url.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/))) {
+            const vid = m[1];
+            return `<div class="media"><iframe src="https://player.vimeo.com/video/${vid}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+        }
+        const isVideo = /\.(mp4|webm|mov)$/i.test(url);
+        const mediaElement = isVideo ? 
+            `<video controls src="${url}" preload="metadata" onerror="console.error('Video failed to load:', '${url}')"></video>` : 
+            `<img loading="lazy" src="${url}" alt="${title}" onerror="console.error('Image failed to load:', '${url}')">`;
+        return mediaElement;
+    } catch (e) {
+        console.error('Error rendering media:', url, e);
+        return `<div class="media-error">Failed to load: ${url}</div>`;
+    }
+}
+
+// Overlay system for instant project navigation
+function createProjectOverlay() {
+    if (currentProjectOverlay) return currentProjectOverlay;
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'project-overlay';
+    overlay.className = 'project-overlay';
+    overlay.innerHTML = `
+        <div class="project-overlay-content">
+            <header class="project-overlay-header">
+                <a href="#" class="close-project" onclick="closeProjectOverlay()">← Tous les projets</a>
+            </header>
+            <main id="project-overlay-main"></main>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    currentProjectOverlay = overlay;
+    return overlay;
+}
+
+function showProjectOverlay(projectId) {
+    const cachedProject = projectCache.get(projectId);
+    if (!cachedProject) {
+        console.error('Project not found in cache:', projectId);
+        return;
+    }
+    
+    const overlay = createProjectOverlay();
+    const main = overlay.querySelector('#project-overlay-main');
+    
+    // Set the cached HTML content
+    main.innerHTML = cachedProject.html;
+    
+    // Add swipe detection for mobile
+    if (window.innerWidth <= 768) {
+        let startX = 0;
+        let startY = 0;
+        let startTime = 0;
+        let isSwipeGesture = false;
+        
+        console.log('🎯 SWIPE DEBUG: Adding touch event listeners to overlay');
+        
+        overlay.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            startTime = Date.now();
+            isSwipeGesture = false;
+            
+            console.log('🎯 SWIPE DEBUG: touchstart', {
+                startX: startX,
+                startY: startY,
+                startTime: startTime,
+                timestamp: new Date().toISOString()
+            });
+        }, { passive: false });
+        
+        overlay.addEventListener('touchmove', function(e) {
+            if (!startX || !startY) return;
+            
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const deltaX = currentX - startX;
+            const deltaY = currentY - startY;
+            
+            console.log('🎯 SWIPE DEBUG: touchmove', {
+                currentX: currentX,
+                currentY: currentY,
+                deltaX: deltaX,
+                deltaY: deltaY,
+                absDeltaX: Math.abs(deltaX),
+                absDeltaY: Math.abs(deltaY),
+                isHorizontal: Math.abs(deltaX) > Math.abs(deltaY),
+                thresholdMet: Math.abs(deltaX) > 20
+            });
+            
+            // If horizontal movement is significant and more than vertical, prevent default
+            if (Math.abs(deltaX) > 20 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                isSwipeGesture = true;
+                console.log('🎯 SWIPE DEBUG: Preventing default browser behavior');
+                e.preventDefault(); // Prevent browser back gesture
+            }
+        }, { passive: false });
+        
+        overlay.addEventListener('touchend', function(e) {
+            if (!startX || !startY) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const endTime = Date.now();
+            
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            const deltaTime = endTime - startTime;
+            
+            console.log('🎯 SWIPE DEBUG: touchend', {
+                endX: endX,
+                endY: endY,
+                deltaX: deltaX,
+                deltaY: deltaY,
+                deltaTime: deltaTime,
+                isSwipeGesture: isSwipeGesture,
+                rightSwipe: deltaX > 50,
+                horizontalDominant: Math.abs(deltaX) > Math.abs(deltaY),
+                fastGesture: deltaTime < 500,
+                allConditions: isSwipeGesture && deltaX > 50 && Math.abs(deltaX) > Math.abs(deltaY) && deltaTime < 500
+            });
+            
+            // Check for right swipe (deltaX > 50px, horizontal movement > vertical, fast gesture)
+            if (isSwipeGesture && deltaX > 50 && Math.abs(deltaX) > Math.abs(deltaY) && deltaTime < 500) {
+                console.log('🎯 SWIPE DEBUG: ✅ RIGHT SWIPE DETECTED - CLOSING OVERLAY');
+                e.preventDefault();
+                e.stopPropagation();
+                closeProjectOverlay();
+            } else {
+                console.log('🎯 SWIPE DEBUG: ❌ Not a valid right swipe');
+            }
+            
+            // Reset values
+            startX = 0;
+            startY = 0;
+            startTime = 0;
+            isSwipeGesture = false;
+        }, { passive: false });
+    }
+    
+    // Mobile viewport fixes
+    if (window.innerWidth <= 768) {
+        // Save scroll position
+        const savedScrollPosition = window.pageYOffset;
+        
+        // Force mobile overlay to be positioned correctly
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.zIndex = '10000';
+        overlay.style.display = 'block';
+        overlay.style.opacity = '1';
+        // Remove transform override to allow CSS animation
+        overlay.style.overflowY = 'hidden';
+        
+        // Ensure the content container is also mobile-positioned
+        const contentElement = overlay.querySelector('.project-overlay-content');
+        if (contentElement) {
+            contentElement.style.height = '100vh';
+            contentElement.style.maxHeight = '100vh';
+            contentElement.style.overflowY = 'auto';
+            contentElement.style.padding = '0.5rem';
+            contentElement.style.width = '100%';
+        }
+        
+        // Ensure main content area is visible
+        const mainElement = main;
+        if (mainElement) {
+            mainElement.style.position = 'relative';
+            mainElement.style.zIndex = '10002';
+            mainElement.style.height = 'auto';
+            mainElement.style.minHeight = '100vh';
+            mainElement.style.overflow = 'visible';
+            mainElement.style.backgroundColor = 'transparent';
+            mainElement.style.opacity = '1';
+            mainElement.style.display = 'block';
+        }
+        
+        // Force the overlay to show content instead of just "darkening"
+        setTimeout(() => {
+            overlay.style.display = 'block';
+            
+            // Force initial state for animation
+            overlay.style.transform = 'translateX(100%)';
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden';
+            
+            // Debug animation states for mobile
+            console.log('🎬 MOBILE ANIMATION DEBUG: Before adding active class');
+            console.log('  - transform:', overlay.style.transform);
+            console.log('  - opacity:', overlay.style.opacity);
+            console.log('  - visibility:', overlay.style.visibility);
+            console.log('  - computed transform:', getComputedStyle(overlay).transform);
+            console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+            
+            // Force a reflow to ensure the initial state is applied
+            overlay.offsetHeight;
+            
+            // Now add the active class to trigger animation
+            overlay.classList.add('active');
+            
+            // Remove inline styles to allow CSS to take over
+            setTimeout(() => {
+                overlay.style.transform = '';
+                overlay.style.opacity = '';
+                overlay.style.visibility = '';
+            }, 10);
+            
+            // Debug after adding active class
+            setTimeout(() => {
+                console.log('🎬 MOBILE ANIMATION DEBUG: After adding active class');
+                console.log('  - transform:', overlay.style.transform);
+                console.log('  - opacity:', overlay.style.opacity);
+                console.log('  - visibility:', overlay.style.visibility);
+                console.log('  - computed transform:', getComputedStyle(overlay).transform);
+                console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+                console.log('  - has active class:', overlay.classList.contains('active'));
+            }, 100);
+            
+            // Allow CSS animation to work
+            // Debug log for mobile
+            console.log('Mobile overlay positioned:', {
+                overlay: {
+                    width: overlay.offsetWidth,
+                    height: overlay.offsetHeight,
+                    display: overlay.style.display,
+                    zIndex: overlay.style.zIndex
+                },
+                content: contentElement ? {
+                    width: contentElement.offsetWidth,
+                    height: contentElement.offsetHeight
+                } : null
+            });
+        }, 50);
+        
+        // Prevent body scroll on mobile
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.width = '100%';
+        
+        // Add swipe gesture support for mobile
+        let startX = 0;
+        let startY = 0;
+        let isSwipeGesture = false;
+        
+        overlay.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            isSwipeGesture = false;
+        }, { passive: true });
+        
+        overlay.addEventListener('touchmove', function(e) {
+            if (!startX || !startY) return;
+            
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            
+            const diffX = startX - currentX;
+            const diffY = startY - currentY;
+            
+            // Check if this is a horizontal swipe (more horizontal than vertical movement)
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                isSwipeGesture = true;
+            }
+        }, { passive: true });
+        
+        overlay.addEventListener('touchend', function(e) {
+            if (!startX || !startY) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const diffX = startX - endX;
+            
+            // Left swipe detected (swipe left to go back)
+            if (isSwipeGesture && diffX > 100) {
+                console.log('Left swipe detected - closing overlay');
+                closeProjectOverlay();
+            }
+            
+            // Reset values
+            startX = 0;
+            startY = 0;
+            isSwipeGesture = false;
+        }, { passive: true });
+        
+        // Restore scroll position when overlay closes
+        overlay.addEventListener('closemobile', function() {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            window.scrollTo(0, savedScrollPosition);
+        });
+    }
+    
+    // Show overlay with animation
+    overlay.style.display = 'block';
+    
+    // Force initial state for animation
+    overlay.style.transform = 'translateX(100%)';
+    overlay.style.opacity = '0';
+    overlay.style.visibility = 'hidden';
+    
+    // Debug animation states
+    console.log('🎬 ANIMATION DEBUG: Before adding active class');
+    console.log('  - transform:', overlay.style.transform);
+    console.log('  - opacity:', overlay.style.opacity);
+    console.log('  - visibility:', overlay.style.visibility);
+    console.log('  - computed transform:', getComputedStyle(overlay).transform);
+    console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+    
+    // Force a reflow to ensure the initial state is applied
+    overlay.offsetHeight;
+    
+    // Now add the active class to trigger animation
+    overlay.classList.add('active');
+    
+    // Remove inline styles to allow CSS to take over
+    setTimeout(() => {
+        overlay.style.transform = '';
+        overlay.style.opacity = '';
+        overlay.style.visibility = '';
+    }, 10);
+    
+    // Debug after adding active class
+    setTimeout(() => {
+        console.log('🎬 ANIMATION DEBUG: After adding active class');
+        console.log('  - transform:', overlay.style.transform);
+        console.log('  - opacity:', overlay.style.opacity);
+        console.log('  - visibility:', overlay.style.visibility);
+        console.log('  - computed transform:', getComputedStyle(overlay).transform);
+        console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+        console.log('  - has active class:', overlay.classList.contains('active'));
+    }, 100);
+    
+    isOverlayOpen = true;
+    
+    // Add click-outside-to-close functionality
+    overlay.addEventListener('click', function(e) {
+        // Only close if clicking on the overlay background, not the content
+        if (e.target === overlay) {
+            closeProjectOverlay();
+        }
+    });
+    
+    // Initialize background for project page
+    setTimeout(() => {
+        generateConcentricSquares();
+        initParallaxEffect();
+    }, 50);
+    
+    console.log('Project overlay opened:', projectId);
+}
+
+function closeProjectOverlay() {
+    if (!currentProjectOverlay || !isOverlayOpen) return;
+    
+    // Trigger mobile close event if on mobile
+    if (window.innerWidth <= 768 && currentProjectOverlay) {
+        currentProjectOverlay.dispatchEvent(new Event('closemobile'));
+    }
+    
+    // Ensure overlay is in the correct state for slide-out
+    currentProjectOverlay.style.transform = '';
+    currentProjectOverlay.style.opacity = '';
+    currentProjectOverlay.style.visibility = '';
+    
+    // Force a reflow to ensure styles are applied
+    currentProjectOverlay.offsetHeight;
+    
+    // Start slide-out animation
+    currentProjectOverlay.classList.remove('active');
+    
+    // Wait for animation to complete, then hide
+    setTimeout(() => {
+        currentProjectOverlay.style.display = 'none';
+        isOverlayOpen = false;
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        document.body.style.width = '';
+        
+        // Restore scroll position
+        if (typeof savedScrollPosition !== 'undefined' && savedScrollPosition !== null) {
+            window.scrollTo(0, savedScrollPosition);
+        }
+    }, 400); // Match the CSS transition duration (0.4s)
+    
+    console.log('Project overlay closed with slide-out animation');
+}
+
+// Make functions globally available
+window.showProjectOverlay = showProjectOverlay;
+window.closeProjectOverlay = closeProjectOverlay;
+window.refreshProjectCache = refreshProjectCache;
+window.clearProjectCache = clearProjectCache;
+
 // Render neural network section
 function renderNeuralNetworkSection(sectionId, projectIds) {
     const list = document.getElementById(sectionId);
-    const projectsToUse = window.projects || projects || [];
+    // Use the sorted projectsWithMedia array instead of the original unsorted window.projects
+    const projectsToUse = window.sortedProjectsWithMedia || window.projects || projects || [];
     const sectionProjects = projectsToUse.filter(p => projectIds.includes(p.id));
     
     console.log('Rendering section:', sectionId);
     console.log('Section projects:', sectionProjects.length);
     
-    // Filter out projects that don't have media/thumbnails
-    const projectsWithMedia = sectionProjects.filter(p => {
-        const thumbnail = getThumbnail(p.id);
-        return thumbnail !== null;
-    });
+    // Don't filter by thumbnails during initial render - use lazy loading instead
+    const projectsWithMedia = sectionProjects;
     
     console.log('Projects with media in section:', projectsWithMedia.length);
     console.log('List element found:', !!list);
@@ -623,10 +2331,9 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
     // Generate HTML for project blocks
     console.log('Creating project blocks HTML...');
     const htmlContent = projectsWithMedia.map((p, index) => {
-        console.log(`Processing project ${index + 1}: ${p.title}`);
+        // Debug removed
         
         const shortTitle = p.title || p.id || 'Untitled Project';
-        const thumbnail = getThumbnail(p.id);
         
         // Assign categories based on project characteristics or random distribution
         const categories = ['installation', 'generative', 'performance', 'commercial'];
@@ -634,17 +2341,18 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         const variation = (index % 4) + 1;
         
         const className = `project-block category-${category} variation-${variation}`;
-        console.log(`Project ${index + 1} classes: ${className}`);
-        return `<article class="${className}" data-project-title="${p.title}">
+        const projectNumber = String(index + 1).padStart(2, '0'); // Format as 01, 02, etc.
+        // Debug removed
+        return `<article class="${className}" data-project-title="${p.title}" data-project-id="${p.id}">
             <a href="project.html?id=${p.id}" class="project-link">
                 <div class="block-surface">
-                    <div class="block-title">${shortTitle}</div>
-                    ${thumbnail ? `<div class="thumbnail-overlay" style="background-image: url('${thumbnail}'); background-size: cover; width: 100px; height: 40px;"></div>` : ''}
+                    <div class="block-title" data-number="${projectNumber}">${shortTitle}</div>
+                    <div class="thumbnail-overlay lazy-thumbnail" data-project-id="${p.id}"></div>
                     <div class="project-hover-text">
-                        <div class="project-name">${shortTitle}</div>
-                        <div class="project-type">${p.type || 'Installation'}</div>
-                        <div class="project-client">${p.client || 'N/A'}</div>
-                        <div class="project-location">${p.location || 'N/A'}</div>
+                        <div class="project-title">${shortTitle}</div>
+                        ${p.type ? `<div class="project-category">${p.type}</div>` : ''}
+                        ${p.client && p.client !== 'N/A' ? `<div class="project-artist">${p.client}</div>` : ''}
+                        ${p.location && p.location !== 'N/A' ? `<div class="project-year">${p.location}</div>` : ''}
                     </div>
                 </div>
             </a>
@@ -696,7 +2404,11 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         blocks.forEach((block, index) => {
             const sizeClass = getRandomSizeClass();
             block.classList.add(sizeClass);
-            positionCardRandomly(block, sizeClass, index);
+            block.setAttribute('data-size', sizeClass); // Ensure data-size is set
+            
+            // Use shuffled position mapping for random layout to maintain alphabetical order
+            const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
+            positionCardCircularly(block, sizeClass, positionIndex, blocks.length);
             
             // Progressive loading: fade in cards with staggered timing (much faster)
             setTimeout(() => {
@@ -716,8 +2428,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         // Create curved connection lines with progressive loading
         setTimeout(() => {
             console.log('About to create connection lines...');
-            // Temporarily disable connection lines
-            // createConnectionLines();
+            createConnectionLines();
             
             // Show connection lines after cards are loaded
             setTimeout(() => {
@@ -742,10 +2453,7 @@ function initBackgroundImageHover() {
     backgroundOverlay.className = 'project-background-image';
     document.body.appendChild(backgroundOverlay);
     
-    // Create the side panel for image preview (desktop only)
-    const sidePanel = document.createElement('div');
-    sidePanel.className = 'image-preview-panel';
-    document.body.appendChild(sidePanel);
+    // Side panel for image preview removed - functionality disabled
     
     // Create mobile overlay background
     const mobileOverlay = document.createElement('div');
@@ -753,49 +2461,28 @@ function initBackgroundImageHover() {
     document.body.appendChild(mobileOverlay);
     
     if (isMobile) {
-        // Mobile: Handle click events for card expansion
+        // Mobile: Use the same overlay system, not card expansion
         document.addEventListener('click', function(e) {
-            const projectBlock = e.target.closest('.project-block');
-            if (projectBlock) {
-                e.preventDefault(); // Prevent default link behavior
+            const projectLink = e.target.closest('a[href*="project.html"]');
+            if (projectLink) {
+                e.preventDefault();
                 
-                // Toggle expansion
-                if (projectBlock.classList.contains('mobile-expanded')) {
-                    // Close expanded card
-                    projectBlock.classList.remove('mobile-expanded');
-                    mobileOverlay.classList.remove('active');
-                } else {
-                    // Close any other expanded cards first
-                    document.querySelectorAll('.project-block.mobile-expanded').forEach(card => {
-                        card.classList.remove('mobile-expanded');
-                    });
-                    mobileOverlay.classList.remove('active');
+                const projectBlock = projectLink.closest('.project-block');
+            if (projectBlock) {
+                    // Get project ID from URL
+                    const projectUrl = projectLink.getAttribute('href');
+                    const projectId = projectUrl.split('id=')[1];
                     
-                    // Expand this card
-                    setTimeout(() => {
-                        projectBlock.classList.add('mobile-expanded');
-                        mobileOverlay.classList.add('active');
-                    }, 50);
+                    if (projectId) {
+                        // Show instant overlay on mobile (same as desktop)
+                        showProjectOverlay(projectId);
+                    }
                 }
-            } else {
-                // Click outside - close any expanded cards
-                document.querySelectorAll('.project-block.mobile-expanded').forEach(card => {
-                    card.classList.remove('mobile-expanded');
-                });
-                mobileOverlay.classList.remove('active');
             }
         });
         
-        // Close expanded cards when clicking overlay
-        mobileOverlay.addEventListener('click', function() {
-            document.querySelectorAll('.project-block.mobile-expanded').forEach(card => {
-                card.classList.remove('mobile-expanded');
-            });
-            mobileOverlay.classList.remove('active');
-        });
-        
     } else {
-        // Desktop: Handle click events for seamless transition
+        // Desktop: Handle click events for instant overlay
         document.addEventListener('click', function(e) {
             const projectLink = e.target.closest('a[href*="project.html"]');
             if (projectLink) {
@@ -803,24 +2490,14 @@ function initBackgroundImageHover() {
                 
                 const projectBlock = projectLink.closest('.project-block');
                 if (projectBlock) {
-                    // Add transition class and keep green state
-                    projectBlock.classList.add('transitioning-to-page');
-                    backgroundOverlay.classList.add('active', 'persistent');
-                    sidePanel.classList.add('active', 'persistent');
-                    
-                    // Get the project URL
+                    // Get project ID from URL
                     const projectUrl = projectLink.getAttribute('href');
+                    const projectId = projectUrl.split('id=')[1];
                     
-                    // Add scale-up animation
-                    setTimeout(() => {
-                        projectBlock.style.transform = 'scale(1.2)';
-                        projectBlock.style.opacity = '0.8';
-                    }, 100);
-                    
-                    // Navigate after animation
-                    setTimeout(() => {
-                        window.location.href = projectUrl;
-                    }, 300);
+                    if (projectId) {
+                        // Show instant overlay
+                        showProjectOverlay(projectId);
+                    }
                 }
             }
         });
@@ -902,31 +2579,143 @@ function initLazyLoading() {
     }
 }
 
+// Lazy loading for project thumbnails
+function initLazyThumbnailLoading() {
+    const lazyThumbnails = document.querySelectorAll('.lazy-thumbnail');
+    
+    if ('IntersectionObserver' in window) {
+        const thumbnailObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const thumbnailDiv = entry.target;
+                    const projectId = thumbnailDiv.dataset.projectId;
+                    const thumbnail = getThumbnail(projectId);
+                    
+                    if (thumbnail) {
+                        // Create img element for GIF animation support
+                        const img = document.createElement('img');
+                        img.src = thumbnail;
+                        
+                        // Get the card and its offset to determine object-position
+                        const card = thumbnailDiv.closest('.project-block');
+                        
+                        // Wait for image to load to get aspect ratio
+                        img.onload = function() {
+                            const aspectRatio = img.naturalWidth / img.naturalHeight;
+                            
+                            // Make card match the image's aspect ratio
+                            if (card && window.innerWidth <= 768) {
+                                const cardWidth = parseFloat(card.style.width) || 412;
+                                const cardHeight = cardWidth / aspectRatio; // Match image's aspect ratio
+                                card.style.height = cardHeight + 'px';
+                                
+                                // Debug removed
+                            }
+                        };
+                        
+                        img.style.width = '100%';
+                        img.style.height = '100%';
+                        img.style.objectFit = 'cover';
+                        img.style.objectPosition = 'center';
+                        img.style.position = 'absolute';
+                        img.style.top = '0';
+                        img.style.left = '0';
+                        
+                        // Clear any existing content and add the image
+                        thumbnailDiv.innerHTML = '';
+                        thumbnailDiv.appendChild(img);
+                    } else {
+                        // Hide thumbnail if no image available
+                        thumbnailDiv.style.display = 'none';
+                    }
+                    
+                    thumbnailObserver.unobserve(thumbnailDiv);
+                }
+            });
+        }, {
+            rootMargin: '50px' // Start loading 50px before the element comes into view
+        });
+
+        lazyThumbnails.forEach(thumbnail => thumbnailObserver.observe(thumbnail));
+    } else {
+        // Fallback for browsers that don't support IntersectionObserver
+        lazyThumbnails.forEach(thumbnailDiv => {
+            const projectId = thumbnailDiv.dataset.projectId;
+            const thumbnail = getThumbnail(projectId);
+            
+            if (thumbnail) {
+                // Create img element for GIF animation support
+                const img = document.createElement('img');
+                img.src = thumbnail;
+                
+                // Get the card and its offset to determine object-position
+                const card = thumbnailDiv.closest('.project-block');
+                
+                // Wait for image to load to get aspect ratio
+                img.onload = function() {
+                    const aspectRatio = img.naturalWidth / img.naturalHeight;
+                    
+                    // Make card match the image's aspect ratio
+                    if (card && window.innerWidth <= 768) {
+                        const cardWidth = parseFloat(card.style.width) || 412;
+                        const cardHeight = cardWidth / aspectRatio; // Match image's aspect ratio
+                        card.style.height = cardHeight + 'px';
+                    }
+                };
+                
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.objectPosition = 'center';
+                img.style.position = 'absolute';
+                img.style.top = '0';
+                img.style.left = '0';
+                
+                // Clear any existing content and add the image
+                thumbnailDiv.innerHTML = '';
+                thumbnailDiv.appendChild(img);
+            } else {
+                thumbnailDiv.style.display = 'none';
+            }
+        });
+    }
+}
+
 // Initialize
 let isInitialized = false;
 function initializeNeuralNetwork() {
+    console.log('initializeNeuralNetwork called, isInitialized:', isInitialized);
     if (isInitialized) {
         console.log('Neural network already initialized, skipping...');
         return;
     }
     
     console.log('=== NEURAL NETWORK INITIALIZATION START ===');
+    console.log('window.projects:', window.projects);
+    console.log('projects (local):', projects);
     const projectsToUse = window.projects || projects || [];
+    console.log('projectsToUse:', projectsToUse);
     console.log('Initializing neural network with projects:', projectsToUse.length);
     
     isInitialized = true;
     
+    // Preload all project content for instant navigation
+    preloadProjectContent();
+    
     if (!projectsToUse.length) {
+        console.log('NO PROJECTS FOUND! Showing error message.');
         document.querySelectorAll('.project-grid').forEach(grid => {
             grid.innerHTML = '<p style="padding:16px;color:#9aa">Aucun projet chargé. Vérifiez data.js.</p>';
         });
         return;
     }
     
+    console.log('Projects found, proceeding with rendering...');
+    
     // Show loading state
     const projectGrid = document.getElementById('list-1');
     if (projectGrid) {
-        projectGrid.innerHTML = '<div class="loading">Generating neural network...</div>';
+        projectGrid.innerHTML = '<div class="loading loading-dots">Generating neural network</div>';
     }
     
     // Use requestAnimationFrame for smooth rendering
@@ -936,19 +2725,112 @@ function initializeNeuralNetwork() {
             const thumbnail = getThumbnail(p.id);
             return thumbnail !== null;
         });
+        
+        // Sort projects alphabetically by title for consistent ordering
+        projectsWithMedia.sort((a, b) => {
+            const titleA = (a.title || a.id || '').toLowerCase();
+            const titleB = (b.title || b.id || '').toLowerCase();
+            return titleA.localeCompare(titleB);
+        });
+        
+        // Create position mapping for random layout
+        // Generate positions using the same logic as positionCardOrganically but adapted
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = Math.max(window.innerHeight, 1000);
+        const margin = 80;
+        const sidebarOffset = 0; // Match the offset used in positionCardCircularly
+        const minX = 0; // Zero left padding - cards can start right at sidebar edge
+        const maxX = viewportWidth - sidebarOffset - margin; // Account for sidebar offset
+        const minY = margin;
+        const maxY = viewportHeight - margin;
+        
+        const organicPositions = [];
+        const usedPositions = []; // Track used positions for collision detection
+        
+        for (let i = 0; i < projectsWithMedia.length; i++) {
+            let bestPosition = null;
+            let bestScore = -1;
+            
+            // Try multiple positions to find a good organic placement (same logic as positionCardOrganically)
+            for (let attempt = 0; attempt < 50; attempt++) {
+                let x, y;
+                
+                if (attempt < 10) {
+                    // First 10 attempts: try center-biased positions within available space
+                    const centerBias = 0.3;
+                    const availableWidth = maxX - minX;
+                    const availableHeight = maxY - minY;
+                    const centerX = minX + availableWidth / 2;
+                    const centerY = minY + availableHeight / 2;
+                    
+                    x = centerX + (Math.random() - 0.5) * availableWidth * centerBias;
+                    y = centerY + (Math.random() - 0.5) * availableHeight * centerBias;
+                } else {
+                    // Remaining attempts: full random
+                    x = Math.random() * (maxX - minX) + minX;
+                    y = Math.random() * (maxY - minY) + minY;
+                }
+                
+                // Simple collision detection
+                let hasCollision = false;
+                for (const used of usedPositions) {
+                    const distance = Math.sqrt((x - used.x) ** 2 + (y - used.y) ** 2);
+                    if (distance < 120) { // Minimum distance between cards
+                        hasCollision = true;
+                        break;
+                    }
+                }
+                
+                if (!hasCollision) {
+                    const score = Math.random(); // Random score for variety
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestPosition = { x, y };
+                    }
+                }
+            }
+            
+            // If no good position found, use a random one
+            if (!bestPosition) {
+                bestPosition = {
+                    x: Math.random() * (maxX - minX) + minX,
+                    y: Math.random() * (maxY - minY) + minY
+                };
+            }
+            
+            organicPositions.push({ index: i, x: bestPosition.x, y: bestPosition.y });
+            usedPositions.push(bestPosition);
+        }
+        
+        // Sort positions by X coordinate (left to right)
+        organicPositions.sort((a, b) => a.x - b.x);
+        
+        // Store the sorted positions globally
+        window.sortedOrganicPositions = organicPositions;
+        
+        // Create mapping: first project (alphabetically) gets leftmost position, etc.
+        window.positionMapping = Array.from({length: projectsWithMedia.length}, (_, i) => i);
+        
+        // Store the sorted projects globally for the rendering function
+        window.sortedProjectsWithMedia = projectsWithMedia;
+        
         const allProjectIds = projectsWithMedia.map(p => p.id);
         
         console.log('Projects with media:', projectsWithMedia.length);
         console.log('All project IDs:', allProjectIds);
+        console.log('First 5 projects alphabetically:', projectsWithMedia.slice(0, 5).map(p => p.title));
+        console.log('First 5 positions (X sorted):', window.sortedOrganicPositions.slice(0, 5).map(p => ({ x: p.x, y: p.y })));
+        console.log('Position mapping:', window.positionMapping.slice(0, 5));
         
         // Render all projects with media in the first section
+        console.log('About to render with project IDs:', allProjectIds.slice(0, 5));
         renderNeuralNetworkSection('list-1', allProjectIds);
         
         // Initialize background image hover effect
         initBackgroundImageHover();
         
-        // Initialize lazy loading
-        initLazyLoading();
+// Initialize lazy loading for thumbnails
+initLazyThumbnailLoading();
         
         // Hide loading state - REMOVED: was clearing the actual content!
         // if (projectGrid) {
@@ -956,18 +2838,15 @@ function initializeNeuralNetwork() {
         // }
         
         console.log('Neural network initialization complete');
+        
+        // Mobile positioning complete - no animations
+        console.log(`📱 Screen width: ${window.innerWidth}, mobile check: ${window.innerWidth <= 768}`);
+        if (window.innerWidth <= 768) {
+            console.log('📱 Mobile layout complete - cards positioned statically');
+        }
     });
     
-    // Debug: Check if titles are in DOM
-    setTimeout(() => {
-        const titles = document.querySelectorAll('.block-title');
-        console.log(`Found ${titles.length} titles in DOM`);
-        titles.forEach((title, index) => {
-            console.log(`Title ${index}: "${title.textContent}"`);
-            console.log(`  Computed styles:`, window.getComputedStyle(title));
-            console.log(`  Position:`, title.getBoundingClientRect());
-        });
-    }, 100);
+    // Debug removed for performance
 }
 
 // Handle window resize
@@ -981,9 +2860,13 @@ window.addEventListener('resize', () => {
             allBlocks.forEach((block, index) => {
                 const sizeClass = block.getAttribute('data-size');
                 if (sizeClass) {
-                    positionCardRandomly(block, sizeClass, index);
+                    // Use shuffled position mapping for random layout to maintain alphabetical order
+                    const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
+                    positionCardCircularly(block, sizeClass, positionIndex, allBlocks.length);
                 }
             });
+            // Update container height for masonry layout
+            updateMasonryContainerHeight();
             // Recreate connection lines
             setTimeout(() => {
                 createConnectionLines();
@@ -1094,26 +2977,421 @@ function refreshParallaxEffect() {
     setTimeout(initParallaxEffect, 100);
 }
 
+// Create mobile neural network connections overlay
+function createMobileNeuralOverlay() {
+    if (window.innerWidth > 768) return; // Only for mobile
+    
+    // Debug removed
+    
+    // Remove existing mobile neural overlay
+    const existingOverlay = document.querySelector('.mobile-neural-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'mobile-neural-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 15;
+        overflow: hidden;
+    `;
+    
+    // Create SVG for connections
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.style.cssText = `
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    `;
+    
+    // Add gradient definition to SVG
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setAttribute('id', 'mobileNeuralGradient');
+    gradient.setAttribute('x1', '0%');
+    gradient.setAttribute('y1', '0%');
+    gradient.setAttribute('x2', '100%');
+    gradient.setAttribute('y2', '0%');
+    
+    // Create gradient stops to match desktop connection paths
+    const stops = [
+        { offset: '0%', color: 'rgba(255,255,255,0.8)' },
+        { offset: '25%', color: 'rgba(255,255,255,0.4)' },
+        { offset: '50%', color: 'rgba(255,255,255,0.1)' },
+        { offset: '75%', color: 'rgba(255,255,255,0.4)' },
+        { offset: '100%', color: 'rgba(255,255,255,0.8)' }
+    ];
+    
+    stops.forEach(stop => {
+        const stopElement = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+        stopElement.setAttribute('offset', stop.offset);
+        stopElement.setAttribute('stop-color', stop.color);
+        gradient.appendChild(stopElement);
+    });
+    
+    defs.appendChild(gradient);
+    svg.appendChild(defs);
+    
+    overlay.appendChild(svg);
+    document.body.appendChild(overlay);
+    
+    // Generate mobile neural connections
+    generateMobileNeuralConnections(svg);
+    
+    // Debug removed
+    
+    // Add parallax scroll effect
+    window.addEventListener('scroll', () => {
+        const scrollY = window.pageYOffset;
+        const parallaxSpeed = 0.3;
+        overlay.style.transform = `translateY(${scrollY * parallaxSpeed}px)`;
+    });
+}
+
+// Animate connection text labels on scroll (mobile only)
+// Mobile scroll animations removed
+function removed_animateConnectionTextOnScroll() {
+    if (window.innerWidth > 768) return;
+    
+    const textLabels = document.querySelectorAll('.mobile-connections-svg text');
+    if (textLabels.length === 0) return;
+    
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const viewportCenter = window.innerHeight / 2;
+    
+    // Update each text based on its proximity to viewport center
+    textLabels.forEach(text => {
+        const initialX = parseFloat(text.dataset.initialX);
+        const initialY = parseFloat(text.dataset.initialY);
+        const offsetX = parseFloat(text.dataset.offsetX);
+        const offsetY = parseFloat(text.dataset.offsetY);
+        
+        if (isNaN(initialX) || isNaN(initialY)) return;
+        
+        // Get text's position relative to viewport
+        const textYInViewport = initialY - scrollTop;
+        
+        // Calculate proximity to viewport center (0-1)
+        // Using full viewport height as range
+        const maxDistance = window.innerHeight;
+        const distanceFromCenter = Math.abs(textYInViewport - viewportCenter);
+        const progress = Math.max(0, 1 - (distanceFromCenter / maxDistance));
+        
+        // Move along the connection line based on proximity
+        const newX = initialX + (offsetX * progress);
+        const newY = initialY + (offsetY * progress);
+        
+        text.setAttribute('x', newX);
+        text.setAttribute('y', newY);
+        
+        // Scale and opacity based on proximity (dramatic effect)
+        const scale = 1 + (progress * 0.5); // Grow 50% at center
+        const opacity = 0.7 + (progress * 0.3); // Brighter at center
+        text.setAttribute('transform', `scale(${scale})`);
+        text.setAttribute('opacity', opacity);
+    });
+}
+
+// Animate card positions on scroll - cards move toward center as you scroll down
+function removed_animateCardPositionsOnScroll() {
+    if (window.innerWidth > 768) return;
+    
+    const cards = document.querySelectorAll('.project-block');
+    if (cards.length === 0) {
+        console.log(`⚠️ No cards found for animation`);
+        return;
+    }
+    
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const viewportWidth = window.innerWidth;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    
+    // Calculate scroll progress (0 at top, 1 at bottom)
+    const scrollProgress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+    
+    // Debug scroll calculation - show for first 20 scroll events
+    if (scrollEventCount <= 20) {
+        console.log(`   📏 Scroll debug: scrollTop=${scrollTop}, docHeight=${docHeight}, scrollProgress=${scrollProgress.toFixed(3)}`);
+        console.log(`   📏 Document: scrollHeight=${document.documentElement.scrollHeight}, innerHeight=${window.innerHeight}`);
+    }
+    
+    let cardsWithData = 0;
+    let cardsAnimated = 0;
+    
+    cards.forEach((card, index) => {
+        const initialX = parseFloat(card.dataset.initialX); // The original offset position
+        const cardWidth = parseFloat(card.dataset.cardWidth);
+        
+        // Validate data
+        if (isNaN(initialX) || isNaN(cardWidth)) {
+            if (index < 3) {
+                console.log(`⚠️ Card ${index}: Missing data - initialX=${card.dataset.initialX}, cardWidth=${card.dataset.cardWidth}`);
+            }
+            return;
+        }
+        
+        cardsWithData++;
+        
+        // Calculate centered position
+        const centeredX = (viewportWidth - cardWidth) / 2;
+        
+        // Move from initial offset position toward center based on scroll progress
+        const translateX = (centeredX - initialX) * scrollProgress;
+        
+        // Apply transform
+        card.style.transform = `translateX(${translateX}px)`;
+        card.style.transition = 'transform 0.1s ease-out';
+        
+        cardsAnimated++;
+        
+        // Debug first 3 cards - show for first 20 scroll events
+        if (index < 3 && scrollEventCount <= 20) {
+            console.log(`   🎯 Card ${index}: progress=${scrollProgress.toFixed(3)}, initialX=${initialX.toFixed(0)}, centeredX=${centeredX.toFixed(0)}, translateX=${translateX.toFixed(0)}`);
+        }
+    });
+    
+    // Summary log
+    if (scrollEventCount <= 3) {
+        console.log(`   📊 Animated ${cardsAnimated}/${cards.length} cards (${cardsWithData} have data)`);
+    }
+}
+
+// Throttle scroll animations with requestAnimationFrame
+let scrollAnimationFrame = null;
+let scrollEventCount = 0;
+
+function removed_handleMobileScroll() {
+    scrollEventCount++;
+    console.log(`🔄 SCROLL #${scrollEventCount}: scrollY=${window.pageYOffset}, viewport=${window.innerWidth}x${window.innerHeight}`);
+    
+    if (scrollAnimationFrame) {
+        return; // Already scheduled
+    }
+    
+    scrollAnimationFrame = requestAnimationFrame(() => {
+        console.log(`   ✅ Animating text and cards for scroll #${scrollEventCount}`);
+        animateConnectionTextOnScroll();
+        animateCardPositionsOnScroll();
+        scrollAnimationFrame = null;
+    });
+}
+
+// Initialize mobile scroll listeners
+function removed_initMobileScrollListeners() {
+    if (window.innerWidth > 768) return;
+    
+    console.log(`📱 Initializing mobile scroll listeners...`);
+    
+    // Remove any existing listeners to avoid duplicates
+    window.removeEventListener('scroll', handleMobileScroll);
+    
+    // Add fresh listener
+    window.addEventListener('scroll', handleMobileScroll, { passive: true });
+    
+    // Also run on resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768) {
+            handleMobileScroll();
+        }
+    });
+    
+    // Run initial animation
+    console.log(`🎬 Running initial scroll animation`);
+    setTimeout(() => {
+        handleMobileScroll();
+    }, 500); // Wait for cards to be positioned
+}
+
+// Generate mobile neural network connections
+function generateMobileNeuralConnections(svg) {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Debug removed
+    
+    // Create connection points (nodes)
+    const nodes = [];
+    const nodeCount = 8; // Even fewer nodes for cleaner look
+    
+    for (let i = 0; i < nodeCount; i++) {
+        const node = {
+            x: Math.random() * viewportWidth,
+            y: Math.random() * viewportHeight * 2, // Extend beyond viewport for scroll effect
+            id: i
+        };
+        nodes.push(node);
+    }
+    
+    // Debug removed
+    
+    // Create connections between nearby nodes
+    const connections = [];
+    for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+            const distance = Math.sqrt(
+                Math.pow(nodes[i].x - nodes[j].x, 2) + 
+                Math.pow(nodes[i].y - nodes[j].y, 2)
+            );
+            
+            // Connect nodes that are reasonably close - more selective for cleaner look
+            if (distance < Math.min(viewportWidth, viewportHeight) * 0.4) {
+                connections.push({
+                    from: nodes[i],
+                    to: nodes[j],
+                    distance: distance
+                });
+            }
+        }
+    }
+    
+    // Debug removed
+    
+    // Draw connections
+    connections.forEach((connection, index) => {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        
+        // Create smooth rounded path like desktop version
+        const startX = connection.from.x;
+        const startY = connection.from.y;
+        const endX = connection.to.x;
+        const endY = connection.to.y;
+        
+        // Calculate smooth rounded path with multiple control points
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Create smooth rounded angles with multiple curves
+        const controlOffset = distance * 0.3; // Larger offset for smoother curves
+        const angle = Math.atan2(dy, dx);
+        
+        // Add some organic variation but keep it smooth
+        const variation = (Math.random() - 0.5) * 0.2;
+        const controlAngle1 = angle + variation;
+        const controlAngle2 = angle - variation;
+        
+        const control1X = startX + Math.cos(controlAngle1) * controlOffset;
+        const control1Y = startY + Math.sin(controlAngle1) * controlOffset;
+        const control2X = endX - Math.cos(controlAngle2) * controlOffset;
+        const control2Y = endY - Math.sin(controlAngle2) * controlOffset;
+        
+        // Use cubic Bézier curve for smooth rounded angles
+        const pathData = `M ${startX} ${startY} C ${control1X} ${control1Y}, ${control2X} ${control2Y}, ${endX} ${endY}`;
+        line.setAttribute('d', pathData);
+        
+        // Style the connection to match desktop - white gradient with subtle glow
+        const opacity = Math.max(0.5, 0.8 - (connection.distance / (viewportWidth * 0.6)) * 0.2);
+        line.style.cssText = `
+            stroke: url(#mobileNeuralGradient);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-opacity: ${opacity};
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
+            animation: mobileNeuralPulse 4s ease-in-out infinite;
+            animation-delay: ${index * 0.1}s;
+        `;
+        
+        // Debug removed
+        
+        svg.appendChild(line);
+    });
+    
+    // Add pulsing animation
+    if (!document.querySelector('#mobile-neural-styles')) {
+        const style = document.createElement('style');
+        style.id = 'mobile-neural-styles';
+        style.textContent = `
+            @keyframes mobileNeuralPulse {
+                0%, 100% { 
+                    stroke-opacity: 0.4; 
+                    filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+                }
+                50% { 
+                    stroke-opacity: 0.7; 
+                    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Clear project cache to ensure fresh content
+    if (window.clearProjectCache) {
+        window.clearProjectCache();
+    }
     generateConcentricSquares();
     initializeNeuralNetwork();
     initParallaxEffect();
+    
+    // Create mobile neural overlay
+    createMobileNeuralOverlay();
+    
+    // Initialize mobile navigation
+    initializeMobileNavigation();
+    
+    // Add keyboard controls for shape cycling
+    addShapeKeyboardListener();
+    
+    // Add shape info to console
+    console.log('🎨 Shape Bank Available:');
+    Object.keys(SHAPE_BANK).forEach(shapeKey => {
+        console.log(`- ${shapeKey}: ${SHAPE_BANK[shapeKey].name}`);
+    });
+    console.log('⌨️ Press "S" to cycle through shapes');
+    console.log('🎲 Default: Random (Alphabetical) layout');
 });
 
 // Also initialize if DOM is already loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
+        // Clear project cache to ensure fresh content
+        if (window.clearProjectCache) {
+            window.clearProjectCache();
+        }
         generateConcentricSquares();
         initializeNeuralNetwork();
         initParallaxEffect();
+        
+        // Create mobile neural overlay
+        createMobileNeuralOverlay();
+        
+        // Initialize mobile navigation
+        initializeMobileNavigation();
     });
 } else {
     generateConcentricSquares();
     // Don't initialize immediately - let the HTML script handle it
     // initializeNeuralNetwork();
     initParallaxEffect();
+    
+    // Create mobile neural overlay
+    createMobileNeuralOverlay();
+    
+    // Initialize mobile navigation
+    initializeMobileNavigation();
+    
+    // Add keyboard controls for shape cycling
+    addShapeKeyboardListener();
+    
+    // Add shape info to console
+    console.log('🎨 Shape Bank Available:');
+    Object.keys(SHAPE_BANK).forEach(shapeKey => {
+        console.log(`- ${shapeKey}: ${SHAPE_BANK[shapeKey].name}`);
+    });
+    console.log('⌨️ Press "S" to cycle through shapes');
+    console.log('🎲 Default: Random (Alphabetical) layout');
 }
 
 // Regenerate squares on window resize
@@ -1123,3 +3401,58 @@ window.addEventListener('resize', function() {
         initParallaxEffect();
     }, 100);
 });
+
+// Image fullscreen functionality
+function openImageFullscreen(imageUrl) {
+    // Create fullscreen overlay if it doesn't exist
+    let overlay = document.getElementById('image-fullscreen-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'image-fullscreen-overlay';
+        overlay.className = 'image-fullscreen-overlay';
+        overlay.innerHTML = `
+            <img src="${imageUrl}" alt="Fullscreen image">
+            <button class="close-btn" onclick="closeImageFullscreen()">&times;</button>
+        `;
+        document.body.appendChild(overlay);
+    } else {
+        // Update the image source
+        const img = overlay.querySelector('img');
+        img.src = imageUrl;
+    }
+    
+    // Show overlay
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Close on escape key
+    const handleEscape = (e) => {
+        if (e.key === 'Escape') {
+            closeImageFullscreen();
+            document.removeEventListener('keydown', handleEscape);
+        }
+    };
+    document.addEventListener('keydown', handleEscape);
+    
+    // Close on background click
+    overlay.onclick = (e) => {
+        if (e.target === overlay) {
+            closeImageFullscreen();
+        }
+    };
+}
+
+function closeImageFullscreen() {
+    const overlay = document.getElementById('image-fullscreen-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Make functions globally available for project pages
+window.generateConcentricSquares = generateConcentricSquares;
+window.initParallaxEffect = initParallaxEffect;
+window.initializeNeuralNetwork = initializeNeuralNetwork;
+window.openImageFullscreen = openImageFullscreen;
+window.closeImageFullscreen = closeImageFullscreen;

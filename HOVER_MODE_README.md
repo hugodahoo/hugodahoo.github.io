@@ -6,13 +6,7 @@
 
 ## 🔄 Easy Rollback Options
 
-### Option 1: Use the Toggle Script (Recommended)
-```bash
-# Run the interactive toggle script
-toggle-hover-mode.bat
-```
-
-### Option 2: Manual HTML Change
+### Option 1: Manual HTML Change
 In `site/index.html`, change:
 ```html
 <!-- Current (hover as default) -->
@@ -20,12 +14,6 @@ In `site/index.html`, change:
 
 <!-- To rollback (original hover behavior) -->
 <body class="neural-network-style original-hover">
-```
-
-### Option 3: Quick Enable Script
-```bash
-# To re-enable hover as default
-enable-hover-default.bat
 ```
 
 ## 🎯 What Changes

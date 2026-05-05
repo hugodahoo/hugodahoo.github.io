@@ -1,0 +1,31 @@
+{
+  "name": "hugo_website",
+  "version": "1.0.0",
+  "description": "A dynamic, interactive portfolio showcasing Hugo Daoust's creative and technical projects. Built with vanilla JavaScript, CSS, and HTML, featuring a neural network-inspired layout with organic project positioning.",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "express": "^4.22.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugodahoo/hugodahoo.github.io.git"
+  },
+  "keywords": [],
+  "author": "Hugo Daoust",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hugodahoo/hugodahoo.github.io/issues"
+  },
+  "homepage": "https://github.com/hugodahoo/hugodahoo.github.io#readme"
+}

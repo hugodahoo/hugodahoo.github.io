@@ -4,7 +4,7 @@
 
 1. **GitHub Account**: You need a GitHub account
 2. **Git Installed**: Make sure Git is installed on your computer
-3. **Repository**: Create a new repository named `hugo-daoust.github.io`
+3. **Repository**: Create a new repository named `hugodahoo.github.io`
 
 ## 🎯 Step-by-Step Deployment
 
@@ -13,7 +13,7 @@
 1. Go to [GitHub.com](https://github.com) and sign in
 2. Click the "+" icon in the top right corner
 3. Select "New repository"
-4. **Important**: Name it exactly `hugo-daoust.github.io`
+4. **Important**: Name it exactly `hugodahoo.github.io`
 5. Make it **Public** (required for free GitHub Pages)
 6. Don't initialize with README (we already have one)
 7. Click "Create repository"
@@ -27,7 +27,7 @@ Open PowerShell/Command Prompt in your project folder and run:
 git init
 
 # Add your GitHub repository as remote
-git remote add origin https://github.com/hugo-daoust/hugo-daoust.github.io.git
+git remote add origin https://github.com/hugodahoo/hugodahoo.github.io.git
 
 # Add all files
 git add .
@@ -52,17 +52,13 @@ git push -u origin main
 
 Your site will be automatically deployed! It may take 5-10 minutes for the first deployment.
 
-**Your portfolio will be live at:** `https://hugo-daoust.github.io`
+**Your portfolio will be live at:** `https://hugodahoo.github.io`
 
 ## 🔄 Future Updates
 
 ### Option 1: Use the Deployment Script (Recommended)
 
 ```bash
-# Windows
-deploy-to-github.bat
-
-# Mac/Linux
 ./deploy-to-github.sh
 ```
 
@@ -78,7 +74,7 @@ git push origin main
 
 ### Common Issues
 
-1. **Repository Name**: Must be exactly `hugo-daoust.github.io`
+1. **Repository Name**: Must be exactly `hugodahoo.github.io`
 2. **Public Repository**: GitHub Pages requires public repos for free accounts
 3. **Branch Name**: Use `main` branch (not `master`)
 4. **File Structure**: Make sure `site/` folder contains your website files
@@ -100,7 +96,7 @@ If changes don't appear:
 ## 📁 File Structure for GitHub Pages
 
 ```
-hugo-daoust.github.io/
+hugodahoo.github.io/
 ├── site/                    # Your website files
 │   ├── index.html          # Homepage
 │   ├── project.html        # Project pages
@@ -131,7 +127,7 @@ Add Google Analytics:
 ## 🚀 Success!
 
 Once deployed, your portfolio will be:
-- ✅ **Live**: Available worldwide at `https://hugo-daoust.github.io`
+- ✅ **Live**: Available worldwide at `https://hugodahoo.github.io`
 - ✅ **Fast**: Served by GitHub's CDN
 - ✅ **Secure**: HTTPS enabled by default
 - ✅ **Automatic**: Updates deploy automatically when you push changes
