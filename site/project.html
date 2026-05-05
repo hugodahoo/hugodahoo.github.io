@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="fr">
 <head>
     <meta charset="utf-8">
@@ -6,11 +6,11 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Projet — Hugo Daoust</title>
+    <title>Projet ? Hugo Daoust</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=94">
+    <link rel="stylesheet" href="styles.css?v=137">
 </head>
 <body>
             <!-- Mobile Header -->
@@ -30,8 +30,8 @@
         <div class="nav-line"></div>
         <div class="nav-items">
             <a href="index.html" class="nav-item">INDEX</a>
-            <a href="#" class="nav-item">ABOUT</a>
-            <a href="#" class="nav-item">JOURNAL</a>
+            <a href="index.html#about" class="nav-item">ABOUT</a>
+            <a href="index.html#journal" class="nav-item">JOURNAL</a>
         </div>
         <div class="nav-line"></div>
     </nav>
@@ -40,9 +40,9 @@
     <!-- Neural network background with 3 layers -->
     <div class="concentric-squares"></div>
     
-    <script src="data.js?v=13"></script>
-    <script src="media/index.js?v=9"></script>
-    <script src="neural-network.js?v=26"></script>
+    <script src="data.js?v=17"></script>
+    <script src="media/index.js?v=10"></script>
+    <script src="neural-network.js?v=302"></script>
     <script>
         // Refresh project cache to ensure overlay and project pages are synchronized
         if (window.refreshProjectCache) {
@@ -77,24 +77,24 @@
         });
     </script>
     <script>
-        console.log('Script starting...');
-        console.log('window.projects:', window.projects);
-        console.log('window.mediaIndex:', window.mediaIndex);
+        
+        
+        
         
         const projectList = (window.projects || []);
-        const extra = (window.mediaIndex || {}).projects || {};
+        const extra = (window.projectMedia || {}).projects || {};
         const params = new URLSearchParams(location.search);
         const id = params.get("id");
         
-        console.log('URL params:', location.search);
-        console.log('Project ID:', id);
-        console.log('Projects array length:', projectList.length);
+        
+        
+        
         
         const p = projectList.find(x => x.id === id);
         const root = document.getElementById("project");
         
-        console.log('Root element:', root);
-        console.log('Found project:', p);
+        
+        
         
         function renderMedia(url, title) {
             try {
@@ -120,112 +120,160 @@
         
         if (!p) {
             root.innerHTML = `<p>Projet introuvable.</p>`;
-            console.log('Project not found for ID:', id);
+            
         } else {
-            console.log('Project found:', p.title);
+            
             // Use fullDescription if available, otherwise fall back to description
             const mainDescription = p.fullDescription || p.description || "";
             
-            // Create description HTML - pure text flow, no special treatment
-            let descHtml;
+            // Parse description using same logic as the overlay (neural-network.js)
+            let mainDescHtml = '';
+            let bulletPointsHtml = '';
+            
             if (p.fullDescription) {
-                // Format fullDescription with proper structure
                 const formattedDesc = mainDescription
-                    .replace(/\\n/g, '\n')  // Convert \n to actual line breaks
+                    .replace(/\\n/g, '\n')
                     .split('\n')
                     .map(line => line.trim())
-                    .filter(line => line.length > 0);
+                    .filter(line => line.length > 0 && line !== '---' && line !== '--');
                 
-                let html = '';
-                let inBulletList = false;
+                let mainHtml = '';
+                let bulletHtml = '';
+                let currentSection = '';
+                let inBulletSection = false;
                 
-                for (let i = 0; i < formattedDesc.length; i++) {
-                    const line = formattedDesc[i];
-                    
-                    if (line.startsWith('- ')) {
-                        // Bullet point - start list if not already in one
-                        if (!inBulletList) {
-                            html += `<ul class="bullet-list">`;
-                            inBulletList = true;
+                formattedDesc.forEach(line => {
+                    if (line.startsWith('**') && line.endsWith('**')) {
+                        if (currentSection) {
+                            if (inBulletSection) bulletHtml += '</ul>';
+                            else mainHtml += '</ul>';
                         }
-                        html += `<li>${line.substring(2)}</li>`;
-                    } else if (line.startsWith('**') && line.endsWith('**')) {
-                        // Section header - bold text (markdown format)
-                        if (inBulletList) {
-                            html += `</ul>`;
-                            inBulletList = false;
-                        }
-                        const headerText = line.substring(2, line.length - 2);
-                        html += `<h3>${headerText}</h3>`;
+                        const sectionTitle = line.substring(2, line.length - 2);
+                        inBulletSection = sectionTitle.includes('Technical details') || 
+                                        sectionTitle.includes('Challenges') || 
+                                        sectionTitle.includes('Impact') || 
+                                        sectionTitle.includes('Process');
+                        let dataSection = '';
+                        if (sectionTitle.includes('Technical details')) dataSection = 'technical';
+                        else if (sectionTitle.includes('Challenges')) dataSection = 'challenges';
+                        else if (sectionTitle.includes('Impact')) dataSection = 'impact';
+                        else if (sectionTitle.includes('Process')) dataSection = 'process';
+                        const headerHtml = '<h3 data-section="' + dataSection + '">' + sectionTitle + '</h3><ul>';
+                        if (inBulletSection) bulletHtml += headerHtml;
+                        else mainHtml += headerHtml;
+                        currentSection = sectionTitle;
                     } else if (line === 'Technical details and implementation' || 
                                line === 'Challenges and solutions' || 
                                line === 'Impact and results' || 
                                line === 'Process and methodology') {
-                        // Section header - plain text format
-                        if (inBulletList) {
-                            html += `</ul>`;
-                            inBulletList = false;
+                        if (currentSection) {
+                            if (inBulletSection) bulletHtml += '</ul>';
+                            else mainHtml += '</ul>';
                         }
-                        html += `<h3>${line}</h3>`;
-                    } else if (line.length > 0) {
-                        // Everything else is just a regular paragraph
-                        if (inBulletList) {
-                            html += `</ul>`;
-                            inBulletList = false;
+                        inBulletSection = true;
+                        let dataSection = '';
+                        if (line.includes('Technical details')) dataSection = 'technical';
+                        else if (line.includes('Challenges')) dataSection = 'challenges';
+                        else if (line.includes('Impact')) dataSection = 'impact';
+                        else if (line.includes('Process')) dataSection = 'process';
+                        const headerHtml = '<h3 data-section="' + dataSection + '">' + line + '</h3><ul>';
+                        bulletHtml += headerHtml;
+                        currentSection = line;
+                    } else if (line.startsWith('- ') || line.startsWith('\u2022')) {
+                        const bulletText = line.startsWith('- ') ? line.substring(2) : line.substring(1).trim();
+                        if (inBulletSection) bulletHtml += '<li>' + bulletText + '</li>';
+                        else mainHtml += '<li>' + bulletText + '</li>';
+                    } else {
+                        if (currentSection) {
+                            if (inBulletSection) bulletHtml += '</ul>';
+                            else mainHtml += '</ul>';
+                            currentSection = '';
+                            inBulletSection = false;
                         }
-                        html += `<p class="desc">${line}</p>`;
+                        if (inBulletSection) bulletHtml += '<p>' + line + '</p>';
+                        else mainHtml += '<p>' + line + '</p>';
                     }
+                });
+                if (currentSection) {
+                    if (inBulletSection) bulletHtml += '</ul>';
+                    else mainHtml += '</ul>';
                 }
-                
-                // Close any open list
-                if (inBulletList) {
-                    html += `</ul>`;
-                }
-                
-                descHtml = html;
+                mainDescHtml = mainHtml;
+                bulletPointsHtml = bulletHtml;
             } else {
-                // Fallback for regular description
-                const bullets = mainDescription.split(/\r?\n|•|\s-\s|, /).map(s => s.trim()).filter(Boolean);
-                descHtml = bullets.length > 1 ? 
-                    `<ul>` + bullets.map(b => `<li>${b}</li>`).join("") + `</ul>` : 
-                    `<p class="desc">${mainDescription}</p>`;
+                mainDescHtml = '<p>' + mainDescription + '</p>';
             }
-            
-            
-            // Simple text-only content
-            
-            
-            
-            
-            
             // Get Instagram links
-            const insta = (p.instagram || []).map(u => `<a target="_blank" rel="noopener" href="${u}">Instagram</a>`).join(" · ");
+            const insta = (p.instagram || []).map(u => `<a target="_blank" rel="noopener" href="${u}">Instagram</a>`).join(" ? ");
             
             // Get project media (images/videos)
-            const projectMedia = extra[p.id] || [];
-            const mediaHtml = projectMedia.length > 0 ? 
-                `<div class="project-media">
-                    ${projectMedia.slice(0, 3).map(media => renderMedia(media.url, media.title || p.title)).join('')}
-                </div>` : '';
+            const projectEntry = extra[p.id];
+            const projectMediaFiles = projectEntry ? (projectEntry.files || []) : [];
             
-            // Render the project page with text wrapping around images
+            // Build content blocks (same structure as the overlay)
+            let contentBlocks = [];
+            
+            // Video embed
+            if (p.videoEmbed) {
+                contentBlocks.push('<div class="content-block video-embed-section"><div class="video-section">' + renderMedia(p.videoEmbed, p.title) + '</div></div>');
+            }
+            
+            // Impact title
+            const impactTitle = p['impact-title'] || '';
+            if (impactTitle) {
+                let descOnly = impactTitle;
+                const di = impactTitle.indexOf(' \u2014 ');
+                if (di !== -1) descOnly = impactTitle.substring(di + 3);
+                contentBlocks.push('<div class="content-block impact-title-block"><div class="impact-title-section"><h2 class="impact-title">' + descOnly + '</h2></div></div>');
+            }
+            
+            // Main text with first image floated
+            if (projectMediaFiles.length > 0) {
+                const firstImg = 'media/' + projectMediaFiles[0].path;
+                contentBlocks.push('<div class="content-block text-with-image"><div class="image-section"><img src="' + firstImg + '" alt="' + p.title + '" loading="lazy"></div><div class="text-section">' + mainDescHtml + '</div></div>');
+            } else {
+                contentBlocks.push('<div class="content-block text-only"><div class="text-section">' + mainDescHtml + '</div></div>');
+            }
+            
+            // Image grid for remaining images
+            if (projectMediaFiles.length > 1) {
+                const gridHtml = projectMediaFiles.slice(1, 6).map(m => '<div class="image-grid-item"><img src="media/' + m.path + '" alt="' + p.title + '" loading="lazy"></div>').join('');
+                contentBlocks.push('<div class="content-block image-grid-section"><div class="image-grid">' + gridHtml + '</div></div>');
+            }
+            
+            // Technical bullet points
+            if (bulletPointsHtml.trim()) {
+                contentBlocks.push('<div class="content-block bullet-points-section"><div class="text-section bullet-points">' + bulletPointsHtml + '</div></div>');
+            }
+            
+            // Render using same structure as the overlay
             const htmlContent = `
+                <a href="index.html" class="back-link">Back to projects</a>
                 <article class="project-article">
-                    <h1>${p.title}</h1>
-                    <p class="meta">${[p.year, p.client, p.role].filter(Boolean).join(" · ")}</p>
-                    <p class="tech">${p.technologies || ""}</p>
-                    <div class="project-content-wrapper">
-                        ${mediaHtml}
-                        <div class="project-content">
-                            ${descHtml}
+                    <header class="project-header" ${projectMediaFiles.length > 0 ? 'style="background-image: url(media/' + projectMediaFiles[0].path + ');"' : ''}>
+                        <div class="header-overlay"></div>
+                        <div class="header-content">
+                            <h1>${p.title}</h1>
+                            <p class="meta">${[p.year, p.client, p.role].filter(Boolean).join(" \u00b7 ")}</p>
+                            <p class="tech">${p.technologies || ""}</p>
                         </div>
+                    </header>
+                    <div class="project-title-bar">
+                        <h2 class="project-title-bar-name">${p.title}</h2>
+                        <p class="project-title-bar-meta">${[p.year, p.client].filter(Boolean).join(" \u00b7 ")}</p>
                     </div>
-                    <p class="links">${insta}</p>
+                    <div class="project-content">
+                        ${contentBlocks.join('')}
+                    </div>
+                    <footer class="project-footer">
+                        ${insta ? '<p class="links">' + insta + '</p>' : ''}
+                    </footer>
                 </article>
             `;
             
-            console.log('Setting HTML content for project:', p.title);
-            console.log('HTML length:', htmlContent.length);
+            
+            
+            root.classList.add('project-overlay');
             root.innerHTML = htmlContent;
         }
         
@@ -235,20 +283,20 @@
         
         // Initialize the 3-layer dotted background with mouse parallax
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing background...');
-            console.log('generateConcentricSquares available:', typeof generateConcentricSquares);
-            console.log('initParallaxEffect available:', typeof initParallaxEffect);
+            
+            
+            
             
             if (typeof generateConcentricSquares === 'function') {
                 generateConcentricSquares();
-                console.log('generateConcentricSquares called successfully');
+                
             } else {
                 console.error('generateConcentricSquares function not found');
             }
             
             if (typeof initParallaxEffect === 'function') {
                 initParallaxEffect();
-                console.log('initParallaxEffect called successfully');
+                
             } else {
                 console.error('initParallaxEffect function not found');
             }
@@ -257,7 +305,7 @@
         // Also initialize if DOM is already loaded
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() {
-                console.log('DOM was loading, now ready...');
+                
                 if (typeof generateConcentricSquares === 'function') {
                     generateConcentricSquares();
                 }
@@ -266,7 +314,7 @@
                 }
             });
         } else {
-            console.log('DOM already loaded, initializing immediately...');
+            
             if (typeof generateConcentricSquares === 'function') {
                 generateConcentricSquares();
             }
@@ -277,7 +325,7 @@
         
         // Regenerate squares on window resize
         window.addEventListener('resize', function() {
-            console.log('Window resized, regenerating background...');
+            
             if (typeof generateConcentricSquares === 'function') {
                 generateConcentricSquares();
             }
@@ -291,9 +339,9 @@
         // Debug: Check if container exists
         setTimeout(() => {
             const container = document.querySelector('.concentric-squares');
-            console.log('Container found:', !!container);
+            
             if (container) {
-                console.log('Container children:', container.children.length);
+                
             }
         }, 1000);
     </script>

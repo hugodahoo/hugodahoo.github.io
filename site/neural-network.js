@@ -1,8 +1,8 @@
 // Neural Network Portfolio Implementation
-console.log('Neural network script loading...');
-console.log('window.projects:', window.projects);
+
+
 const projects = window.projects || [];
-console.log('projects array length:', projects.length);
+
 
 let positionedCards = [];
 let isNeuralNetworkStyle = true;
@@ -254,6 +254,733 @@ function getThumbnail(projectId) {
     return `media/${thumbnailPath}`;
 }
 
+// ── Tag-Based Clustering Engine ──────────────────────────────────────────────
+// Extracts real tags from project data and positions via tag-overlap similarity.
+// No manual scoring -- relationships come from actual shared attributes.
+
+const TAG_ALIASES = {
+    'touchdesigner': 'TouchDesigner',
+    'td': 'TouchDesigner',
+    'projection': 'Projection',
+    'projection mapping': 'Projection',
+    'led': 'LED',
+    'audio': 'Audio',
+    'spatial audio': 'Audio',
+    'sound': 'Audio',
+    'camera tracking': 'Tracking',
+    'camera': 'Tracking',
+    'ir sensors': 'Sensors',
+    'ir sensor': 'Sensors',
+    'sensor': 'Sensors',
+    'sensors': 'Sensors',
+    'depth sensor': 'Sensors',
+    'thermal cameras': 'Thermal',
+    'thermal camera': 'Thermal',
+    'thermal': 'Thermal',
+    'gpu': 'GPU',
+    'gpu particle systems': 'GPU',
+    'intercom systems': 'Intercom',
+    'intercom': 'Intercom',
+    'kinect': 'Sensors',
+    'lidar': 'Sensors',
+    'multiple sensing systems': 'Sensors',
+    'video': 'Video',
+    'vr': 'VR',
+    'ar': 'AR',
+    'ai': 'AI',
+    'machine learning': 'AI',
+};
+
+function extractProjectTags(project) {
+    const tags = new Set();
+
+    const techStr = project.technologies || '';
+    techStr.split(',').forEach(t => {
+        const raw = t.trim().toLowerCase();
+        if (!raw) return;
+        const alias = TAG_ALIASES[raw];
+        if (alias) {
+            tags.add(alias);
+        } else {
+            tags.add(t.trim());
+        }
+    });
+
+    const client = (project.client || '').toLowerCase();
+    if (client.includes('lozano-hemmer')) tags.add('Lozano-Hemmer');
+    else if (client.includes('moment factory')) tags.add('Moment Factory');
+    else if (client.includes('cirque')) tags.add('Cirque du Soleil');
+    else if (client.includes('billie eilish') || client.includes('arcade fire') || client.includes('red hot') || client.includes('panasonic')) {
+        const name = project.client.split('/')[0].trim();
+        tags.add(name);
+    }
+
+    const desc = (project.description || '').toLowerCase();
+    if (desc.includes('interactive') || desc.includes('interaction')) tags.add('Interactive');
+    if (desc.includes('installation')) tags.add('Installation');
+    if (desc.includes('concert') || desc.includes('tour') || desc.includes('stage') || desc.includes('arena')) tags.add('Live Show');
+    if (desc.includes('museum') || desc.includes('gallery') || desc.includes('exhibition')) tags.add('Exhibition');
+
+    return [...tags];
+}
+
+function computeTagSimilarity(tagsA, tagsB) {
+    const setA = new Set(tagsA.map(t => t.toLowerCase()));
+    const setB = new Set(tagsB.map(t => t.toLowerCase()));
+    let intersection = 0;
+    for (const t of setA) { if (setB.has(t)) intersection++; }
+    const union = new Set([...setA, ...setB]).size;
+    return union === 0 ? 0 : intersection / union;
+}
+
+function computeAllTags(projectsArray) {
+    for (const p of projectsArray) {
+        p._tags = extractProjectTags(p);
+    }
+}
+
+function computeTagPositions(projectsArray) {
+    const n = projectsArray.length;
+    if (n === 0) return;
+
+    const seeded = (s) => { let v = s; return () => { v = (v * 16807) % 2147483647; return v / 2147483647; }; };
+    const rand = seeded(42);
+
+    for (const p of projectsArray) {
+        p._scores = { x: 0.08 + rand() * 0.84, y: 0.08 + rand() * 0.84 };
+    }
+
+    const iterations = 200;
+    const repulsion = 0.06;
+    const attraction = 0.02;
+    const damping = 0.88;
+
+    const vx = new Float64Array(n);
+    const vy = new Float64Array(n);
+
+    for (let iter = 0; iter < iterations; iter++) {
+        const t = 1 - iter / iterations;
+
+        for (let i = 0; i < n; i++) {
+            const pi = projectsArray[i];
+            for (let j = i + 1; j < n; j++) {
+                const pj = projectsArray[j];
+                let dx = pi._scores.x - pj._scores.x;
+                let dy = pi._scores.y - pj._scores.y;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 0.02) { dx = (rand() - 0.5) * 0.04; dy = (rand() - 0.5) * 0.04; dist = 0.04; }
+
+                const repulse = repulsion / (dist * dist) * t;
+                const nx = dx / dist;
+                const ny = dy / dist;
+                vx[i] += nx * repulse;
+                vy[i] += ny * repulse;
+                vx[j] -= nx * repulse;
+                vy[j] -= ny * repulse;
+
+                const sim = computeTagSimilarity(pi._tags, pj._tags);
+                if (sim > 0.15) {
+                    const attract = attraction * sim * dist * t;
+                    vx[i] -= nx * attract;
+                    vy[i] -= ny * attract;
+                    vx[j] += nx * attract;
+                    vy[j] += ny * attract;
+                }
+            }
+        }
+
+        for (let i = 0; i < n; i++) {
+            vx[i] *= damping;
+            vy[i] *= damping;
+            projectsArray[i]._scores.x += vx[i];
+            projectsArray[i]._scores.y += vy[i];
+            projectsArray[i]._scores.x = Math.max(0.05, Math.min(0.95, projectsArray[i]._scores.x));
+            projectsArray[i]._scores.y = Math.max(0.05, Math.min(0.95, projectsArray[i]._scores.y));
+        }
+    }
+
+    normalizePositions(projectsArray);
+}
+
+function normalizePositions(projectsArray) {
+    if (projectsArray.length < 2) return;
+    let minX = 1, maxX = 0, minY = 1, maxY = 0;
+    for (const p of projectsArray) {
+        minX = Math.min(minX, p._scores.x);
+        maxX = Math.max(maxX, p._scores.x);
+        minY = Math.min(minY, p._scores.y);
+        maxY = Math.max(maxY, p._scores.y);
+    }
+    const rangeX = maxX - minX || 1;
+    const rangeY = maxY - minY || 1;
+    for (const p of projectsArray) {
+        p._scores.x = 0.05 + ((p._scores.x - minX) / rangeX) * 0.9;
+        p._scores.y = 0.05 + ((p._scores.y - minY) / rangeY) * 0.9;
+    }
+}
+
+function computeAllScores(projectsArray) {
+    computeAllTags(projectsArray);
+    computeTagPositions(projectsArray);
+}
+
+function tagDistance(a, b) {
+    return Math.sqrt((a._scores.x - b._scores.x) ** 2 + (a._scores.y - b._scores.y) ** 2);
+}
+
+function scoreDistance(a, b) {
+    return tagDistance(a, b);
+}
+
+function findNearestNeighbors(project, allProjects, k) {
+    return allProjects
+        .filter(p => p.id !== project.id && p._scores)
+        .map(p => ({
+            project: p,
+            distance: tagDistance(project, p),
+            sharedTags: (project._tags || []).filter(t => (p._tags || []).map(pt => pt.toLowerCase()).includes(t.toLowerCase()))
+        }))
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, k);
+}
+
+// ── 10x10 Grid Layout Engine ─────────────────────────────────────────────────
+// Projects placed in a 10x10 grid based on their axis scores.
+// Empty cells filled with solid gray squares (different tone per row).
+
+const GRID_SIZE = 10;
+
+function sortBySimilarity(allProjects) {
+    if (allProjects.length <= 1) return allProjects;
+
+    const sorted = [];
+    const remaining = new Set(allProjects.map((_, i) => i));
+
+    let currentIdx = 0;
+    remaining.delete(currentIdx);
+    sorted.push(allProjects[currentIdx]);
+
+    while (remaining.size > 0) {
+        const current = allProjects[currentIdx];
+        let bestIdx = -1;
+        let bestSim = -1;
+
+        for (const idx of remaining) {
+            const sim = computeTagSimilarity(current._tags || [], allProjects[idx]._tags || []);
+            if (sim > bestSim) {
+                bestSim = sim;
+                bestIdx = idx;
+            }
+        }
+
+        remaining.delete(bestIdx);
+        sorted.push(allProjects[bestIdx]);
+        currentIdx = bestIdx;
+    }
+
+    return sorted;
+}
+
+function generateGridBackground(allProjects) {
+    const G = 40;
+    const pad = 1;
+    const viewW = 200;
+    const viewH = 120;
+    const cellW = (viewW - pad * 2) / G;
+    const cellH = (viewH - pad * 2) / G;
+    const seeded = (s) => { let v = s; return () => { v = (v * 16807) % 2147483647; return v / 2147483647; }; };
+    const rand = seeded(77);
+
+    function makeSvg(className) {
+        const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        s.setAttribute('class', className);
+        s.setAttribute('preserveAspectRatio', 'none');
+        s.setAttribute('viewBox', `0 0 ${viewW} ${viewH}`);
+        return s;
+    }
+
+    // Layer 1 (slowest): structural grid, dots, tick marks
+    let p1 = '';
+    // Layer 2 (medium): radar rings, crosshairs, diagonal scans, data text
+    let p2 = '';
+    // Layer 3 (fastest): data paths, project markers, geometric shapes, info blocks
+    let p3 = '';
+
+    // ═══ LAYER 1 (slowest): structural grid, dots, ticks ═══
+    for (let r = 0; r <= G; r++) {
+        for (let c = 0; c <= G; c++) {
+            const x = pad + c * cellW;
+            const y = pad + r * cellH;
+            const isMajor = (r % 10 === 0 && c % 10 === 0);
+            const isMid = (r % 5 === 0 && c % 5 === 0);
+            const radius = isMajor ? 0.6 : isMid ? 0.4 : 0.18;
+            const opacity = isMajor ? 0.7 : isMid ? 0.4 : 0.15;
+            p1 += `<circle cx="${x}" cy="${y}" r="${radius}" fill="rgba(90,155,115,${opacity})"/>`;
+        }
+    }
+    for (let i = 0; i <= G; i += 10) {
+        const x = pad + i * cellW;
+        const y = pad + i * cellH;
+        p1 += `<line x1="${pad}" y1="${y}" x2="${viewW - pad}" y2="${y}" stroke="rgba(90,155,115,0.35)" stroke-width="0.2"/>`;
+        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.35)" stroke-width="0.2"/>`;
+    }
+    for (let i = 0; i <= G; i += 5) {
+        if (i % 10 === 0) continue;
+        const x = pad + i * cellW;
+        const y = pad + i * cellH;
+        p1 += `<line x1="${pad}" y1="${y}" x2="${viewW - pad}" y2="${y}" stroke="rgba(90,155,115,0.18)" stroke-width="0.14"/>`;
+        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.18)" stroke-width="0.14"/>`;
+    }
+    for (let i = 0; i <= G; i++) {
+        if (i % 5 === 0) continue;
+        const x = pad + i * cellW;
+        const y = pad + i * cellH;
+        p1 += `<line x1="${pad}" y1="${y}" x2="${viewW - pad}" y2="${y}" stroke="rgba(90,155,115,0.07)" stroke-width="0.1"/>`;
+        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.07)" stroke-width="0.1"/>`;
+    }
+    for (let i = 0; i <= G; i++) {
+        const x = pad + i * cellW;
+        const y = pad + i * cellH;
+        const tickLen = (i % 10 === 0) ? 1.5 : (i % 5 === 0) ? 1.0 : 0.5;
+        const tickOp = (i % 10 === 0) ? 0.7 : (i % 5 === 0) ? 0.4 : 0.15;
+        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${pad - tickLen}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
+        p1 += `<line x1="${x}" y1="${viewH - pad}" x2="${x}" y2="${viewH - pad + tickLen}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
+        if (i <= G * viewH / viewW) {
+            p1 += `<line x1="${pad}" y1="${y}" x2="${pad - tickLen}" y2="${y}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
+            p1 += `<line x1="${viewW - pad}" y1="${y}" x2="${viewW - pad + tickLen}" y2="${y}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
+        }
+        if (i % 5 === 0) {
+            const label = (i / G * 10).toFixed(0);
+            p1 += `<text x="${x}" y="${pad - 1.8}" text-anchor="middle" fill="rgba(90,155,115,0.5)" font-size="1.4" font-family="monospace">${label}</text>`;
+            p1 += `<text x="${x}" y="${viewH - pad + 2.8}" text-anchor="middle" fill="rgba(90,155,115,0.3)" font-size="1.2" font-family="monospace">${label}</text>`;
+        }
+    }
+
+    // ═══ LAYER 2 (medium): radar rings, crosshairs, diagonals, data text, shapes ═══
+    for (let d = -G; d <= G; d += 8) {
+        const x1 = pad + Math.max(0, d) * cellW;
+        const y1 = pad + Math.max(0, -d) * cellH;
+        const x2 = Math.min(viewW - pad, pad + (d + G) * cellW);
+        const y2 = Math.min(viewH - pad, pad + (G - d) * cellH * viewH / viewW);
+        p2 += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(90,155,115,0.06)" stroke-width="0.1"/>`;
+    }
+    const cx = viewW / 2;
+    const cy = viewH / 2;
+    for (let r = 5; r <= 55; r += 5) {
+        const op = r % 10 === 0 ? 0.2 : 0.08;
+        p2 += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(90,155,115,${op})" stroke-width="0.12"/>`;
+    }
+    p2 += `<line x1="${pad}" y1="${cy}" x2="${viewW - pad}" y2="${cy}" stroke="rgba(90,155,115,0.2)" stroke-width="0.15" stroke-dasharray="1 2"/>`;
+    p2 += `<line x1="${cx}" y1="${pad}" x2="${cx}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.2)" stroke-width="0.15" stroke-dasharray="1 2"/>`;
+
+    const dataWords = ['TAG', 'NODE', 'LINK', 'GRID', 'MAP', 'VEC', 'POS', 'IDX', 'REF', 'SRC', 'OUT', 'IN', 'NET', 'SIM', 'CLS', 'GRP', 'ADJ', 'EDGE', 'DIST', 'ATTR', 'REP'];
+    for (let i = 0; i < 60; i++) {
+        const x = pad + rand() * (viewW - pad * 2);
+        const y = pad + rand() * (viewH - pad * 2);
+        const word = dataWords[Math.floor(rand() * dataWords.length)];
+        const val = (rand() * 10).toFixed(2);
+        const op = 0.12 + rand() * 0.18;
+        p2 += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="rgba(90,155,115,${op.toFixed(2)})" font-size="${(0.6 + rand() * 0.6).toFixed(1)}" font-family="monospace">${word}:${val}</text>`;
+    }
+    for (let i = 0; i < 30; i++) {
+        const x = pad + rand() * (viewW - pad * 2);
+        const y = pad + rand() * (viewH - pad * 2);
+        const type = Math.floor(rand() * 3);
+        const op = 0.12 + rand() * 0.18;
+        if (type === 0) {
+            const s = 0.4 + rand() * 0.6;
+            p2 += `<rect x="${(x - s / 2).toFixed(1)}" y="${(y - s / 2).toFixed(1)}" width="${s.toFixed(1)}" height="${s.toFixed(1)}" fill="none" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08" transform="rotate(${(rand() * 45).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+        } else if (type === 1) {
+            const s = 0.3 + rand() * 0.4;
+            const pts = `${x.toFixed(1)},${(y - s).toFixed(1)} ${(x - s * 0.87).toFixed(1)},${(y + s * 0.5).toFixed(1)} ${(x + s * 0.87).toFixed(1)},${(y + s * 0.5).toFixed(1)}`;
+            p2 += `<polygon points="${pts}" fill="none" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08"/>`;
+        } else {
+            const s = 0.3 + rand() * 0.5;
+            p2 += `<line x1="${(x - s).toFixed(1)}" y1="${(y - s).toFixed(1)}" x2="${(x + s).toFixed(1)}" y2="${(y + s).toFixed(1)}" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08"/>`;
+            p2 += `<line x1="${(x + s).toFixed(1)}" y1="${(y - s).toFixed(1)}" x2="${(x - s).toFixed(1)}" y2="${(y + s).toFixed(1)}" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08"/>`;
+        }
+    }
+
+    // ═══ LAYER 3 (fastest): data paths, project markers, L-traces, info blocks ═══
+    const scored = allProjects.filter(pr => pr._scores);
+
+    scored.forEach((pr, idx) => {
+        for (let n = 1; n <= 3; n++) {
+            const ni = (idx + n) % scored.length;
+            if (!scored[ni]._scores) continue;
+            if (rand() > 0.55) continue;
+            const x1 = pad + pr._scores.x * (viewW - pad * 2);
+            const y1 = pad + (1 - pr._scores.y) * (viewH - pad * 2);
+            const x2 = pad + scored[ni]._scores.x * (viewW - pad * 2);
+            const y2 = pad + (1 - scored[ni]._scores.y) * (viewH - pad * 2);
+            const mx = (x1 + x2) / 2 + (rand() - 0.5) * 15;
+            const my = (y1 + y2) / 2 + (rand() - 0.5) * 10;
+            const isGreen = rand() > 0.4;
+            const color = isGreen ? `rgba(90,180,120,${0.15 + rand() * 0.2})` : `rgba(140,140,140,${0.1 + rand() * 0.15})`;
+            const dash = rand() > 0.5 ? `stroke-dasharray="${(0.3 + rand() * 0.5).toFixed(1)} ${(0.5 + rand() * 1).toFixed(1)}"` : '';
+            p3 += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${color}" stroke-width="${(0.15 + rand() * 0.2).toFixed(2)}" ${dash}/>`;
+        }
+    });
+
+    scored.forEach((pr, idx) => {
+        if (rand() > 0.4) return;
+        const ni = (idx + Math.floor(rand() * scored.length)) % scored.length;
+        if (!scored[ni]._scores) return;
+        const x1 = pad + pr._scores.x * (viewW - pad * 2);
+        const y1 = pad + (1 - pr._scores.y) * (viewH - pad * 2);
+        const x2 = pad + scored[ni]._scores.x * (viewW - pad * 2);
+        const y2 = pad + (1 - scored[ni]._scores.y) * (viewH - pad * 2);
+        const goHorizontalFirst = rand() > 0.5;
+        const path = goHorizontalFirst
+            ? `M${x1.toFixed(1)},${y1.toFixed(1)} H${x2.toFixed(1)} V${y2.toFixed(1)}`
+            : `M${x1.toFixed(1)},${y1.toFixed(1)} V${y2.toFixed(1)} H${x2.toFixed(1)}`;
+        p3 += `<path d="${path}" fill="none" stroke="rgba(90,155,115,0.15)" stroke-width="0.1" stroke-dasharray="0.3 0.6"/>`;
+    });
+
+    scored.forEach(pr => {
+        const x = pad + pr._scores.x * (viewW - pad * 2);
+        const y = pad + (1 - pr._scores.y) * (viewH - pad * 2);
+        const r = 0.6 + rand() * 0.4;
+        p3 += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="rgba(90,180,120,0.1)" stroke="rgba(90,180,120,0.45)" stroke-width="0.12"/>`;
+        const ch = 1.0;
+        p3 += `<line x1="${(x - ch).toFixed(1)}" y1="${y.toFixed(1)}" x2="${(x + ch).toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(90,155,115,0.3)" stroke-width="0.08"/>`;
+        p3 += `<line x1="${x.toFixed(1)}" y1="${(y - ch).toFixed(1)}" x2="${x.toFixed(1)}" y2="${(y + ch).toFixed(1)}" stroke="rgba(90,155,115,0.3)" stroke-width="0.08"/>`;
+        if (rand() > 0.4 && pr._tags && pr._tags.length > 0) {
+            const label = pr._tags[0].substring(0, 8).toUpperCase();
+            p3 += `<text x="${(x + 1).toFixed(1)}" y="${(y - 0.6).toFixed(1)}" fill="rgba(90,155,115,0.3)" font-size="0.8" font-family="monospace">${label}</text>`;
+        }
+        if (rand() > 0.7) {
+            const idFragment = pr.id.substring(0, 8).toUpperCase();
+            p3 += `<text x="${(x + 1).toFixed(1)}" y="${(y + 1.2).toFixed(1)}" fill="rgba(90,155,115,0.2)" font-size="0.7" font-family="monospace">${idFragment}</text>`;
+        }
+    });
+
+    const tagCount = new Set(scored.flatMap(p => p._tags || [])).size;
+    const infoBlocks = [
+        { x: pad + 1, y: pad + 2, lines: ['SYS:TAG_CLUSTER', 'NODES:' + scored.length, 'TAGS:' + tagCount, 'MODE:FORCE'] },
+        { x: viewW - pad - 22, y: pad + 2, lines: ['LAYOUT:FORCE_DIRECTED', 'METRIC:JACCARD', 'ITER:120', 'DAMPING:0.92'] },
+        { x: pad + 1, y: viewH - pad - 5, lines: ['LINKS:TAG_OVERLAP', 'REPULSION:0.012', 'ATTRACT:0.08', 'STATUS:ACTIVE'] },
+        { x: viewW - pad - 18, y: viewH - pad - 5, lines: ['RENDER:SVG_OVERLAY', 'FRAME:' + Date.now().toString(36).toUpperCase(), 'BUILD:v3.0', 'UPTIME:00:00:00'] }
+    ];
+    infoBlocks.forEach(block => {
+        block.lines.forEach((line, li) => {
+            p3 += `<text x="${block.x}" y="${block.y + li * 1.5}" fill="rgba(90,155,115,0.3)" font-size="1.0" font-family="monospace">${line}</text>`;
+        });
+    });
+
+    // Build 3 SVG layers
+    const svg1 = makeSvg('grid-bg-svg grid-bg-layer-1');
+    svg1.innerHTML = p1;
+    const svg2 = makeSvg('grid-bg-svg grid-bg-layer-2');
+    svg2.innerHTML = p2;
+    const svg3 = makeSvg('grid-bg-svg grid-bg-layer-3');
+    svg3.innerHTML = p3;
+    return [svg1, svg2, svg3];
+}
+
+function renderGridLayout(container, allProjects) {
+    const oldWrapper = container.querySelector('.radar-grid-wrapper');
+    if (oldWrapper) oldWrapper.remove();
+
+    document.querySelectorAll('.grid-bg-svg').forEach(el => el.remove());
+    const bgLayers = generateGridBackground(allProjects);
+    bgLayers.forEach(layer => document.body.appendChild(layer));
+
+    const sorted = sortBySimilarity(allProjects);
+    const G = GRID_SIZE;
+    const totalCells = G * G;
+
+    const featuredInterval = 6;
+    const featuredIndices = new Set();
+    for (let i = 0; i < sorted.length; i++) {
+        if (i % featuredInterval === 0 && i < sorted.length - 1) featuredIndices.add(i);
+    }
+
+    const grid = Array.from({ length: G }, () => Array(G).fill(null));
+    const occupied = Array.from({ length: G }, () => Array(G).fill(false));
+
+    grid[G - 1][G - 1] = { project: sorted[sorted.length - 1], featured: false };
+    occupied[G - 1][G - 1] = true;
+
+    const remaining = sorted.slice(0, -1);
+    let pi = 0;
+
+    for (let r = 0; r < G && pi < remaining.length; r++) {
+        for (let c = 0; c < G && pi < remaining.length; c++) {
+            if (occupied[r][c]) continue;
+
+            const isFeatured = featuredIndices.has(pi);
+
+            if (isFeatured && r + 1 < G && c + 1 < G &&
+                !occupied[r][c+1] && !occupied[r+1][c] && !occupied[r+1][c+1]) {
+                grid[r][c] = { project: remaining[pi], featured: true };
+                occupied[r][c] = true;
+                occupied[r][c+1] = true;
+                occupied[r+1][c] = true;
+                occupied[r+1][c+1] = true;
+                pi++;
+                continue;
+            }
+
+            if ((r + c) % 4 === 3 && !isFeatured) {
+                continue;
+            }
+
+            grid[r][c] = { project: remaining[pi], featured: false };
+            occupied[r][c] = true;
+            pi++;
+        }
+    }
+
+    while (pi < remaining.length) {
+        for (let r = 0; r < G && pi < remaining.length; r++) {
+            for (let c = 0; c < G && pi < remaining.length; c++) {
+                if (!occupied[r][c]) {
+                    grid[r][c] = { project: remaining[pi], featured: false };
+                    occupied[r][c] = true;
+                    pi++;
+                }
+            }
+        }
+    }
+
+    const cards = Array.from(container.querySelectorAll('.project-block'));
+    const cardMap = new Map();
+    cards.forEach(c => cardMap.set(c.getAttribute('data-project-id'), c));
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'radar-grid-wrapper';
+
+    for (let r = 0; r < G; r++) {
+        for (let c = 0; c < G; c++) {
+            const cell = grid[r][c];
+
+            if (cell && cell.project) {
+                const p = cell.project;
+                const card = cardMap.get(p.id);
+                if (card) {
+                    card.style.cssText = 'position:relative;';
+                    if (cell.featured) card.classList.add('featured-project');
+                    wrapper.appendChild(card);
+                } else {
+                    const filler = document.createElement('div');
+                    filler.className = 'grid-filler-invisible';
+                    wrapper.appendChild(filler);
+                }
+            } else if (cell && !cell.project) {
+                const card = cardMap.get(cell.id);
+                if (card) {
+                    card.style.cssText = 'position:relative;';
+                    wrapper.appendChild(card);
+                }
+            } else {
+                const filler = document.createElement('div');
+                filler.className = 'grid-filler-invisible';
+                wrapper.appendChild(filler);
+            }
+        }
+    }
+
+    container.innerHTML = '';
+    container.appendChild(wrapper);
+
+    let idx = 0;
+    Array.from(wrapper.children).forEach((cell) => {
+        if (cell.classList.contains('project-block')) {
+            setTimeout(() => cell.classList.add('loaded'), idx * 30);
+            idx++;
+        }
+    });
+}
+
+// ── Grid Connection Lines ────────────────────────────────────────────────────
+
+function createScatterConnectionLines(allProjects) {
+    document.querySelectorAll('.connection-line').forEach(l => l.remove());
+
+    const cards = document.querySelectorAll('.project-block');
+    if (cards.length === 0) return;
+
+    const projectMap = new Map();
+    allProjects.forEach(p => projectMap.set(p.id, p));
+    const drawn = new Set();
+
+    cards.forEach(card => {
+        const pid = card.getAttribute('data-project-id');
+        const proj = projectMap.get(pid);
+        if (!proj || !proj._scores) return;
+
+        const neighbors = findNearestNeighbors(proj, allProjects, 1);
+        neighbors.forEach(n => {
+            const key = [pid, n.project.id].sort().join('::');
+            if (drawn.has(key)) return;
+            drawn.add(key);
+
+            const targetCard = document.querySelector(`.project-block[data-project-id="${n.project.id}"]`);
+            if (!targetCard) return;
+
+            const sr = card.getBoundingClientRect();
+            const er = targetCard.getBoundingClientRect();
+            createScatterLine(
+                { x: sr.left + sr.width/2, y: sr.top + sr.height/2 },
+                { x: er.left + er.width/2, y: er.top + er.height/2 },
+                n.distance, pid, n.project.id
+            );
+        });
+    });
+}
+
+function createScatterLine(start, end, distance, fromId, toId) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('connection-line');
+    if (fromId) svg.setAttribute('data-from', fromId);
+    if (toId) svg.setAttribute('data-to', toId);
+    svg.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:5;';
+
+    const opacity = Math.max(0.06, 0.18 - distance * 0.12);
+    const mx = (start.x + end.x)/2, my = (start.y + end.y)/2;
+    const dx = end.x - start.x, dy = end.y - start.y;
+
+    const useGreen = Math.random() < 0.4;
+    const color = useGreen
+        ? `rgba(144,238,144,${opacity})`
+        : `rgba(180,180,180,${opacity * 0.5})`;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M${start.x},${start.y} Q${mx + dy*0.08},${my - dx*0.08} ${end.x},${end.y}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '1');
+    svg.appendChild(path);
+    document.body.appendChild(svg);
+}
+
+// ── Score Tooltip ────────────────────────────────────────────────────────────
+
+let scoreTooltip = null;
+
+function showScoreTooltip(card, project) {
+    if (!scoreTooltip) {
+        scoreTooltip = document.createElement('div');
+        scoreTooltip.className = 'score-tooltip';
+        document.body.appendChild(scoreTooltip);
+    }
+
+    const tags = project._tags || [];
+    const neighbors = findNearestNeighbors(project, projects, 3);
+    const sharedWithNeighbors = new Set();
+    neighbors.forEach(n => {
+        (n.sharedTags || []).forEach(t => sharedWithNeighbors.add(t));
+    });
+
+    let html = `<div class="tooltip-title">${project.title}</div>`;
+    if (project.year) {
+        html += `<div class="tooltip-kw" style="margin-bottom:6px;opacity:0.5">${project.year}</div>`;
+    }
+    if (tags.length > 0) {
+        html += `<div class="tooltip-tags">`;
+        tags.forEach(tag => {
+            const isShared = sharedWithNeighbors.has(tag);
+            const cls = isShared ? 'tooltip-tag shared' : 'tooltip-tag';
+            html += `<span class="${cls}">${tag}</span>`;
+        });
+        html += `</div>`;
+    }
+    if (neighbors.length > 0 && neighbors[0].sharedTags && neighbors[0].sharedTags.length > 0) {
+        html += `<div class="tooltip-kw" style="margin-top:6px;"><em>Nearest:</em> ${neighbors.slice(0, 2).map(n => n.project.title).join(', ')}</div>`;
+    }
+
+    scoreTooltip.innerHTML = html;
+    scoreTooltip.classList.add('visible');
+
+    const rect = card.getBoundingClientRect();
+    let left = rect.right + 10;
+    let top = rect.top;
+
+    if (left + 320 > window.innerWidth) {
+        left = rect.left - 330;
+    }
+    if (top + scoreTooltip.offsetHeight > window.innerHeight) {
+        top = window.innerHeight - scoreTooltip.offsetHeight - 10;
+    }
+
+    scoreTooltip.style.left = left + 'px';
+    scoreTooltip.style.top = Math.max(10, top) + 'px';
+}
+
+function hideScoreTooltip() {
+    if (scoreTooltip) scoreTooltip.classList.remove('visible');
+}
+
+// ── Grid Interaction System ──────────────────────────────────────────────────
+
+function initScatterInteractions(allProjects) {
+    const cards = document.querySelectorAll('.project-block');
+    const projectMap = new Map();
+    allProjects.forEach(p => projectMap.set(p.id, p));
+    const allCells = document.querySelectorAll('.radar-grid-wrapper > *');
+    const connectionLines = document.querySelectorAll('.connection-line');
+
+    cards.forEach(card => {
+        const pid = card.getAttribute('data-project-id');
+        const proj = projectMap.get(pid);
+        if (!proj) return;
+
+        card.addEventListener('mouseenter', () => {
+            const myTags = new Set((proj._tags || []).map(t => t.toLowerCase()));
+            const relatedIds = new Set([pid]);
+
+            allProjects.forEach(p => {
+                if (p.id === pid || !p._tags) return;
+                const shared = p._tags.some(t => myTags.has(t.toLowerCase()));
+                if (shared) relatedIds.add(p.id);
+            });
+
+            allCells.forEach(c => {
+                const cid = c.getAttribute('data-project-id');
+                if (cid && relatedIds.has(cid)) {
+                    c.classList.add('scatter-highlight');
+                    c.classList.remove('scatter-dimmed');
+                } else if (cid) {
+                    c.classList.add('scatter-dimmed');
+                    c.classList.remove('scatter-highlight');
+                } else {
+                    c.classList.add('scatter-dimmed');
+                }
+            });
+
+            showScoreTooltip(card, proj);
+
+            connectionLines.forEach(line => {
+                const from = line.getAttribute('data-from');
+                const to = line.getAttribute('data-to');
+                if (relatedIds.has(from) && relatedIds.has(to)) {
+                    line.classList.add('line-highlight');
+                } else {
+                    line.classList.add('line-dimmed');
+                }
+            });
+        });
+
+        card.addEventListener('mouseleave', () => {
+            allCells.forEach(c => {
+                c.classList.remove('scatter-highlight', 'scatter-dimmed');
+            });
+            hideScoreTooltip();
+
+            connectionLines.forEach(line => {
+                line.classList.remove('line-highlight', 'line-dimmed');
+            });
+        });
+    });
+}
+
+function initAxisFilterInteractions(allProjects) {
+    // No axis labels to filter by in tag-cluster mode
+}
+
+// ── End Grid Layout Engine ───────────────────────────────────────────────────
+
 // Shape bank for different project card arrangements
 const SHAPE_BANK = {
     circle: {
@@ -405,13 +1132,13 @@ let currentShape = 'random';
 function changeShape(shapeName) {
     if (SHAPE_BANK[shapeName]) {
         currentShape = shapeName;
-        console.log(`Switched to ${SHAPE_BANK[shapeName].name} layout`);
+        
         
         // Reposition all cards with new shape
         if (isNeuralNetworkStyle) {
             resetPositionedCards();
             const allBlocks = document.querySelectorAll('.project-block');
-            console.log(`Repositioning ${allBlocks.length} cards with ${shapeName} shape`);
+            
             
             allBlocks.forEach((block, index) => {
                 // Get size class from classList or generate one
@@ -424,7 +1151,7 @@ function changeShape(shapeName) {
                     block.setAttribute('data-size', sizeClass);
                 }
                 
-                console.log(`Repositioning card ${index + 1} with size: ${sizeClass}`);
+                
                 // Use shuffled position mapping for random layout to maintain alphabetical order
                 const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
                 positionCardCircularly(block, sizeClass, positionIndex, allBlocks.length);
@@ -453,7 +1180,7 @@ function addShapeKeyboardListener() {
         if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
             if (e.key === 's' || e.key === 'S') {
                 e.preventDefault();
-                console.log('🔄 Cycling to next shape...');
+                
                 cycleShape();
             }
         }
@@ -461,7 +1188,7 @@ function addShapeKeyboardListener() {
     
     // Add window resize listener for responsive repositioning
     window.addEventListener('resize', debounce(function() {
-        console.log('📱 Window resized - repositioning for current device type');
+        
         if (isNeuralNetworkStyle) {
             // Re-layout all cards on resize
             resetPositionedCards();
@@ -477,7 +1204,7 @@ function addShapeKeyboardListener() {
     }, 250));
     
     keyboardListenerAdded = true;
-    console.log('⌨️ Shape cycling keyboard listener added');
+    
 }
 
 // Debounce function for resize events
@@ -519,33 +1246,33 @@ function initializeMobileNavigation() {
             if (section === 'portfolio') {
                 // Show portfolio
                 projectSection.style.display = 'block';
-                console.log('📱 Switched to Portfolio view');
+                
             } else if (section === 'skills') {
                 // Hide portfolio for now (we can add skills content later)
                 projectSection.style.display = 'none';
-                console.log('📱 Switched to Skills view');
+                
             }
         });
     });
     
-    console.log('📱 Mobile navigation initialized');
+    
 }
 
 // Test function - can be called from browser console
 function testShapes() {
-    console.log('🧪 Testing all shapes...');
+    
     const shapeNames = Object.keys(SHAPE_BANK);
     
     let index = 0;
     const interval = setInterval(() => {
         if (index >= shapeNames.length) {
             clearInterval(interval);
-            console.log('✅ Shape testing complete!');
+            
             return;
         }
         
         const shapeName = shapeNames[index];
-        console.log(`Testing shape: ${shapeName}`);
+        
         changeShape(shapeName);
         index++;
     }, 2000);
@@ -553,19 +1280,19 @@ function testShapes() {
 
 // Quick test function for immediate shape switching
 function quickTest() {
-    console.log('🚀 Quick shape test...');
+    
     const shapes = ['random', 'circle', 'cube', 'hand', 'sineWave', 'spiral', 'diamond'];
     let currentIndex = 0;
     
     const testInterval = setInterval(() => {
         if (currentIndex >= shapes.length) {
             clearInterval(testInterval);
-            console.log('✅ Quick test complete!');
+            
             return;
         }
         
         const shape = shapes[currentIndex];
-        console.log(`🔄 Switching to: ${shape}`);
+        
         changeShape(shape);
         currentIndex++;
     }, 1000);
@@ -574,7 +1301,7 @@ function quickTest() {
 // Function to return to default random layout
 function resetToRandom() {
     changeShape('random');
-    console.log('🎲 Reset to default Random (Alphabetical) layout');
+    
 }
 
 // Make functions available globally for console testing
@@ -1454,8 +2181,8 @@ function debugPositions() {
     const blocks = document.querySelectorAll('.project-block');
     const paths = document.querySelectorAll('.connection-path');
     
-    console.log('=== POSITION DEBUG COMPARISON ===');
-    console.log('Project Blocks:');
+    
+    
     
     blocks.forEach((block, index) => {
         const style = window.getComputedStyle(block);
@@ -1463,23 +2190,23 @@ function debugPositions() {
         const projectGrid = document.querySelector('.project-grid');
         const gridRect = projectGrid.getBoundingClientRect();
         
-        console.log(`Block ${index}: "${block.querySelector('.block-title')?.textContent || 'No title'}"`);
-        console.log(`  CSS left: ${style.left}, CSS top: ${style.top}`);
-        console.log(`  CSS width: ${style.width}, CSS height: ${style.height}`);
-        console.log(`  getBoundingClientRect: left=${rect.left}, top=${rect.top}, width=${rect.width}, height=${rect.height}`);
-        console.log(`  Relative to grid: left=${rect.left - gridRect.left}, top=${rect.top - gridRect.top}`);
-        console.log(`  Center (CSS): x=${parseFloat(style.left) + parseFloat(style.width)/2}, y=${parseFloat(style.top) + parseFloat(style.height)/2}`);
-        console.log(`  Center (getBoundingClientRect): x=${rect.left + rect.width/2}, y=${rect.top + rect.height/2}`);
-        console.log('---');
+        
+        
+        
+        
+        
+        
+        
+        
     });
     
-    console.log('Connection Paths:');
+    
     paths.forEach((path, index) => {
         const style = window.getComputedStyle(path);
-        console.log(`Path ${index}:`);
-        console.log(`  CSS left: ${style.left}, CSS top: ${style.top}`);
-        console.log(`  CSS width: ${style.width}, CSS transform: ${style.transform}`);
-        console.log('---');
+        
+        
+        
+        
     });
 }
 
@@ -1496,24 +2223,24 @@ function resetPositionedCards() {
 
 // Caching system for instant project navigation
 function clearProjectCache() {
-    console.log('Clearing project cache...');
+    
     projectCache.clear();
-    console.log('Project cache cleared successfully');
+    
 }
 
 function refreshProjectCache() {
-    console.log('Refreshing project cache...');
+    
     clearProjectCache();
     preloadProjectContent();
 }
 
 function preloadProjectContent() {
-    console.log('Preloading project content...');
+    
     const projectsToCache = window.projects || projects || [];
     const mediaIndex = window.projectMedia || window.mediaIndex || {};
     
-    console.log('Media index available:', !!mediaIndex);
-    console.log('Media index projects:', Object.keys(mediaIndex.projects || {}));
+    
+    
     
     projectsToCache.forEach(project => {
         // Always regenerate content to ensure it's up-to-date
@@ -1525,7 +2252,7 @@ function preloadProjectContent() {
         });
     });
     
-    console.log(`Cached ${projectCache.size} projects`);
+    
 }
 
 // Simple title formatting - just return the title as-is
@@ -1546,7 +2273,7 @@ function generateProjectHTML(project, mediaIndex) {
             .replace(/\\n/g, '\n')
             .split('\n')
             .map(line => line.trim())
-            .filter(line => line.length > 0);
+            .filter(line => line.length > 0 && line !== '---' && line !== '--');
         
         let mainHtml = '';
         let bulletHtml = '';
@@ -1722,7 +2449,7 @@ function generateProjectHTML(project, mediaIndex) {
     const localMedia = highResMedia.length > 0 ? highResMedia : thumbnailMedia;
     const allMedia = localMedia; // Use all available media instead of just first 3
     
-    console.log('Media for', project.id, ':', allMedia);
+    
     
     // Create content with images integrated
     let contentBlocks = [];
@@ -1846,6 +2573,11 @@ function generateProjectHTML(project, mediaIndex) {
                 </div>
             </header>
             
+            <div class="project-title-bar">
+                <h2 class="project-title-bar-name">${formatTitleWithItalics(project.title)}</h2>
+                <p class="project-title-bar-meta">${[project.year, project.client].filter(Boolean).join(" · ")}</p>
+            </div>
+            
             <div class="project-content">
                 ${medias}
             </div>
@@ -1963,7 +2695,7 @@ function showProjectOverlay(projectId) {
         let startTime = 0;
         let isSwipeGesture = false;
         
-        console.log('🎯 SWIPE DEBUG: Adding touch event listeners to overlay');
+        
         
         overlay.addEventListener('touchstart', function(e) {
             startX = e.touches[0].clientX;
@@ -1971,12 +2703,7 @@ function showProjectOverlay(projectId) {
             startTime = Date.now();
             isSwipeGesture = false;
             
-            console.log('🎯 SWIPE DEBUG: touchstart', {
-                startX: startX,
-                startY: startY,
-                startTime: startTime,
-                timestamp: new Date().toISOString()
-            });
+            
         }, { passive: false });
         
         overlay.addEventListener('touchmove', function(e) {
@@ -1987,21 +2714,12 @@ function showProjectOverlay(projectId) {
             const deltaX = currentX - startX;
             const deltaY = currentY - startY;
             
-            console.log('🎯 SWIPE DEBUG: touchmove', {
-                currentX: currentX,
-                currentY: currentY,
-                deltaX: deltaX,
-                deltaY: deltaY,
-                absDeltaX: Math.abs(deltaX),
-                absDeltaY: Math.abs(deltaY),
-                isHorizontal: Math.abs(deltaX) > Math.abs(deltaY),
-                thresholdMet: Math.abs(deltaX) > 20
-            });
+            
             
             // If horizontal movement is significant and more than vertical, prevent default
             if (Math.abs(deltaX) > 20 && Math.abs(deltaX) > Math.abs(deltaY)) {
                 isSwipeGesture = true;
-                console.log('🎯 SWIPE DEBUG: Preventing default browser behavior');
+                
                 e.preventDefault(); // Prevent browser back gesture
             }
         }, { passive: false });
@@ -2017,27 +2735,16 @@ function showProjectOverlay(projectId) {
             const deltaY = endY - startY;
             const deltaTime = endTime - startTime;
             
-            console.log('🎯 SWIPE DEBUG: touchend', {
-                endX: endX,
-                endY: endY,
-                deltaX: deltaX,
-                deltaY: deltaY,
-                deltaTime: deltaTime,
-                isSwipeGesture: isSwipeGesture,
-                rightSwipe: deltaX > 50,
-                horizontalDominant: Math.abs(deltaX) > Math.abs(deltaY),
-                fastGesture: deltaTime < 500,
-                allConditions: isSwipeGesture && deltaX > 50 && Math.abs(deltaX) > Math.abs(deltaY) && deltaTime < 500
-            });
+            
             
             // Check for right swipe (deltaX > 50px, horizontal movement > vertical, fast gesture)
             if (isSwipeGesture && deltaX > 50 && Math.abs(deltaX) > Math.abs(deltaY) && deltaTime < 500) {
-                console.log('🎯 SWIPE DEBUG: ✅ RIGHT SWIPE DETECTED - CLOSING OVERLAY');
+                
                 e.preventDefault();
                 e.stopPropagation();
                 closeProjectOverlay();
             } else {
-                console.log('🎯 SWIPE DEBUG: ❌ Not a valid right swipe');
+                
             }
             
             // Reset values
@@ -2098,12 +2805,12 @@ function showProjectOverlay(projectId) {
             overlay.style.visibility = 'hidden';
             
             // Debug animation states for mobile
-            console.log('🎬 MOBILE ANIMATION DEBUG: Before adding active class');
-            console.log('  - transform:', overlay.style.transform);
-            console.log('  - opacity:', overlay.style.opacity);
-            console.log('  - visibility:', overlay.style.visibility);
-            console.log('  - computed transform:', getComputedStyle(overlay).transform);
-            console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+            
+            
+            
+            
+            
+            
             
             // Force a reflow to ensure the initial state is applied
             overlay.offsetHeight;
@@ -2111,38 +2818,29 @@ function showProjectOverlay(projectId) {
             // Now add the active class to trigger animation
             overlay.classList.add('active');
             
-            // Remove inline styles to allow CSS to take over
+            // Remove inline styles and reset scroll after overlay is visible
             setTimeout(() => {
                 overlay.style.transform = '';
                 overlay.style.opacity = '';
                 overlay.style.visibility = '';
+                overlay.scrollTop = 0;
+                if (contentElement) contentElement.scrollTop = 0;
             }, 10);
             
             // Debug after adding active class
             setTimeout(() => {
-                console.log('🎬 MOBILE ANIMATION DEBUG: After adding active class');
-                console.log('  - transform:', overlay.style.transform);
-                console.log('  - opacity:', overlay.style.opacity);
-                console.log('  - visibility:', overlay.style.visibility);
-                console.log('  - computed transform:', getComputedStyle(overlay).transform);
-                console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
-                console.log('  - has active class:', overlay.classList.contains('active'));
+                
+                
+                
+                
+                
+                
+                
             }, 100);
             
             // Allow CSS animation to work
             // Debug log for mobile
-            console.log('Mobile overlay positioned:', {
-                overlay: {
-                    width: overlay.offsetWidth,
-                    height: overlay.offsetHeight,
-                    display: overlay.style.display,
-                    zIndex: overlay.style.zIndex
-                },
-                content: contentElement ? {
-                    width: contentElement.offsetWidth,
-                    height: contentElement.offsetHeight
-                } : null
-            });
+            
         }, 50);
         
         // Prevent body scroll on mobile
@@ -2184,7 +2882,7 @@ function showProjectOverlay(projectId) {
             
             // Left swipe detected (swipe left to go back)
             if (isSwipeGesture && diffX > 100) {
-                console.log('Left swipe detected - closing overlay');
+                
                 closeProjectOverlay();
             }
             
@@ -2212,12 +2910,12 @@ function showProjectOverlay(projectId) {
     overlay.style.visibility = 'hidden';
     
     // Debug animation states
-    console.log('🎬 ANIMATION DEBUG: Before adding active class');
-    console.log('  - transform:', overlay.style.transform);
-    console.log('  - opacity:', overlay.style.opacity);
-    console.log('  - visibility:', overlay.style.visibility);
-    console.log('  - computed transform:', getComputedStyle(overlay).transform);
-    console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
+    
+    
+    
+    
+    
+    
     
     // Force a reflow to ensure the initial state is applied
     overlay.offsetHeight;
@@ -2225,22 +2923,25 @@ function showProjectOverlay(projectId) {
     // Now add the active class to trigger animation
     overlay.classList.add('active');
     
-    // Remove inline styles to allow CSS to take over
+    // Remove inline styles and reset scroll after overlay is visible
     setTimeout(() => {
         overlay.style.transform = '';
         overlay.style.opacity = '';
         overlay.style.visibility = '';
+        overlay.scrollTop = 0;
+        const scrollContainer = overlay.querySelector('.project-overlay-content');
+        if (scrollContainer) scrollContainer.scrollTop = 0;
     }, 10);
     
     // Debug after adding active class
     setTimeout(() => {
-        console.log('🎬 ANIMATION DEBUG: After adding active class');
-        console.log('  - transform:', overlay.style.transform);
-        console.log('  - opacity:', overlay.style.opacity);
-        console.log('  - visibility:', overlay.style.visibility);
-        console.log('  - computed transform:', getComputedStyle(overlay).transform);
-        console.log('  - computed opacity:', getComputedStyle(overlay).opacity);
-        console.log('  - has active class:', overlay.classList.contains('active'));
+        
+        
+        
+        
+        
+        
+        
     }, 100);
     
     isOverlayOpen = true;
@@ -2259,7 +2960,7 @@ function showProjectOverlay(projectId) {
         initParallaxEffect();
     }, 50);
     
-    console.log('Project overlay opened:', projectId);
+    
 }
 
 function closeProjectOverlay() {
@@ -2296,7 +2997,7 @@ function closeProjectOverlay() {
         }
     }, 400); // Match the CSS transition duration (0.4s)
     
-    console.log('Project overlay closed with slide-out animation');
+    
 }
 
 // Make functions globally available
@@ -2308,18 +3009,14 @@ window.clearProjectCache = clearProjectCache;
 // Render neural network section
 function renderNeuralNetworkSection(sectionId, projectIds) {
     const list = document.getElementById(sectionId);
-    // Use the sorted projectsWithMedia array instead of the original unsorted window.projects
-    const projectsToUse = window.sortedProjectsWithMedia || window.projects || projects || [];
+    const allProjects = window.sortedProjectsWithMedia || window.projects || projects || [];
+    const projectsToUse = allProjects.filter(p => !p.hidden);
     const sectionProjects = projectsToUse.filter(p => projectIds.includes(p.id));
     
-    console.log('Rendering section:', sectionId);
-    console.log('Section projects:', sectionProjects.length);
     
-    // Don't filter by thumbnails during initial render - use lazy loading instead
+    
+    
     const projectsWithMedia = sectionProjects;
-    
-    console.log('Projects with media in section:', projectsWithMedia.length);
-    console.log('List element found:', !!list);
     
     if (!list) {
         console.error('List element not found:', sectionId);
@@ -2329,21 +3026,21 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
     resetPositionedCards();
     
     // Generate HTML for project blocks
-    console.log('Creating project blocks HTML...');
-    const htmlContent = projectsWithMedia.map((p, index) => {
-        // Debug removed
-        
+    // Sort: featured first, then by title
+    const featuredProjects = projectsWithMedia.filter(p => p.featured);
+    const regularProjects = projectsWithMedia.filter(p => !p.featured);
+    const orderedProjects = [...featuredProjects, ...regularProjects];
+
+    const htmlContent = orderedProjects.map((p, index) => {
         const shortTitle = p.title || p.id || 'Untitled Project';
-        
-        // Assign categories based on project characteristics or random distribution
         const categories = ['installation', 'generative', 'performance', 'commercial'];
-        const category = p.category || categories[index % categories.length]; // Cycle through categories
+        const category = p.category || categories[index % categories.length];
         const variation = (index % 4) + 1;
+        const featuredClass = p.featured ? ' featured-project' : '';
         
-        const className = `project-block category-${category} variation-${variation}`;
-        const projectNumber = String(index + 1).padStart(2, '0'); // Format as 01, 02, etc.
-        // Debug removed
-        return `<article class="${className}" data-project-title="${p.title}" data-project-id="${p.id}">
+        const className = `project-block category-${category} variation-${variation}${featuredClass}`;
+        const projectNumber = String(index + 1).padStart(2, '0');
+        return `<article class="${className}" data-project-title="${p.title}" data-project-id="${p.id}" data-score-x="${(p._scores?.x || 0.5).toFixed(3)}" data-score-y="${(p._scores?.y || 0.5).toFixed(3)}">
             <a href="project.html?id=${p.id}" class="project-link">
                 <div class="block-surface">
                     <div class="block-title" data-number="${projectNumber}">${shortTitle}</div>
@@ -2358,87 +3055,64 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         </article>`;
     }).join("");
     
-    console.log('Generated HTML length:', htmlContent.length);
-    console.log('First 500 chars of HTML:', htmlContent.substring(0, 500));
-    console.log('Setting innerHTML...');
+    
+    
+    
     
     try {
         list.innerHTML = htmlContent;
-        console.log('HTML set successfully');
+        
     } catch (error) {
         console.error('Error setting innerHTML:', error);
-        console.log('Problematic HTML:', htmlContent.substring(0, 1000));
+        
     }
     
-    console.log('HTML set, checking for blocks...');
-    console.log('List innerHTML length after set:', list.innerHTML.length);
-    console.log('List innerHTML preview:', list.innerHTML.substring(0, 200));
+    
+    
+    
     
     // Check immediately without timeout
     const blocksImmediate = list.querySelectorAll('.project-block');
-    console.log('Found blocks immediately after HTML set:', blocksImmediate.length);
+    
     
     // Force visibility test
     if (blocksImmediate.length > 0) {
-        console.log('First block found and ready for positioning');
+        
     }
     
     // Mutation observer removed - no longer needed
     
     setTimeout(() => {
         const blocks = list.querySelectorAll('.project-block');
-        console.log('Found blocks after timeout:', blocks.length);
-        console.log('List element:', list);
-        console.log('List innerHTML length:', list.innerHTML.length);
-        console.log('List innerHTML preview:', list.innerHTML.substring(0, 500));
+        
+        
+        
+        
         
         if (blocks.length === 0) {
-            console.log('NO BLOCKS FOUND - Checking what happened to the HTML');
-            console.log('List children:', list.children);
-            console.log('List children length:', list.children.length);
+            
+            
+            
             return;
         }
         
-        // Position cards randomly (restored visual appeal)
-        blocks.forEach((block, index) => {
-            const sizeClass = getRandomSizeClass();
-            block.classList.add(sizeClass);
-            block.setAttribute('data-size', sizeClass); // Ensure data-size is set
-            
-            // Use shuffled position mapping for random layout to maintain alphabetical order
-            const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
-            positionCardCircularly(block, sizeClass, positionIndex, blocks.length);
-            
-            // Progressive loading: fade in cards with staggered timing (much faster)
-            setTimeout(() => {
-                block.classList.add('loaded');
-            }, index * 20); // Reduced from 80ms to 20ms
-        });
-        
-        // Create connection lines (restored full version)
-        setTimeout(() => {
-            createConnectionLines();
-        }, 50);
-        
-        
-        // Refresh parallax effect for new cards (optimized)
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+            const projectMap = new Map();
+            orderedProjects.forEach(p => projectMap.set(p.id, p));
+            positionMobileScatter(blocks, orderedProjects, projectMap);
+        } else {
+            renderGridLayout(list, orderedProjects);
+        }
+
         refreshParallaxEffect();
-        
-        // Create curved connection lines with progressive loading
-        setTimeout(() => {
-            console.log('About to create connection lines...');
-            createConnectionLines();
-            
-            // Show connection lines after cards are loaded
+
+        if (!isMobile) {
             setTimeout(() => {
-                const connectionLines = document.querySelectorAll('.connection-line');
-                connectionLines.forEach((line, index) => {
-                    setTimeout(() => {
-                        line.classList.add('loaded');
-                    }, index * 120); // 120ms delay between each connection line
-                });
-            }, 500); // Wait 500ms after cards start loading
-        }, 200);
+                initScatterInteractions(orderedProjects);
+            }, 300);
+        }
     }, 100);
 }
 
@@ -2501,28 +3175,11 @@ function initBackgroundImageHover() {
             }
         });
         
-        // Desktop: Handle hover events for side panel
+        // Desktop: Handle hover events for background dots
         document.addEventListener('mouseover', function(e) {
             const projectBlock = e.target.closest('.project-block');
             if (projectBlock && !projectBlock.classList.contains('transitioning-to-page')) {
-                // Show green dots
                 backgroundOverlay.classList.add('active');
-                
-                // Get project ID and find high-res image
-                const projectId = projectBlock.getAttribute('data-project-title');
-                const project = projects.find(p => p.title === projectId);
-                if (project) {
-                    const thumbnail = getThumbnail(project.id);
-                    if (thumbnail) {
-                        // Create and load image in side panel
-                        const img = document.createElement('img');
-                        img.src = thumbnail;
-                        img.loading = 'lazy';
-                        sidePanel.innerHTML = '';
-                        sidePanel.appendChild(img);
-                        sidePanel.classList.add('active');
-                    }
-                }
             }
         });
         
@@ -2530,11 +3187,9 @@ function initBackgroundImageHover() {
         document.addEventListener('mouseout', function(e) {
             const projectBlock = e.target.closest('.project-block');
             if (projectBlock && !projectBlock.classList.contains('transitioning-to-page')) {
-                // Check if mouse is still over any project block
                 const relatedTarget = e.relatedTarget;
                 if (!relatedTarget || !relatedTarget.closest('.project-block')) {
                     backgroundOverlay.classList.remove('active');
-                    sidePanel.classList.remove('active');
                 }
             }
         });
@@ -2624,8 +3279,8 @@ function initLazyThumbnailLoading() {
                         thumbnailDiv.innerHTML = '';
                         thumbnailDiv.appendChild(img);
                     } else {
-                        // Hide thumbnail if no image available
-                        thumbnailDiv.style.display = 'none';
+                        const card = thumbnailDiv.closest('.project-block');
+                        if (card) card.style.display = 'none';
                     }
                     
                     thumbnailObserver.unobserve(thumbnailDiv);
@@ -2682,19 +3337,157 @@ function initLazyThumbnailLoading() {
 
 // Initialize
 let isInitialized = false;
+// ── Axis Labels ──────────────────────────────────────────────────────────────
+
+function injectAxisLabels(container) {
+    container.querySelectorAll('.scatter-axis-label, .scatter-crosshair, .cluster-label').forEach(e => e.remove());
+
+    const hLine = document.createElement('div');
+    hLine.className = 'scatter-crosshair scatter-crosshair-h';
+    container.appendChild(hLine);
+
+    const vLine = document.createElement('div');
+    vLine.className = 'scatter-crosshair scatter-crosshair-v';
+    container.appendChild(vLine);
+}
+
+function injectClusterLabels(container, allProjects) {
+    container.querySelectorAll('.cluster-label').forEach(e => e.remove());
+
+    const tagGroups = {};
+    allProjects.forEach(p => {
+        if (!p._tags || !p._scores) return;
+        p._tags.forEach(tag => {
+            if (!tagGroups[tag]) tagGroups[tag] = [];
+            tagGroups[tag].push(p);
+        });
+    });
+
+    const sidebarWidth = 210;
+    const containerWidth = window.innerWidth - sidebarWidth;
+    const containerHeight = window.innerHeight;
+
+    Object.entries(tagGroups).forEach(([tag, members]) => {
+        if (members.length < 2) return;
+        const avgX = members.reduce((s, p) => s + p._scores.x, 0) / members.length;
+        const avgY = members.reduce((s, p) => s + p._scores.y, 0) / members.length;
+
+        const spread = members.reduce((s, p) => {
+            return s + Math.sqrt((p._scores.x - avgX) ** 2 + (p._scores.y - avgY) ** 2);
+        }, 0) / members.length;
+
+        if (spread > 0.35) return;
+
+        const el = document.createElement('div');
+        el.className = 'cluster-label';
+        el.textContent = tag;
+        el.style.left = (sidebarWidth + avgX * containerWidth) + 'px';
+        el.style.top = ((1 - avgY) * containerHeight) + 'px';
+        container.appendChild(el);
+    });
+}
+
+// ── Mobile Scatter Layout ────────────────────────────────────────────────────
+
+function positionMobileScatter(blocks, orderedProjects, projectMap) {
+    // Group projects into 4 quadrants
+    const quadrants = {
+        'responsive-spatial':  { label: '', projects: [] },
+        'responsive-digital':  { label: '', projects: [] },
+        'generative-spatial':  { label: '', projects: [] },
+        'generative-digital':  { label: '', projects: [] }
+    };
+
+    orderedProjects.forEach(p => {
+        const s = p._scores || { x: 0.5, y: 0.5 };
+        const xKey = s.x < 0.5 ? 'responsive' : 'generative';
+        const yKey = s.y >= 0.5 ? 'spatial' : 'digital';
+        quadrants[xKey + '-' + yKey].projects.push(p);
+    });
+
+    // Layout: featured first at top, then quadrant groups
+    const vw = window.innerWidth;
+    const cardWidth = vw * 0.85;
+    const cardHeight = 90;
+    const featuredHeight = 120;
+    const gap = 12;
+    let y = 20;
+
+    // Featured projects first
+    blocks.forEach(block => {
+        const pid = block.getAttribute('data-project-id');
+        const proj = projectMap.get(pid);
+        if (!proj || !proj.featured) return;
+
+        block.style.left = ((vw - cardWidth * 1.0) / 2) + 'px';
+        block.style.top = y + 'px';
+        block.style.width = (cardWidth * 1.0) + 'px';
+        block.style.height = featuredHeight + 'px';
+        block.classList.add('featured-project');
+        block._w = cardWidth;
+        block._h = featuredHeight;
+        y += featuredHeight + gap;
+        setTimeout(() => block.classList.add('loaded'), 50);
+    });
+
+    y += 20;
+
+    // Quadrant sections
+    Object.values(quadrants).forEach(q => {
+        if (q.projects.length === 0) return;
+
+        // Add section header
+        const header = document.createElement('div');
+        header.className = 'mobile-quadrant-header';
+        header.textContent = q.label;
+        header.style.cssText = `
+            position: absolute; left: ${(vw - cardWidth) / 2}px; top: ${y}px;
+            width: ${cardWidth}px; font-size: 11px; font-weight: 600;
+            color: #90EE90; text-transform: uppercase; letter-spacing: 2px;
+            padding: 8px 0; border-bottom: 1px solid rgba(144,238,144,0.3);
+            font-family: 'Inter', sans-serif;
+        `;
+        blocks[0].parentElement.appendChild(header);
+        y += 30;
+
+        q.projects.forEach(p => {
+            const block = document.querySelector(`.project-block[data-project-id="${p.id}"]`);
+            if (!block) return;
+
+            block.style.left = ((vw - cardWidth) / 2) + 'px';
+            block.style.top = y + 'px';
+            block.style.width = cardWidth + 'px';
+            block.style.height = cardHeight + 'px';
+            block._w = cardWidth;
+            block._h = cardHeight;
+            y += cardHeight + gap;
+            setTimeout(() => block.classList.add('loaded'), 50);
+        });
+
+        y += 20;
+    });
+
+    // Update container height
+    const container = blocks[0]?.parentElement;
+    if (container) {
+        container.style.minHeight = (y + 60) + 'px';
+    }
+}
+
 function initializeNeuralNetwork() {
-    console.log('initializeNeuralNetwork called, isInitialized:', isInitialized);
+    
     if (isInitialized) {
-        console.log('Neural network already initialized, skipping...');
+        
         return;
     }
     
-    console.log('=== NEURAL NETWORK INITIALIZATION START ===');
-    console.log('window.projects:', window.projects);
-    console.log('projects (local):', projects);
-    const projectsToUse = window.projects || projects || [];
-    console.log('projectsToUse:', projectsToUse);
-    console.log('Initializing neural network with projects:', projectsToUse.length);
+    
+    
+    
+    const allProjects = window.projects || projects || [];
+    const projectsToUse = allProjects.filter(p => !p.hidden);
+    
+    
     
     isInitialized = true;
     
@@ -2702,14 +3495,14 @@ function initializeNeuralNetwork() {
     preloadProjectContent();
     
     if (!projectsToUse.length) {
-        console.log('NO PROJECTS FOUND! Showing error message.');
+        
         document.querySelectorAll('.project-grid').forEach(grid => {
             grid.innerHTML = '<p style="padding:16px;color:#9aa">Aucun projet chargé. Vérifiez data.js.</p>';
         });
         return;
     }
     
-    console.log('Projects found, proceeding with rendering...');
+    
     
     // Show loading state
     const projectGrid = document.getElementById('list-1');
@@ -2719,159 +3512,58 @@ function initializeNeuralNetwork() {
     
     // Use requestAnimationFrame for smooth rendering
     requestAnimationFrame(() => {
-        // Get all project IDs that have media (optimized filtering)
-        const projectsWithMedia = projectsToUse.filter(p => {
-            const thumbnail = getThumbnail(p.id);
-            return thumbnail !== null;
-        });
+        const projectsWithMedia = [...projectsToUse];
         
-        // Sort projects alphabetically by title for consistent ordering
+        // Sort alphabetically
         projectsWithMedia.sort((a, b) => {
             const titleA = (a.title || a.id || '').toLowerCase();
             const titleB = (b.title || b.id || '').toLowerCase();
             return titleA.localeCompare(titleB);
         });
         
-        // Create position mapping for random layout
-        // Generate positions using the same logic as positionCardOrganically but adapted
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = Math.max(window.innerHeight, 1000);
-        const margin = 80;
-        const sidebarOffset = 0; // Match the offset used in positionCardCircularly
-        const minX = 0; // Zero left padding - cards can start right at sidebar edge
-        const maxX = viewportWidth - sidebarOffset - margin; // Account for sidebar offset
-        const minY = margin;
-        const maxY = viewportHeight - margin;
+        // Compute scatter scores for all projects
+        computeAllScores(projectsWithMedia);
         
-        const organicPositions = [];
-        const usedPositions = []; // Track used positions for collision detection
-        
-        for (let i = 0; i < projectsWithMedia.length; i++) {
-            let bestPosition = null;
-            let bestScore = -1;
-            
-            // Try multiple positions to find a good organic placement (same logic as positionCardOrganically)
-            for (let attempt = 0; attempt < 50; attempt++) {
-                let x, y;
-                
-                if (attempt < 10) {
-                    // First 10 attempts: try center-biased positions within available space
-                    const centerBias = 0.3;
-                    const availableWidth = maxX - minX;
-                    const availableHeight = maxY - minY;
-                    const centerX = minX + availableWidth / 2;
-                    const centerY = minY + availableHeight / 2;
-                    
-                    x = centerX + (Math.random() - 0.5) * availableWidth * centerBias;
-                    y = centerY + (Math.random() - 0.5) * availableHeight * centerBias;
-                } else {
-                    // Remaining attempts: full random
-                    x = Math.random() * (maxX - minX) + minX;
-                    y = Math.random() * (maxY - minY) + minY;
-                }
-                
-                // Simple collision detection
-                let hasCollision = false;
-                for (const used of usedPositions) {
-                    const distance = Math.sqrt((x - used.x) ** 2 + (y - used.y) ** 2);
-                    if (distance < 120) { // Minimum distance between cards
-                        hasCollision = true;
-                        break;
-                    }
-                }
-                
-                if (!hasCollision) {
-                    const score = Math.random(); // Random score for variety
-                    if (score > bestScore) {
-                        bestScore = score;
-                        bestPosition = { x, y };
-                    }
-                }
-            }
-            
-            // If no good position found, use a random one
-            if (!bestPosition) {
-                bestPosition = {
-                    x: Math.random() * (maxX - minX) + minX,
-                    y: Math.random() * (maxY - minY) + minY
-                };
-            }
-            
-            organicPositions.push({ index: i, x: bestPosition.x, y: bestPosition.y });
-            usedPositions.push(bestPosition);
-        }
-        
-        // Sort positions by X coordinate (left to right)
-        organicPositions.sort((a, b) => a.x - b.x);
-        
-        // Store the sorted positions globally
-        window.sortedOrganicPositions = organicPositions;
-        
-        // Create mapping: first project (alphabetically) gets leftmost position, etc.
-        window.positionMapping = Array.from({length: projectsWithMedia.length}, (_, i) => i);
-        
-        // Store the sorted projects globally for the rendering function
+        // Store globally
         window.sortedProjectsWithMedia = projectsWithMedia;
         
         const allProjectIds = projectsWithMedia.map(p => p.id);
         
-        console.log('Projects with media:', projectsWithMedia.length);
-        console.log('All project IDs:', allProjectIds);
-        console.log('First 5 projects alphabetically:', projectsWithMedia.slice(0, 5).map(p => p.title));
-        console.log('First 5 positions (X sorted):', window.sortedOrganicPositions.slice(0, 5).map(p => ({ x: p.x, y: p.y })));
-        console.log('Position mapping:', window.positionMapping.slice(0, 5));
         
-        // Render all projects with media in the first section
-        console.log('About to render with project IDs:', allProjectIds.slice(0, 5));
+        
+        const gridContainer = document.getElementById('list-1');
+        if (gridContainer && window.innerWidth > 768) {
+            injectAxisLabels(gridContainer);
+        }
+        
+        // Render
         renderNeuralNetworkSection('list-1', allProjectIds);
         
-        // Initialize background image hover effect
-        initBackgroundImageHover();
-        
-// Initialize lazy loading for thumbnails
-initLazyThumbnailLoading();
-        
-        // Hide loading state - REMOVED: was clearing the actual content!
-        // if (projectGrid) {
-        //     projectGrid.innerHTML = '';
-        // }
-        
-        console.log('Neural network initialization complete');
-        
-        // Mobile positioning complete - no animations
-        console.log(`📱 Screen width: ${window.innerWidth}, mobile check: ${window.innerWidth <= 768}`);
-        if (window.innerWidth <= 768) {
-            console.log('📱 Mobile layout complete - cards positioned statically');
+        if (gridContainer && window.innerWidth > 768) {
+            setTimeout(() => injectClusterLabels(gridContainer, projectsWithMedia), 600);
         }
+        
+        initBackgroundImageHover();
+        initLazyThumbnailLoading();
+        
+        
     });
     
     // Debug removed for performance
 }
 
-// Handle window resize
+// Handle window resize -- grid is CSS-driven, just refresh connections
 let resizeTimeout;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        if (isNeuralNetworkStyle) {
-            resetPositionedCards();
-            const allBlocks = document.querySelectorAll('.project-block');
-            allBlocks.forEach((block, index) => {
-                const sizeClass = block.getAttribute('data-size');
-                if (sizeClass) {
-                    // Use shuffled position mapping for random layout to maintain alphabetical order
-                    const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
-                    positionCardCircularly(block, sizeClass, positionIndex, allBlocks.length);
-                }
-            });
-            // Update container height for masonry layout
-            updateMasonryContainerHeight();
-            // Recreate connection lines
-            setTimeout(() => {
-                createConnectionLines();
-            }, 200);
+        if (isNeuralNetworkStyle && window.sortedProjectsWithMedia) {
+            const isMobile = window.innerWidth <= 768;
+            if (!isMobile) {
+                setTimeout(() => createScatterConnectionLines(window.sortedProjectsWithMedia), 200);
+            }
         }
-    }, 100);
+    }, 200);
 });
 
 
@@ -2891,21 +3583,23 @@ function generateConcentricSquares() {
     }
 }
 
-// Parallax effect for layered dot patterns
+// Parallax effect for background SVG layers
 function initParallaxEffect() {
+    const bgLayer1 = document.querySelector('.grid-bg-layer-1');
+    const bgLayer2 = document.querySelector('.grid-bg-layer-2');
+    const bgLayer3 = document.querySelector('.grid-bg-layer-3');
     const dotLayers = document.querySelectorAll('.dot-layer');
     
-    if (!dotLayers.length) return;
+    if (!bgLayer1 && !dotLayers.length) return;
     
     let animationId;
     let mouseX = 0;
     let mouseY = 0;
     let lastUpdate = 0;
     let isActive = false;
-    const throttleMs = 8; // ~120fps for smoother animation
+    const throttleMs = 8;
     
-    // Different speeds for each layer (more subtle differences)
-    const layerSpeeds = [0.3, 0.6, 0.9]; // Very slow, slow, medium
+    const layerSpeeds = [0.3, 0.6, 0.9];
     
     function updateParallax(timestamp) {
         if (!isActive) {
@@ -2922,50 +3616,45 @@ function initParallaxEffect() {
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
         
-        // Calculate normalized mouse position (-1 to 1)
         const normalizedX = (mouseX / windowWidth) * 2 - 1;
         const normalizedY = (mouseY / windowHeight) * 2 - 1;
         
-        // Update each dot layer with different speeds - much more subtle
+        // Move dot layers if they exist
         dotLayers.forEach((layer, index) => {
             const speed = layerSpeeds[index];
-            const offsetX = normalizedX * speed * 8; // Much smaller movement range
+            const offsetX = normalizedX * speed * 8;
             const offsetY = normalizedY * speed * 8;
-            
             layer.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
         });
         
-        // No parallax for page content - only background dots move
+        // Layer 1 (grid/dots): slow -- 4px
+        if (bgLayer1) {
+            const offsetX = normalizedX * 4;
+            const offsetY = normalizedY * 3;
+            bgLayer1.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
+        }
+        // Layer 2 (rings/text/shapes): medium -- 10px
+        if (bgLayer2) {
+            const offsetX = normalizedX * 10;
+            const offsetY = normalizedY * 7;
+            bgLayer2.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
+        }
+        // Layer 3 (data paths/markers): fast -- 18px
+        if (bgLayer3) {
+            const offsetX = normalizedX * 18;
+            const offsetY = normalizedY * 12;
+            bgLayer3.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
+        }
         
-        animationId = requestAnimationFrame(updateParallax);
+        animationId = null;
     }
     
-    // Mouse move handler with lazy activation
-    let mouseThrottle = false;
+    // Mouse move handler -- single rAF per move, no infinite loop
     document.addEventListener('mousemove', function(e) {
-        if (!isActive) {
-            isActive = true;
-        }
-        
-        if (mouseThrottle) return;
-        mouseThrottle = true;
-        
-        requestAnimationFrame(() => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            mouseThrottle = false;
-        });
-        
-        if (!animationId && isActive) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        if (!animationId) {
             animationId = requestAnimationFrame(updateParallax);
-        }
-    });
-    
-    // Stop animation when mouse leaves
-    document.addEventListener('mouseleave', function() {
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
         }
     });
 }
@@ -3047,12 +3736,18 @@ function createMobileNeuralOverlay() {
     
     // Debug removed
     
-    // Add parallax scroll effect
+    // Add parallax scroll effect (throttled via rAF)
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-        const scrollY = window.pageYOffset;
-        const parallaxSpeed = 0.3;
-        overlay.style.transform = `translateY(${scrollY * parallaxSpeed}px)`;
-    });
+        if (!scrollTicking) {
+            scrollTicking = true;
+            requestAnimationFrame(() => {
+                const scrollY = window.pageYOffset;
+                overlay.style.transform = `translate3d(0, ${scrollY * 0.3}px, 0)`;
+                scrollTicking = false;
+            });
+        }
+    }, { passive: true });
 }
 
 // Animate connection text labels on scroll (mobile only)
@@ -3105,7 +3800,7 @@ function removed_animateCardPositionsOnScroll() {
     
     const cards = document.querySelectorAll('.project-block');
     if (cards.length === 0) {
-        console.log(`⚠️ No cards found for animation`);
+        
         return;
     }
     
@@ -3118,8 +3813,8 @@ function removed_animateCardPositionsOnScroll() {
     
     // Debug scroll calculation - show for first 20 scroll events
     if (scrollEventCount <= 20) {
-        console.log(`   📏 Scroll debug: scrollTop=${scrollTop}, docHeight=${docHeight}, scrollProgress=${scrollProgress.toFixed(3)}`);
-        console.log(`   📏 Document: scrollHeight=${document.documentElement.scrollHeight}, innerHeight=${window.innerHeight}`);
+        
+        
     }
     
     let cardsWithData = 0;
@@ -3132,7 +3827,7 @@ function removed_animateCardPositionsOnScroll() {
         // Validate data
         if (isNaN(initialX) || isNaN(cardWidth)) {
             if (index < 3) {
-                console.log(`⚠️ Card ${index}: Missing data - initialX=${card.dataset.initialX}, cardWidth=${card.dataset.cardWidth}`);
+                
             }
             return;
         }
@@ -3153,13 +3848,13 @@ function removed_animateCardPositionsOnScroll() {
         
         // Debug first 3 cards - show for first 20 scroll events
         if (index < 3 && scrollEventCount <= 20) {
-            console.log(`   🎯 Card ${index}: progress=${scrollProgress.toFixed(3)}, initialX=${initialX.toFixed(0)}, centeredX=${centeredX.toFixed(0)}, translateX=${translateX.toFixed(0)}`);
+            
         }
     });
     
     // Summary log
     if (scrollEventCount <= 3) {
-        console.log(`   📊 Animated ${cardsAnimated}/${cards.length} cards (${cardsWithData} have data)`);
+        
     }
 }
 
@@ -3169,14 +3864,14 @@ let scrollEventCount = 0;
 
 function removed_handleMobileScroll() {
     scrollEventCount++;
-    console.log(`🔄 SCROLL #${scrollEventCount}: scrollY=${window.pageYOffset}, viewport=${window.innerWidth}x${window.innerHeight}`);
+    
     
     if (scrollAnimationFrame) {
         return; // Already scheduled
     }
     
     scrollAnimationFrame = requestAnimationFrame(() => {
-        console.log(`   ✅ Animating text and cards for scroll #${scrollEventCount}`);
+        
         animateConnectionTextOnScroll();
         animateCardPositionsOnScroll();
         scrollAnimationFrame = null;
@@ -3187,7 +3882,7 @@ function removed_handleMobileScroll() {
 function removed_initMobileScrollListeners() {
     if (window.innerWidth > 768) return;
     
-    console.log(`📱 Initializing mobile scroll listeners...`);
+    
     
     // Remove any existing listeners to avoid duplicates
     window.removeEventListener('scroll', handleMobileScroll);
@@ -3203,7 +3898,7 @@ function removed_initMobileScrollListeners() {
     });
     
     // Run initial animation
-    console.log(`🎬 Running initial scroll animation`);
+    
     setTimeout(() => {
         handleMobileScroll();
     }, 500); // Wait for cards to be positioned
@@ -3344,12 +4039,12 @@ document.addEventListener('DOMContentLoaded', function() {
     addShapeKeyboardListener();
     
     // Add shape info to console
-    console.log('🎨 Shape Bank Available:');
+    
     Object.keys(SHAPE_BANK).forEach(shapeKey => {
-        console.log(`- ${shapeKey}: ${SHAPE_BANK[shapeKey].name}`);
+        
     });
-    console.log('⌨️ Press "S" to cycle through shapes');
-    console.log('🎲 Default: Random (Alphabetical) layout');
+    
+    
 });
 
 // Also initialize if DOM is already loaded
@@ -3385,12 +4080,12 @@ if (document.readyState === 'loading') {
     addShapeKeyboardListener();
     
     // Add shape info to console
-    console.log('🎨 Shape Bank Available:');
+    
     Object.keys(SHAPE_BANK).forEach(shapeKey => {
-        console.log(`- ${shapeKey}: ${SHAPE_BANK[shapeKey].name}`);
+        
     });
-    console.log('⌨️ Press "S" to cycle through shapes');
-    console.log('🎲 Default: Random (Alphabetical) layout');
+    
+    
 }
 
 // Regenerate squares on window resize

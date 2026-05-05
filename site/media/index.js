@@ -401,15 +401,6 @@ const mediaIndex = {
       "name": "Basel 2022",
       "files": [
         {
-          "filename": "Hek_thermal_hugoda.jpg",
-          "path": "high-res/basel-2022/Hek_thermal_hugoda.jpg",
-          "size": 0,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758832379.416943
-        },
-        {
           "filename": "Hek_thermal_hugoda.png",
           "path": "high-res/basel-2022/Hek_thermal_hugoda.png",
           "size": 150847,
@@ -545,9 +536,9 @@ const mediaIndex = {
           "last_modified": 1758832383.8107264
         }
       ],
-      "total_files": 16,
+      "total_files": 15,
       "total_size": 7856559,
-      "has_issues": true
+      "has_issues": false
     },
     "billie-eilish-2020-world-tour": {
       "name": "Billie Eilish 2020 World Tour",
@@ -560,10 +551,46 @@ const mediaIndex = {
           "extension": ".jpg",
           "hash": "high-res",
           "last_modified": 1758902351.9236064
+        },
+        {
+          "filename": "Moment_Factory_Concerts_Billie_Eilish1.19.30PM-WS.jpg",
+          "path": "high-res/billie-eilish-2020-world-tour/Moment_Factory_Concerts_Billie_Eilish1.19.30PM-WS.jpg",
+          "size": 64599,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
+        },
+        {
+          "filename": "Moment_Factory_Concerts_Billie_Eilish2.19.00PM-WS.jpg",
+          "path": "high-res/billie-eilish-2020-world-tour/Moment_Factory_Concerts_Billie_Eilish2.19.00PM-WS.jpg",
+          "size": 244549,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
+        },
+        {
+          "filename": "Moment_Factory_Concerts_Billie_Eilish3.07.26PM-WS.jpg",
+          "path": "high-res/billie-eilish-2020-world-tour/Moment_Factory_Concerts_Billie_Eilish3.07.26PM-WS.jpg",
+          "size": 82740,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
+        },
+        {
+          "filename": "Moment_Factory_Concerts_Billie_Eilish5.28.48PM-WS.jpg",
+          "path": "high-res/billie-eilish-2020-world-tour/Moment_Factory_Concerts_Billie_Eilish5.28.48PM-WS.jpg",
+          "size": 254345,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
         }
       ],
-      "total_files": 1,
-      "total_size": 436420,
+      "total_files": 5,
+      "total_size": 1082653,
       "has_issues": false
     },
     "biometric-theatre": {
@@ -774,15 +801,6 @@ const mediaIndex = {
           "last_modified": 1758902354.0421813
         },
         {
-          "filename": "collider_water_mill_2024_rlh_012_t.jpg",
-          "path": "high-res/collider/collider_water_mill_2024_rlh_012_t.jpg",
-          "size": 6439,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902353.0668464
-        },
-        {
           "filename": "collider_water_mill_2024_rlh_027.png",
           "path": "high-res/collider/collider_water_mill_2024_rlh_027.png",
           "size": 2240240,
@@ -828,9 +846,9 @@ const mediaIndex = {
           "last_modified": 1758902354.1086788
         }
       ],
-      "total_files": 10,
-      "total_size": 8228947,
-      "has_issues": true
+      "total_files": 9,
+      "total_size": 8222508,
+      "has_issues": false
     },
     "colors-of-bangkok": {
       "name": "Colors Of Bangkok",
@@ -1377,15 +1395,6 @@ const mediaIndex = {
       "name": "Hormonium",
       "files": [
         {
-          "filename": "hormonium_montreal_2022_rlh_012_t.jpg",
-          "path": "high-res/hormonium/hormonium_montreal_2022_rlh_012_t.jpg",
-          "size": 35781,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902356.2704709
-        },
-        {
           "filename": "hormonium_paris_2024_pd_001.jpg",
           "path": "high-res/hormonium/hormonium_paris_2024_pd_001.jpg",
           "size": 367230,
@@ -1422,9 +1431,9 @@ const mediaIndex = {
           "last_modified": 1758902356.417629
         }
       ],
-      "total_files": 5,
-      "total_size": 3633051,
-      "has_issues": true
+      "total_files": 4,
+      "total_size": 3597270,
+      "has_issues": false
     },
     "kontinuum": {
       "name": "Kontinuum",
@@ -1537,15 +1546,6 @@ const mediaIndex = {
           "last_modified": 1758825315.9906397
         },
         {
-          "filename": "kristallstimmen_2024_wattens_sk_029_t.jpg",
-          "path": "high-res/kristallstimmen/kristallstimmen_2024_wattens_sk_029_t.jpg",
-          "size": 825308,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902356.8772256
-        },
-        {
           "filename": "kristallstimmen_2024_wattens_sk_086.png",
           "path": "high-res/kristallstimmen/kristallstimmen_2024_wattens_sk_086.png",
           "size": 1901282,
@@ -1573,9 +1573,9 @@ const mediaIndex = {
           "last_modified": 1758902356.9877803
         }
       ],
-      "total_files": 7,
-      "total_size": 9091604,
-      "has_issues": true
+      "total_files": 6,
+      "total_size": 8266296,
+      "has_issues": false
     },
     "listening-forest": {
       "name": "Listening Forest",
@@ -1660,19 +1660,10 @@ const mediaIndex = {
           "extension": ".jpg",
           "hash": "high-res",
           "last_modified": 1758832412.2014818
-        },
-        {
-          "filename": "thermal_drift_bentonville_2022_er_003_t.jpg",
-          "path": "high-res/listening-forest/thermal_drift_bentonville_2022_er_003_t.jpg",
-          "size": 13059,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902359.4898224
         }
       ],
-      "total_files": 10,
-      "total_size": 3583174,
+      "total_files": 9,
+      "total_size": 3570115,
       "has_issues": false
     },
     "nova-lumina": {
@@ -1801,11 +1792,47 @@ const mediaIndex = {
           "extension": ".jpg",
           "hash": "high-res",
           "last_modified": 1758901984.1947687
+        },
+        {
+          "filename": "01._test-interactive-basketball-court-5-960x670.jpg",
+          "path": "high-res/panasonic-augmented-basketball-court/01._test-interactive-basketball-court-5-960x670.jpg",
+          "size": 121646,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
+        },
+        {
+          "filename": "test-interactive-basketball-court-2_7d83939e-bdfe-46d8-b1f2-70fd5bed9da3.jpg",
+          "path": "high-res/panasonic-augmented-basketball-court/test-interactive-basketball-court-2_7d83939e-bdfe-46d8-b1f2-70fd5bed9da3.jpg",
+          "size": 194952,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
+        },
+        {
+          "filename": "test-interactive-basketball-court-8-960x523.jpg",
+          "path": "high-res/panasonic-augmented-basketball-court/test-interactive-basketball-court-8-960x523.jpg",
+          "size": 131248,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
+        },
+        {
+          "filename": "test-interactive-basketball-court-821x960.jpg",
+          "path": "high-res/panasonic-augmented-basketball-court/test-interactive-basketball-court-821x960.jpg",
+          "size": 113411,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
         }
       ],
-      "total_files": 1,
-      "total_size": 167054,
-      "has_issues": true
+      "total_files": 5,
+      "total_size": 728311,
+      "has_issues": false
     },
     "recurrent-first-dream": {
       "name": "Recurrent First Dream",
@@ -2192,15 +2219,6 @@ const mediaIndex = {
       "name": "Spectral Subjects",
       "files": [
         {
-          "filename": "spectral_subjects_jacksonville_2024_de_025.jpg",
-          "path": "high-res/spectral-subjects/spectral_subjects_jacksonville_2024_de_025.jpg",
-          "size": 0,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758832421.0100749
-        },
-        {
           "filename": "spectral_subjects_jacksonville_2024_de_025.png",
           "path": "high-res/spectral-subjects/spectral_subjects_jacksonville_2024_de_025.png",
           "size": 8973530,
@@ -2208,15 +2226,6 @@ const mediaIndex = {
           "extension": ".png",
           "hash": "high-res",
           "last_modified": 1757366450.3187432
-        },
-        {
-          "filename": "spectral_subjects_montreal_2025_RLH_001.jpg",
-          "path": "high-res/spectral-subjects/spectral_subjects_montreal_2025_RLH_001.jpg",
-          "size": 0,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758832422.9172957
         },
         {
           "filename": "spectral_subjects_montreal_2025_RLH_001.png",
@@ -2237,22 +2246,13 @@ const mediaIndex = {
           "last_modified": 1757366452.4985597
         }
       ],
-      "total_files": 5,
+      "total_files": 3,
       "total_size": 28371664,
-      "has_issues": true
+      "has_issues": false
     },
     "sync": {
       "name": "Sync",
       "files": [
-        {
-          "filename": "1.jpg",
-          "path": "high-res/sync/1.jpg",
-          "size": 0,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758832427.7311783
-        },
         {
           "filename": "1.png",
           "path": "high-res/sync/1.png",
@@ -2261,15 +2261,6 @@ const mediaIndex = {
           "extension": ".png",
           "hash": "high-res",
           "last_modified": 1684442091.4211497
-        },
-        {
-          "filename": "37.jpg",
-          "path": "high-res/sync/37.jpg",
-          "size": 0,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758832428.7815926
         },
         {
           "filename": "37.png",
@@ -2290,9 +2281,9 @@ const mediaIndex = {
           "last_modified": 1684444485.1994455
         }
       ],
-      "total_files": 5,
+      "total_files": 3,
       "total_size": 23931583,
-      "has_issues": true
+      "has_issues": false
     },
     "tabegami-sama": {
       "name": "Tabegami Sama",
@@ -2582,19 +2573,10 @@ const mediaIndex = {
           "extension": ".jpg",
           "hash": "high-res",
           "last_modified": 1758832436.38388
-        },
-        {
-          "filename": "thermal_drift_madrid_2023_rlh_006_t.jpg",
-          "path": "high-res/thermal-drift/thermal_drift_madrid_2023_rlh_006_t.jpg",
-          "size": 6118,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.918946
         }
       ],
-      "total_files": 8,
-      "total_size": 1831204,
+      "total_files": 7,
+      "total_size": 1825086,
       "has_issues": false
     },
     "translation-island": {
@@ -2712,6 +2694,191 @@ const mediaIndex = {
       "total_files": 12,
       "total_size": 20197135,
       "has_issues": true
+    },
+    "deriva-termica-beti-jai": {
+      "name": "Deriva Termica Beti Jai",
+      "files": [
+        {
+          "filename": "thermal_drift_madrid_2026_ev_002.jpg",
+          "path": "high-res/deriva-termica-beti-jai/thermal_drift_madrid_2026_ev_002.jpg",
+          "size": 260711,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018597
+        },
+        {
+          "filename": "thermal_drift_madrid_2026_ev_004.jpg",
+          "path": "high-res/deriva-termica-beti-jai/thermal_drift_madrid_2026_ev_004.jpg",
+          "size": 302668,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018600
+        },
+        {
+          "filename": "thermal_drift_madrid_2026_ev_006.jpg",
+          "path": "high-res/deriva-termica-beti-jai/thermal_drift_madrid_2026_ev_006.jpg",
+          "size": 235509,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018637
+        },
+        {
+          "filename": "thermal_drift_madrid_2026_ev_008.jpg",
+          "path": "high-res/deriva-termica-beti-jai/thermal_drift_madrid_2026_ev_008.jpg",
+          "size": 179124,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018641
+        },
+        {
+          "filename": "thermal_drift_madrid_2026_rlh_002.jpg",
+          "path": "high-res/deriva-termica-beti-jai/thermal_drift_madrid_2026_rlh_002.jpg",
+          "size": 283679,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018644
+        }
+      ],
+      "total_files": 5,
+      "total_size": 1261691,
+      "has_issues": false
+    },
+    "jardin-inconcluso": {
+      "name": "Jardin Inconcluso",
+      "files": [
+        {
+          "filename": "jardin_inconcluso_pulse_garden_001.jpg",
+          "path": "high-res/jardin-inconcluso/jardin_inconcluso_pulse_garden_001.jpg",
+          "size": 269004,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018603
+        },
+        {
+          "filename": "jardin_inconcluso_resurgent_streams_001.jpg",
+          "path": "high-res/jardin-inconcluso/jardin_inconcluso_resurgent_streams_001.jpg",
+          "size": 358108,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018607
+        },
+        {
+          "filename": "jardin_inconcluso_spiral_reflector_001.jpg",
+          "path": "high-res/jardin-inconcluso/jardin_inconcluso_spiral_reflector_001.jpg",
+          "size": 238620,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018615
+        },
+        {
+          "filename": "jardin_inconcluso_thermal_drift_001.jpg",
+          "path": "high-res/jardin-inconcluso/jardin_inconcluso_thermal_drift_001.jpg",
+          "size": 459536,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018647
+        }
+      ],
+      "total_files": 4,
+      "total_size": 1325268,
+      "has_issues": false
+    },
+    "translation-stream-al-ain": {
+      "name": "Translation Stream Al Ain",
+      "files": [
+        {
+          "filename": "translation_stream_al_ain_2025_dct_1.jpg",
+          "path": "high-res/translation-stream-al-ain/translation_stream_al_ain_2025_dct_1.jpg",
+          "size": 415452,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018541
+        },
+        {
+          "filename": "translation_stream_al_ain_2025_dct_3.jpg",
+          "path": "high-res/translation-stream-al-ain/translation_stream_al_ain_2025_dct_3.jpg",
+          "size": 264720,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018542
+        },
+        {
+          "filename": "translation_stream_al_ain_2025_dct_5.jpg",
+          "path": "high-res/translation-stream-al-ain/translation_stream_al_ain_2025_dct_5.jpg",
+          "size": 422834,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018542
+        }
+      ],
+      "total_files": 3,
+      "total_size": 1103006,
+      "has_issues": false
+    },
+    "undercurrents": {
+      "name": "Undercurrents",
+      "files": [
+        {
+          "filename": "undercurrents_houston_2026_ne_001.jpg",
+          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_001.jpg",
+          "size": 200738,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018560
+        },
+        {
+          "filename": "undercurrents_houston_2026_ne_004.jpg",
+          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_004.jpg",
+          "size": 232207,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018564
+        },
+        {
+          "filename": "undercurrents_houston_2026_ne_006.jpg",
+          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_006.jpg",
+          "size": 124671,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018569
+        },
+        {
+          "filename": "undercurrents_houston_2026_ne_009.jpg",
+          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_009.jpg",
+          "size": 151568,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018589
+        },
+        {
+          "filename": "undercurrents_houston_2026_ne_011.jpg",
+          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_011.jpg",
+          "size": 132680,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778018593
+        }
+      ],
+      "total_files": 5,
+      "total_size": 841864,
+      "has_issues": false
     }
   }
 };
@@ -2719,8 +2886,8 @@ const mediaIndex = {
 // Enhanced metadata exports for debugging
 mediaIndex.validation = {
     "original_media_projects": 37,
-    "high_res_projects": 38,
-    "total_files_in_high_res": 267,
+    "high_res_projects": 42,
+    "total_files_in_high_res": 282,
     "has_consistency_issues": true
 };
 
