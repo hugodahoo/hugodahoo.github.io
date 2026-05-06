@@ -34,10 +34,9 @@ body {
 body.neural-network-style {
     background: #2d7054;
     color: #ffffff;
-    min-height: 100vh;
+    height: 100vh;
     position: relative;
-    overflow-x: visible;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 
@@ -102,10 +101,9 @@ body.neural-network-style {
 
 /* Main container */
 .main-container {
-    min-height: 100vh;
+    height: 100vh;
     position: relative;
-    overflow-x: visible; /* Allow hover effects to extend horizontally */
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .project-section {
@@ -122,7 +120,9 @@ body.neural-network-style {
 .project-grid {
     position: relative;
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
     display: block;
     padding-bottom: 0;
     cursor: crosshair;
@@ -189,9 +189,6 @@ body.hover-as-default .project-block .block-surface {
     left: -50px;
     right: -50px;
     bottom: -50px;
-    box-shadow:
-        0 20px 40px rgba(0,0,0,0.45),
-        0 0 30px rgba(255,255,255,0.12);
 }
 
 /* Side panel for image preview (desktop only) - DISABLED */
@@ -432,24 +429,26 @@ header:not(.mobile-header) {
 }
 
 .mobile-header {
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.5rem;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background: #90EE90;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 99999;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
     display: flex !important;
     visibility: visible;
     opacity: 1;
     align-items: center;
     justify-content: space-between;
-    height: 84px; /* 5% higher than 80px */
+    height: 60px;
 }
 
 header a {
-    color: #90EE90;
+    color: #333;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 300;
@@ -458,7 +457,7 @@ header a {
 }
 
 header a:hover {
-    color: #ffffff;
+    color: #000;
 }
 
 /* Add padding to main content to account for fixed header */
@@ -713,6 +712,40 @@ body::-webkit-scrollbar-thumb:hover {
 .project-overlay .project-title-bar {
     padding: 2rem 2rem 1.5rem 2rem;
     border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+}
+
+.back-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    background: none;
+    color: #555;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    margin-top: 0.2rem;
+    padding: 0;
+    line-height: 1;
+}
+
+.back-arrow:hover {
+    border-color: #333;
+    color: #111;
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.project-title-bar-text {
+    flex: 1;
+    min-width: 0;
 }
 
 .project-overlay .project-title-bar-name {
@@ -1198,20 +1231,20 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .detail-card {
-    background: rgba(0, 0, 0, 0.02);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(0, 0, 0, 0.025);
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 6px;
-    padding: 1.2rem 1.4rem;
+    padding: 1.4rem 1.6rem;
 }
 
 .detail-card h3 {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
-    font-weight: 500;
+    font-size: 0.7rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #888;
-    margin: 0 0 0.8rem 0;
+    color: #666;
+    margin: 0 0 1rem 0;
     padding-bottom: 0.6rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
@@ -1226,11 +1259,11 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .detail-card li {
-    font-family: 'Source Serif 4', 'Georgia', serif;
-    font-size: 0.82rem;
-    line-height: 1.6;
-    color: #3a3a3a;
-    margin-bottom: 0.35rem;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: #2a2a2a;
+    margin-bottom: 0.5rem;
     padding-left: 0;
 }
 
@@ -1336,6 +1369,14 @@ body::-webkit-scrollbar-thumb:hover {
     
     .project-overlay .project-title-bar {
         padding: 1.5rem 1rem 1rem 1rem;
+        gap: 1rem;
+    }
+
+    .back-arrow {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        font-size: 1rem;
     }
     
     .project-overlay .project-title-bar-name {
@@ -1470,7 +1511,8 @@ body::-webkit-scrollbar-thumb:hover {
     width: calc(100% - 220px);
     margin-left: 210px;
     height: calc(100vh - 20px);
-    padding: 10px 10px 10px 10px;
+    padding: 30px 10px 10px 10px;
+    margin-top: 10px;
     box-sizing: border-box;
 }
 
@@ -1720,10 +1762,27 @@ body::-webkit-scrollbar-thumb:hover {
     z-index: 10;
 }
 
-/* Mobile: collapse grid to vertical list */
+/* Mobile: responsive grid */
 @media (max-width: 768px) {
     .radar-grid-wrapper {
-        display: none;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+        gap: 2px;
+        width: 100%;
+        margin-left: 0;
+        height: auto;
+        padding: 68px 0 0 0;
+        margin-top: 0;
+        align-content: start;
+    }
+    .radar-grid-wrapper .project-block {
+        aspect-ratio: 4 / 3;
+    }
+    .radar-grid-wrapper .project-block.featured-project {
+        grid-column: span 2;
+        grid-row: auto;
+        aspect-ratio: 16 / 9;
     }
     .grid-bg-svg {
         display: none;
@@ -1732,6 +1791,12 @@ body::-webkit-scrollbar-thumb:hover {
     .scatter-crosshair,
     .cluster-label {
         display: none;
+    }
+    .grid-filler-invisible {
+        display: none;
+    }
+    .radar-grid-wrapper {
+        grid-auto-flow: dense;
     }
 }
 
@@ -1883,24 +1948,18 @@ body.hover-as-default .project-block .project-hover-text {
     to { opacity: 1; transform: translate3d(-50%, -50%, 0) scale(1); }
 }
 
-/* Path hover highlighting effect */
+/* 3D drop shadow on hover -- offset rectangle */
 
 .project-block:hover::before {
     content: '';
     position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 0px;
+    top: -42px;
+    left: -42px;
+    right: -58px;
+    bottom: -58px;
+    background: rgba(144, 238, 144, 0.25);
     z-index: -1;
-    animation: glowPulse 3s ease-in-out infinite alternate;
-}
-
-@keyframes glowPulse {
-    from { opacity: 0.4; }
-    to { opacity: 0.7; }
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Block surface */
@@ -2205,16 +2264,19 @@ body.hover-as-default .project-block .thumbnail-overlay {
 /* Mobile Navigation Menu */
 .mobile-nav-menu {
     position: fixed;
-    top: 84px;
+    top: 60px;
     left: 0;
     right: 0;
-    background: #90EE90;
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 99998;
     padding: 20px;
     transform: translateY(-100%);
     transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
     opacity: 0;
     visibility: hidden;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .mobile-nav-menu.open {
@@ -2281,6 +2343,32 @@ body.hover-as-default .project-block .thumbnail-overlay {
     opacity: 0.7;
 }
 
+.nav-identity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.nav-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.nav-location {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.3);
+}
+
 .nav-social {
     display: flex;
     gap: 12px;
@@ -2315,272 +2403,69 @@ body.hover-as-default .project-block .thumbnail-overlay {
     transform: rotate(-45deg) translate(7px, -6px);
 }
 
-/* Mobile adaptations - Clean 2-column grid layout */
+/* Mobile adaptations — consolidated */
 @media (max-width: 768px) {
     .mobile-header {
         display: flex;
     }
-    
-    /* Show mobile header on project pages too */
     body .mobile-header {
         display: flex;
     }
-    
+
+    .vertical-name {
+        writing-mode: horizontal-tb;
+        transform: none;
+    }
+    .vertical-name span {
+        font-size: 13px;
+        letter-spacing: 4px;
+    }
+
     .project-section {
-        padding-top: 0px; /* Cards right after header */
-        overflow-x: visible; /* Allow hover effects to extend horizontally */
+        padding: 68px 0 0 0;
         position: relative;
+        overflow: visible;
     }
-    
+
     .project-grid {
-        overflow: visible; /* Allow cards to extend beyond container */
-        position: relative;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        padding: 0;
     }
+
     .project-block {
-            /* Allow JavaScript to control width for dynamic offscreen sizing */
-            max-width: none !important;
-        padding: 0 !important; /* Remove padding to allow thumbnail to fill entire card */
+        padding: 0 !important;
         box-sizing: border-box;
-        /* Better touch targets */
         touch-action: manipulation;
-        /* Clean grid design */
-        border-radius: 0px;
+        border-radius: 0;
         box-shadow: none;
         border: none;
-        transition: all 0.2s ease;
-        /* Ensure no overlapping */
-        position: absolute;
-        overflow: visible !important;
+        overflow: hidden;
     }
-    
-        /* Override desktop size classes on mobile */
-        .project-block.small,
-        .project-block.medium,
-        .project-block.large,
-        .project-block.xlarge {
-            /* Allow JavaScript to control width for dynamic offscreen sizing */
-            max-width: none !important;
-    }
-    
+
     .project-block:hover,
     .project-block:active {
-        transform: translateZ(10px) scale(1.02); /* Subtle scale for mobile */
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        /* Enhanced for touch */
-        cursor: pointer;
     }
-    
-    /* Hide neural network connections on mobile grid */
+
     .connection-path {
         display: none !important;
     }
-    
-    /* Mobile project titles - positioned on top of cards */
-    .project-block .project-title {
-        position: absolute;
-        top: -25px;
-        left: 0;
-        right: 0;
-        font-size: 11px;
-        line-height: 1.2;
-        font-weight: 600;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        text-align: center;
-        color: #2c2c2c;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 4px 8px;
-        border-radius: 4px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        z-index: 10;
-    }
-    
-    /* Mobile thumbnail sizing - fill entire card */
-        .project-block .block-surface {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 0px;
-            overflow: hidden;
-            /* Preserve category background colors for blend mode effect */
-            background: inherit;
-        }
-    
-    .project-block .thumbnail-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        background: transparent;
-        /* Override desktop styles */
-        opacity: 1 !important;
-        mix-blend-mode: normal !important;
-        background-size: unset !important;
-        background-position: unset !important;
-        background-repeat: unset !important;
-    }
-    
-    .project-block .thumbnail-overlay img {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-            border-radius: 0px !important;
-        z-index: 1 !important;
-        max-width: none !important;
-        max-height: none !important;
-        /* Color overlay effect */
-        mix-blend-mode: multiply !important;
-        opacity: 0.8 !important;
-        min-width: 100% !important;
-        min-height: 100% !important;
-    }
-    
-    /* Hide other elements on mobile to let thumbnail fill the card */
+
     .project-block .project-hover-text {
         display: none;
     }
-    
-    /* Show block titles as project titles above cards */
-        .project-block .block-title {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            line-height: 1.2;
-            font-weight: 400;
-            text-align: left;
-            color: #ffffff;
-            background: transparent;
-            padding: 0;
-            border-radius: 0px;
-            white-space: nowrap;
-            overflow: visible;
-            text-overflow: clip;
-            z-index: 25;
-            display: block !important;
-            min-height: auto;
-            border-left: none;
-            box-shadow: none;
-        }
-        
-        .project-block .block-title::before {
-            content: attr(data-number);
-            display: inline-block;
-            margin-right: 8px;
-            font-weight: 600;
-        }
-        
-        /* Smooth transition for JavaScript-controlled position */
-        .project-block {
-            transition: transform 0.1s ease-out;
-        }
-        
-        /* Ensure parent cards have absolute positioning for masonry grid */
-        .project-block {
-            position: absolute !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            box-sizing: border-box !important;
-            transform: none !important;
-        }
-    
-    /* Ensure touch-friendly spacing and title space */
-    .project-section {
-        padding: 100px 0px 15px 0px; /* Reduced space for mobile header */
-        /* No need for extra height since cards are positioned absolutely */
-        min-height: 100vh; /* Match viewport height */
-        height: auto;
-        overflow: visible;
-    }
-    
-    /* Ensure main container allows scrolling */
-    .main-container {
-        height: auto !important;
-        min-height: 100vh;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-    
-    /* Better navigation on mobile */
-    body.neural-network-style {
-        overflow-x: hidden;
-        overflow-y: auto; /* Allow vertical scrolling */
-    }
-    
-    .connection-path {
-        display: none;
-    }
-    
-    .unwrapped-content h2 {
-        font-size: 16px;
-    }
-    
-    .unwrapped-content .meta {
-        font-size: 13px;
-    }
-    
-    .unwrapped-content .client {
-        font-size: 12px;
-    }
-    
-    .unwrapped-content .tech {
-        font-size: 11px;
-    }
-    
-    .unwrapped-content .description {
-        font-size: 12px;
-    }
-    
-    .unwrapped-content .year {
-        font-size: 11px;
-    }
-    
-}
 
-/* Hide side panel on mobile */
-@media (max-width: 768px) {
-    /* Image preview panel mobile - DISABLED */
-    /*
-    .image-preview-panel {
-        display: none;
+    .project-block .block-title {
+        font-size: 9px;
     }
-    */
-}
 
-/* Responsive viewport handling */
-@media (max-width: 1200px) {
-    .project-grid {
-        min-height: 120vh;
-    }
-    
-}
-
-@media (max-width: 900px) {
-}
-
-@media (max-width: 768px) {
-    .project-grid {
-        /* Let JavaScript calculate the proper height */
-        min-height: auto;
-        height: auto;
-        /* Ensure grid layout works */
-        padding: 30px 15px;
-        box-sizing: border-box;
-    }
-    
-    /* Make sure scrolling works well on mobile */
-    .main-container {
-        overflow-y: auto;
-        overflow-x: hidden;
-        height: 100vh;
-        -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+    .project-block .thumbnail-overlay img {
+        object-fit: cover !important;
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 0 !important;
     }
 }
 
@@ -2589,21 +2474,41 @@ html {
     scroll-behavior: smooth;
 }
 
+html.no-scroll,
+html.no-scroll body {
+    overflow: hidden !important;
+    height: 100vh;
+}
+
+@media (max-width: 768px) {
+    html.no-scroll,
+    html.no-scroll body {
+        overflow-y: auto !important;
+        height: auto;
+    }
+    body.neural-network-style {
+        height: auto;
+        overflow-y: auto;
+    }
+    .main-container {
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+    .project-grid {
+        height: auto;
+        max-height: none;
+        overflow: visible;
+    }
+}
+
 body.neural-network-style::-webkit-scrollbar {
-    width: 8px;
+    display: none;
 }
 
-body.neural-network-style::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.1);
-}
-
-body.neural-network-style::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
-    border-radius: 4px;
-}
-
-body.neural-network-style::-webkit-scrollbar-thumb:hover {
-    background: rgba(255,255,255,0.5);
+body.neural-network-style {
+    scrollbar-width: none;
 }
 
 /* Performance Optimizations -- promote only on interaction */
@@ -2706,16 +2611,13 @@ body.neural-network-style::-webkit-scrollbar-thumb:hover {
     .project-block.xlarge { width: 128px !important; height: 96px !important; }
     
     .project-grid {
-        overflow: visible; /* Allow cards to extend beyond container */
+        overflow: hidden;
         position: relative;
     }
     
-    /* Ensure main container allows scrolling */
     .main-container {
-        height: auto !important;
-        min-height: 100vh;
-        overflow-y: auto;
-        overflow-x: hidden;
+        height: 100vh !important;
+        overflow: hidden !important;
     }
     
     /* Desktop thumbnail styling */
@@ -2725,16 +2627,10 @@ body.neural-network-style::-webkit-scrollbar-thumb:hover {
         left: 0 !important;
         width: 100% !important;
         height: 100% !important;
-        object-fit: cover !important; /* Fill card completely, crop if needed */
-        object-position: center !important; /* Center the crop */
+        object-fit: cover !important;
+        object-position: center !important;
         border-radius: 0px !important;
         z-index: 1 !important;
         opacity: 1.0 !important;
-    }
-    
-    /* Make sure scrolling works well on desktop */
-    .main-container {
-        overflow-y: auto;
-        overflow-x: visible; /* Allow hover effects to extend horizontally */
     }
 }

@@ -695,10 +695,7 @@ function renderGridLayout(container, allProjects) {
     const grid = Array.from({ length: G }, () => Array(G).fill(null));
     const occupied = Array.from({ length: G }, () => Array(G).fill(false));
 
-    grid[G - 1][G - 1] = { project: sorted[sorted.length - 1], featured: false };
-    occupied[G - 1][G - 1] = true;
-
-    const remaining = sorted.slice(0, -1);
+    const remaining = sorted;
     let pi = 0;
 
     for (let r = 0; r < G && pi < remaining.length; r++) {
@@ -1087,11 +1084,6 @@ const SHAPE_BANK = {
             const viewportWidth = window.innerWidth;
             const viewportHeight = Math.max(window.innerHeight, 1000);
             
-            // Mobile-first layout: use grid on small screens
-            if (window.innerWidth <= 768) {
-                return calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight);
-            }
-            
             // Desktop: Random positioning with some structure
             const margin = 100;
             const availableWidth = viewportWidth - (margin * 2);
@@ -1142,8 +1134,6 @@ function changeShape(shapeName) {
                 const positionIndex = (currentShape === 'random' && window.positionMapping) ? window.positionMapping[index] : index;
                 positionCardCircularly(block, sizeClass, positionIndex, allBlocks.length);
             });
-            // Update container height for masonry layout
-            updateMasonryContainerHeight();
         }
     }
 }
@@ -1184,8 +1174,6 @@ function addShapeKeyboardListener() {
                 const totalCards = allBlocks.length;
                 positionCardCircularly(block, sizeClass, index, totalCards);
             });
-            // Update container height for masonry layout
-            updateMasonryContainerHeight();
         }
     }, 250));
     
@@ -1206,11 +1194,7 @@ function debounce(func, wait) {
     };
 }
 
-// Handle window resize for mobile neural overlay
-window.addEventListener('resize', debounce(() => {
-    // Recreate mobile neural overlay on resize
-    createMobileNeuralOverlay();
-}, 250));
+// (Mobile neural overlay resize handler removed)
 
 // Mobile navigation functionality
 function initializeMobileNavigation() {
@@ -1386,108 +1370,7 @@ function positionCardOrganically(index, totalCards) {
     return bestPosition;
 }
 
-// Mobile grid positioning - true masonry layout with proper spacing
-function calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions) {
-    // Mobile: Single column with comfortable spacing
-    const margin = 0; // No top margin - cards start right after header
-    const cardSpacing = 25; // Spacing between cards
-    const cardWidth = dimensions.width;
-    const cardHeight = dimensions.height;
-    
-    // Debug: Log the parameters
-    if (index === 0) {
-        // Debug removed for performance
-    }
-    
-    // Single column layout - all cards with dramatic horizontal offset
-    if (index === 0) {
-        window.mobileColumnY = margin; // Start with top margin
-        // Debug removed
-    }
-    
-    // Calculate controlled horizontal offset - alternating left/right with max 2 consecutive
-    const availableSpace = viewportWidth - cardWidth; // Space when card is fully visible (~36% of viewport)
-    
-    if (index === 0) {
-        // Debug removed
-        window.mobileOffsetHistory = []; // Track last 2 positions
-    }
-    
-    // Determine if we can repeat the same position (max 2 in a row)
-    const lastTwo = window.mobileOffsetHistory.slice(-2);
-    const canGoLeft = !(lastTwo.length === 2 && lastTwo[0] === 'left' && lastTwo[1] === 'left');
-    const canGoRight = !(lastTwo.length === 2 && lastTwo[0] === 'right' && lastTwo[1] === 'right');
-    
-    let randomOffset;
-    let position;
-    
-    // Choose left or right, avoiding 3 in a row
-    if (!canGoLeft && canGoRight) {
-        // Must go right (already 2 lefts in a row)
-        position = 'right';
-    } else if (!canGoRight && canGoLeft) {
-        // Must go left (already 2 rights in a row)
-        position = 'left';
-    } else {
-        // Can go either way - random choice
-        position = Math.random() > 0.5 ? 'left' : 'right';
-    }
-    
-    if (position === 'left') {
-        // Extend beyond LEFT edge (negative X)
-        randomOffset = -(30 + Math.random() * 60); // -30 to -90px (goes offscreen left)
-    } else {
-        // Extend beyond RIGHT edge (large positive X)
-        randomOffset = availableSpace + (30 + Math.random() * 60); // Push card right so it extends offscreen
-    }
-    
-    // Track this position
-    window.mobileOffsetHistory.push(position);
-    
-    // Calculate X position - offset directly
-    const x = randomOffset;
-    
-    // Calculate Y position - stack vertically with spacing
-    const y = window.mobileColumnY;
-    
-    // Update Y position for next card (add height of this card + spacing)
-    window.mobileColumnY = y + cardHeight + cardSpacing;
-    
-    // Debug logging removed for performance
-    
-    // Store the calculated dimensions for CSS consistency
-    window.mobileCardWidth = cardWidth;
-    window.mobileCardHeight = cardHeight;
-    window.mobileCardSpacing = cardSpacing;
-    window.mobileMargin = margin;
-    
-    // Update CSS custom properties for exact positioning
-    if (index === 0) { // Only update once per layout
-        document.documentElement.style.setProperty('--mobile-card-width', `${Math.floor(cardWidth)}px`);
-        document.documentElement.style.setProperty('--mobile-card-spacing', `${cardSpacing}px`);
-        document.documentElement.style.setProperty('--mobile-margin', `${margin}px`);
-        
-        // Container height will be calculated after all cards are processed
-        
-        // Debug removed for performance
-    }
-    
-    return { x, y };
-}
-
-// Calculate and set container height for masonry layout
-function updateMasonryContainerHeight() {
-    if (window.innerWidth <= 768 && window.mobileColumnHeights) {
-        const margin = 16;
-        const maxColumnHeight = Math.max(...window.mobileColumnHeights);
-        const totalHeight = maxColumnHeight + margin + 100; // Increased padding for proper scroll ending
-        const projectGrid = document.querySelector('.project-grid');
-        if (projectGrid) {
-            projectGrid.style.minHeight = `${totalHeight}px`;
-            // Debug removed
-        }
-    }
-}
+// (calculateMobileGridPosition and updateMasonryContainerHeight retired — mobile uses CSS grid now)
 
 
 // Calculate position based on current shape
@@ -1544,44 +1427,7 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
     
     let position;
     
-    // Mobile: Use grid layout for all shapes
-    if (window.innerWidth <= 768) {
-        position = calculateMobileGridPosition(index, totalCards, viewportWidth, viewportHeight, dimensions);
-    // Debug removed for performance
-        
-        // Enhanced debug for card positioning and sizing
-        setTimeout(() => {
-            const allCards = document.querySelectorAll('.project-block');
-            const card = allCards[index];
-            if (card) {
-                const cardRect = card.getBoundingClientRect();
-                const computedStyle = getComputedStyle(card);
-                const thumbnail = card.querySelector('.thumbnail-overlay');
-                const img = thumbnail?.querySelector('img');
-                const blockSurface = card.querySelector('.block-surface');
-                
-                // Debug removed for performance
-                
-                // Check for overlaps with other cards (desktop only - mobile uses perfect grid)
-                if (window.innerWidth > 768) {
-                    const otherCards = Array.from(allCards).filter((c, i) => i !== index);
-                    const overlaps = otherCards.filter(otherCard => {
-                        const otherRect = otherCard.getBoundingClientRect();
-                        return !(cardRect.right <= otherRect.left || 
-                               cardRect.left >= otherRect.right || 
-                               cardRect.bottom <= otherRect.top || 
-                               cardRect.top >= otherRect.bottom);
-                    });
-                    
-                    if (overlaps.length > 0) {
-                        // Debug removed
-                    }
-                }
-            }
-        }, 1000 + index * 100); // Stagger debug logs
-        
-        // No need to store positioned cards for grid layout
-    } else if (currentShape === 'random') {
+    if (currentShape === 'random') {
         // Use pre-sorted organic positions (sorted by X coordinate)
         if (window.sortedOrganicPositions && window.sortedOrganicPositions[index]) {
             position = { x: window.sortedOrganicPositions[index].x, y: window.sortedOrganicPositions[index].y };
@@ -2563,8 +2409,11 @@ function generateProjectHTML(project, mediaIndex) {
             </header>
             
             <div class="project-title-bar">
-                <h2 class="project-title-bar-name">${formatTitleWithItalics(project.title)}</h2>
-                <p class="project-title-bar-meta">${[project.year, project.client].filter(Boolean).join(" · ")}</p>
+                <button class="back-arrow" onclick="closeProjectOverlay()" aria-label="Back to projects">&larr;</button>
+                <div class="project-title-bar-text">
+                    <h2 class="project-title-bar-name">${formatTitleWithItalics(project.title)}</h2>
+                    <p class="project-title-bar-meta">${[project.year, project.client].filter(Boolean).join(" · ")}</p>
+                </div>
             </div>
             
             <div class="project-content">
@@ -3087,13 +2936,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         
         const isMobile = window.innerWidth <= 768;
 
-        if (isMobile) {
-            const projectMap = new Map();
-            orderedProjects.forEach(p => projectMap.set(p.id, p));
-            positionMobileScatter(blocks, orderedProjects, projectMap);
-        } else {
-            renderGridLayout(list, orderedProjects);
-        }
+        renderGridLayout(list, orderedProjects);
 
         refreshParallaxEffect();
 
@@ -3376,92 +3219,7 @@ function injectClusterLabels(container, allProjects) {
     });
 }
 
-// ── Mobile Scatter Layout ────────────────────────────────────────────────────
-
-function positionMobileScatter(blocks, orderedProjects, projectMap) {
-    // Group projects into 4 quadrants
-    const quadrants = {
-        'responsive-spatial':  { label: '', projects: [] },
-        'responsive-digital':  { label: '', projects: [] },
-        'generative-spatial':  { label: '', projects: [] },
-        'generative-digital':  { label: '', projects: [] }
-    };
-
-    orderedProjects.forEach(p => {
-        const s = p._scores || { x: 0.5, y: 0.5 };
-        const xKey = s.x < 0.5 ? 'responsive' : 'generative';
-        const yKey = s.y >= 0.5 ? 'spatial' : 'digital';
-        quadrants[xKey + '-' + yKey].projects.push(p);
-    });
-
-    // Layout: featured first at top, then quadrant groups
-    const vw = window.innerWidth;
-    const cardWidth = vw * 0.85;
-    const cardHeight = 90;
-    const featuredHeight = 120;
-    const gap = 12;
-    let y = 20;
-
-    // Featured projects first
-    blocks.forEach(block => {
-        const pid = block.getAttribute('data-project-id');
-        const proj = projectMap.get(pid);
-        if (!proj || !proj.featured) return;
-
-        block.style.left = ((vw - cardWidth * 1.0) / 2) + 'px';
-        block.style.top = y + 'px';
-        block.style.width = (cardWidth * 1.0) + 'px';
-        block.style.height = featuredHeight + 'px';
-        block.classList.add('featured-project');
-        block._w = cardWidth;
-        block._h = featuredHeight;
-        y += featuredHeight + gap;
-        setTimeout(() => block.classList.add('loaded'), 50);
-    });
-
-    y += 20;
-
-    // Quadrant sections
-    Object.values(quadrants).forEach(q => {
-        if (q.projects.length === 0) return;
-
-        // Add section header
-        const header = document.createElement('div');
-        header.className = 'mobile-quadrant-header';
-        header.textContent = q.label;
-        header.style.cssText = `
-            position: absolute; left: ${(vw - cardWidth) / 2}px; top: ${y}px;
-            width: ${cardWidth}px; font-size: 11px; font-weight: 600;
-            color: #90EE90; text-transform: uppercase; letter-spacing: 2px;
-            padding: 8px 0; border-bottom: 1px solid rgba(144,238,144,0.3);
-            font-family: 'Inter', sans-serif;
-        `;
-        blocks[0].parentElement.appendChild(header);
-        y += 30;
-
-        q.projects.forEach(p => {
-            const block = document.querySelector(`.project-block[data-project-id="${p.id}"]`);
-            if (!block) return;
-
-            block.style.left = ((vw - cardWidth) / 2) + 'px';
-            block.style.top = y + 'px';
-            block.style.width = cardWidth + 'px';
-            block.style.height = cardHeight + 'px';
-            block._w = cardWidth;
-            block._h = cardHeight;
-            y += cardHeight + gap;
-            setTimeout(() => block.classList.add('loaded'), 50);
-        });
-
-        y += 20;
-    });
-
-    // Update container height
-    const container = blocks[0]?.parentElement;
-    if (container) {
-        container.style.minHeight = (y + 60) + 'px';
-    }
-}
+// ── Mobile Scatter Layout (retired — mobile now uses renderGridLayout) ───────
 
 function initializeNeuralNetwork() {
     
@@ -3620,358 +3378,9 @@ function refreshParallaxEffect() {
     setTimeout(initParallaxEffect, 100);
 }
 
-// Create mobile neural network connections overlay
-function createMobileNeuralOverlay() {
-    if (window.innerWidth > 768) return; // Only for mobile
-    
-    // Debug removed
-    
-    // Remove existing mobile neural overlay
-    const existingOverlay = document.querySelector('.mobile-neural-overlay');
-    if (existingOverlay) {
-        existingOverlay.remove();
-    }
-    
-    const overlay = document.createElement('div');
-    overlay.className = 'mobile-neural-overlay';
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        pointer-events: none;
-        z-index: 15;
-        overflow: hidden;
-    `;
-    
-    // Create SVG for connections
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.style.cssText = `
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-    `;
-    
-    // Add gradient definition to SVG
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-    gradient.setAttribute('id', 'mobileNeuralGradient');
-    gradient.setAttribute('x1', '0%');
-    gradient.setAttribute('y1', '0%');
-    gradient.setAttribute('x2', '100%');
-    gradient.setAttribute('y2', '0%');
-    
-    // Create gradient stops to match desktop connection paths
-    const stops = [
-        { offset: '0%', color: 'rgba(255,255,255,0.8)' },
-        { offset: '25%', color: 'rgba(255,255,255,0.4)' },
-        { offset: '50%', color: 'rgba(255,255,255,0.1)' },
-        { offset: '75%', color: 'rgba(255,255,255,0.4)' },
-        { offset: '100%', color: 'rgba(255,255,255,0.8)' }
-    ];
-    
-    stops.forEach(stop => {
-        const stopElement = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-        stopElement.setAttribute('offset', stop.offset);
-        stopElement.setAttribute('stop-color', stop.color);
-        gradient.appendChild(stopElement);
-    });
-    
-    defs.appendChild(gradient);
-    svg.appendChild(defs);
-    
-    overlay.appendChild(svg);
-    document.body.appendChild(overlay);
-    
-    // Generate mobile neural connections
-    generateMobileNeuralConnections(svg);
-    
-    // Debug removed
-    
-    // Add parallax scroll effect (throttled via rAF)
-    let scrollTicking = false;
-    window.addEventListener('scroll', () => {
-        if (!scrollTicking) {
-            scrollTicking = true;
-            requestAnimationFrame(() => {
-                const scrollY = window.pageYOffset;
-                overlay.style.transform = `translate3d(0, ${scrollY * 0.3}px, 0)`;
-                scrollTicking = false;
-            });
-        }
-    }, { passive: true });
-}
+// (createMobileNeuralOverlay retired — mobile uses same CSS grid as desktop)
 
-// Animate connection text labels on scroll (mobile only)
-// Mobile scroll animations removed
-function removed_animateConnectionTextOnScroll() {
-    if (window.innerWidth > 768) return;
-    
-    const textLabels = document.querySelectorAll('.mobile-connections-svg text');
-    if (textLabels.length === 0) return;
-    
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const viewportCenter = window.innerHeight / 2;
-    
-    // Update each text based on its proximity to viewport center
-    textLabels.forEach(text => {
-        const initialX = parseFloat(text.dataset.initialX);
-        const initialY = parseFloat(text.dataset.initialY);
-        const offsetX = parseFloat(text.dataset.offsetX);
-        const offsetY = parseFloat(text.dataset.offsetY);
-        
-        if (isNaN(initialX) || isNaN(initialY)) return;
-        
-        // Get text's position relative to viewport
-        const textYInViewport = initialY - scrollTop;
-        
-        // Calculate proximity to viewport center (0-1)
-        // Using full viewport height as range
-        const maxDistance = window.innerHeight;
-        const distanceFromCenter = Math.abs(textYInViewport - viewportCenter);
-        const progress = Math.max(0, 1 - (distanceFromCenter / maxDistance));
-        
-        // Move along the connection line based on proximity
-        const newX = initialX + (offsetX * progress);
-        const newY = initialY + (offsetY * progress);
-        
-        text.setAttribute('x', newX);
-        text.setAttribute('y', newY);
-        
-        // Scale and opacity based on proximity (dramatic effect)
-        const scale = 1 + (progress * 0.5); // Grow 50% at center
-        const opacity = 0.7 + (progress * 0.3); // Brighter at center
-        text.setAttribute('transform', `scale(${scale})`);
-        text.setAttribute('opacity', opacity);
-    });
-}
-
-// Animate card positions on scroll - cards move toward center as you scroll down
-function removed_animateCardPositionsOnScroll() {
-    if (window.innerWidth > 768) return;
-    
-    const cards = document.querySelectorAll('.project-block');
-    if (cards.length === 0) {
-        
-        return;
-    }
-    
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const viewportWidth = window.innerWidth;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    
-    // Calculate scroll progress (0 at top, 1 at bottom)
-    const scrollProgress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
-    
-    // Debug scroll calculation - show for first 20 scroll events
-    if (scrollEventCount <= 20) {
-        
-        
-    }
-    
-    let cardsWithData = 0;
-    let cardsAnimated = 0;
-    
-    cards.forEach((card, index) => {
-        const initialX = parseFloat(card.dataset.initialX); // The original offset position
-        const cardWidth = parseFloat(card.dataset.cardWidth);
-        
-        // Validate data
-        if (isNaN(initialX) || isNaN(cardWidth)) {
-            if (index < 3) {
-                
-            }
-            return;
-        }
-        
-        cardsWithData++;
-        
-        // Calculate centered position
-        const centeredX = (viewportWidth - cardWidth) / 2;
-        
-        // Move from initial offset position toward center based on scroll progress
-        const translateX = (centeredX - initialX) * scrollProgress;
-        
-        // Apply transform
-        card.style.transform = `translateX(${translateX}px)`;
-        card.style.transition = 'transform 0.1s ease-out';
-        
-        cardsAnimated++;
-        
-        // Debug first 3 cards - show for first 20 scroll events
-        if (index < 3 && scrollEventCount <= 20) {
-            
-        }
-    });
-    
-    // Summary log
-    if (scrollEventCount <= 3) {
-        
-    }
-}
-
-// Throttle scroll animations with requestAnimationFrame
-let scrollAnimationFrame = null;
-let scrollEventCount = 0;
-
-function removed_handleMobileScroll() {
-    scrollEventCount++;
-    
-    
-    if (scrollAnimationFrame) {
-        return; // Already scheduled
-    }
-    
-    scrollAnimationFrame = requestAnimationFrame(() => {
-        
-        animateConnectionTextOnScroll();
-        animateCardPositionsOnScroll();
-        scrollAnimationFrame = null;
-    });
-}
-
-// Initialize mobile scroll listeners
-function removed_initMobileScrollListeners() {
-    if (window.innerWidth > 768) return;
-    
-    
-    
-    // Remove any existing listeners to avoid duplicates
-    window.removeEventListener('scroll', handleMobileScroll);
-    
-    // Add fresh listener
-    window.addEventListener('scroll', handleMobileScroll, { passive: true });
-    
-    // Also run on resize
-    window.addEventListener('resize', () => {
-        if (window.innerWidth <= 768) {
-            handleMobileScroll();
-        }
-    });
-    
-    // Run initial animation
-    
-    setTimeout(() => {
-        handleMobileScroll();
-    }, 500); // Wait for cards to be positioned
-}
-
-// Generate mobile neural network connections
-function generateMobileNeuralConnections(svg) {
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    
-    // Debug removed
-    
-    // Create connection points (nodes)
-    const nodes = [];
-    const nodeCount = 8; // Even fewer nodes for cleaner look
-    
-    for (let i = 0; i < nodeCount; i++) {
-        const node = {
-            x: Math.random() * viewportWidth,
-            y: Math.random() * viewportHeight * 2, // Extend beyond viewport for scroll effect
-            id: i
-        };
-        nodes.push(node);
-    }
-    
-    // Debug removed
-    
-    // Create connections between nearby nodes
-    const connections = [];
-    for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-            const distance = Math.sqrt(
-                Math.pow(nodes[i].x - nodes[j].x, 2) + 
-                Math.pow(nodes[i].y - nodes[j].y, 2)
-            );
-            
-            // Connect nodes that are reasonably close - more selective for cleaner look
-            if (distance < Math.min(viewportWidth, viewportHeight) * 0.4) {
-                connections.push({
-                    from: nodes[i],
-                    to: nodes[j],
-                    distance: distance
-                });
-            }
-        }
-    }
-    
-    // Debug removed
-    
-    // Draw connections
-    connections.forEach((connection, index) => {
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        
-        // Create smooth rounded path like desktop version
-        const startX = connection.from.x;
-        const startY = connection.from.y;
-        const endX = connection.to.x;
-        const endY = connection.to.y;
-        
-        // Calculate smooth rounded path with multiple control points
-        const dx = endX - startX;
-        const dy = endY - startY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        // Create smooth rounded angles with multiple curves
-        const controlOffset = distance * 0.3; // Larger offset for smoother curves
-        const angle = Math.atan2(dy, dx);
-        
-        // Add some organic variation but keep it smooth
-        const variation = (Math.random() - 0.5) * 0.2;
-        const controlAngle1 = angle + variation;
-        const controlAngle2 = angle - variation;
-        
-        const control1X = startX + Math.cos(controlAngle1) * controlOffset;
-        const control1Y = startY + Math.sin(controlAngle1) * controlOffset;
-        const control2X = endX - Math.cos(controlAngle2) * controlOffset;
-        const control2Y = endY - Math.sin(controlAngle2) * controlOffset;
-        
-        // Use cubic Bézier curve for smooth rounded angles
-        const pathData = `M ${startX} ${startY} C ${control1X} ${control1Y}, ${control2X} ${control2Y}, ${endX} ${endY}`;
-        line.setAttribute('d', pathData);
-        
-        // Style the connection to match desktop - white gradient with subtle glow
-        const opacity = Math.max(0.5, 0.8 - (connection.distance / (viewportWidth * 0.6)) * 0.2);
-        line.style.cssText = `
-            stroke: url(#mobileNeuralGradient);
-            stroke-width: 1.5;
-            fill: none;
-            stroke-opacity: ${opacity};
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.4));
-            animation: mobileNeuralPulse 4s ease-in-out infinite;
-            animation-delay: ${index * 0.1}s;
-        `;
-        
-        // Debug removed
-        
-        svg.appendChild(line);
-    });
-    
-    // Add pulsing animation
-    if (!document.querySelector('#mobile-neural-styles')) {
-        const style = document.createElement('style');
-        style.id = 'mobile-neural-styles';
-        style.textContent = `
-            @keyframes mobileNeuralPulse {
-                0%, 100% { 
-                    stroke-opacity: 0.4; 
-                    filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
-                }
-                50% { 
-                    stroke-opacity: 0.7; 
-                    filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-}
+// (Dead mobile scroll animation and neural overlay code removed)
 
 
 // Initialize when DOM is ready
@@ -3983,9 +3392,6 @@ document.addEventListener('DOMContentLoaded', function() {
     generateConcentricSquares();
     initializeNeuralNetwork();
     initParallaxEffect();
-    
-    // Create mobile neural overlay
-    createMobileNeuralOverlay();
     
     // Initialize mobile navigation
     initializeMobileNavigation();
@@ -4013,9 +3419,6 @@ if (document.readyState === 'loading') {
         initializeNeuralNetwork();
         initParallaxEffect();
         
-        // Create mobile neural overlay
-        createMobileNeuralOverlay();
-        
         // Initialize mobile navigation
         initializeMobileNavigation();
     });
@@ -4024,9 +3427,6 @@ if (document.readyState === 'loading') {
     // Don't initialize immediately - let the HTML script handle it
     // initializeNeuralNetwork();
     initParallaxEffect();
-    
-    // Create mobile neural overlay
-    createMobileNeuralOverlay();
     
     // Initialize mobile navigation
     initializeMobileNavigation();
