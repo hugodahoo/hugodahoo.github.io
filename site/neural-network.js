@@ -690,11 +690,7 @@ function renderGridLayout(container, allProjects) {
     const G = GRID_SIZE;
     const totalCells = G * G;
 
-    const featuredInterval = 6;
-    const featuredIndices = new Set();
-    for (let i = 0; i < sorted.length; i++) {
-        if (i % featuredInterval === 0 && i < sorted.length - 1) featuredIndices.add(i);
-    }
+    const featuredIds = new Set(['undercurrents', 'deriva-termica-beti-jai', 'red-hot-chili-peppers-getaway-tour']);
 
     const grid = Array.from({ length: G }, () => Array(G).fill(null));
     const occupied = Array.from({ length: G }, () => Array(G).fill(false));
@@ -709,7 +705,7 @@ function renderGridLayout(container, allProjects) {
         for (let c = 0; c < G && pi < remaining.length; c++) {
             if (occupied[r][c]) continue;
 
-            const isFeatured = featuredIndices.has(pi);
+            const isFeatured = featuredIds.has(remaining[pi].id);
 
             if (isFeatured && r + 1 < G && c + 1 < G &&
                 !occupied[r][c+1] && !occupied[r+1][c] && !occupied[r+1][c+1]) {
@@ -867,11 +863,6 @@ function showScoreTooltip(card, project) {
     }
 
     const tags = project._tags || [];
-    const neighbors = findNearestNeighbors(project, projects, 3);
-    const sharedWithNeighbors = new Set();
-    neighbors.forEach(n => {
-        (n.sharedTags || []).forEach(t => sharedWithNeighbors.add(t));
-    });
 
     let html = `<div class="tooltip-title">${project.title}</div>`;
     if (project.year) {
@@ -880,14 +871,9 @@ function showScoreTooltip(card, project) {
     if (tags.length > 0) {
         html += `<div class="tooltip-tags">`;
         tags.forEach(tag => {
-            const isShared = sharedWithNeighbors.has(tag);
-            const cls = isShared ? 'tooltip-tag shared' : 'tooltip-tag';
-            html += `<span class="${cls}">${tag}</span>`;
+            html += `<span class="tooltip-tag">${tag}</span>`;
         });
         html += `</div>`;
-    }
-    if (neighbors.length > 0 && neighbors[0].sharedTags && neighbors[0].sharedTags.length > 0) {
-        html += `<div class="tooltip-kw" style="margin-top:6px;"><em>Nearest:</em> ${neighbors.slice(0, 2).map(n => n.project.title).join(', ')}</div>`;
     }
 
     scoreTooltip.innerHTML = html;
@@ -2542,15 +2528,18 @@ function generateProjectHTML(project, mediaIndex) {
         `);
     }
     
-    // Add bullet points section at the end
     if (bulletPointsHtml.trim()) {
-        contentBlocks.push(`
-            <div class="content-block bullet-points-section">
-                <div class="text-section bullet-points">
-                    ${bulletPointsHtml}
-                </div>
-            </div>
-        `);
+        const sectionRegex = /<h3[^>]*>(.*?)<\/h3>\s*<ul>([\s\S]*?)<\/ul>/g;
+        let cards = '';
+        let match;
+        while ((match = sectionRegex.exec(bulletPointsHtml)) !== null) {
+            const title = match[1];
+            const items = match[2];
+            cards += `<div class="detail-card"><h3>${title}</h3><ul>${items}</ul></div>`;
+        }
+        if (cards) {
+            contentBlocks.push(`<div class="content-block detail-grid">${cards}</div>`);
+        }
     }
     
     const medias = contentBlocks.join('');
@@ -3584,79 +3573,45 @@ function generateConcentricSquares() {
 }
 
 // Parallax effect for background SVG layers
+let _parallaxBound = false;
+let _parallaxMouseX = 0;
+let _parallaxMouseY = 0;
+let _parallaxRafId = null;
+
 function initParallaxEffect() {
+    if (!_parallaxBound) {
+        _parallaxBound = true;
+        document.addEventListener('mousemove', function(e) {
+            _parallaxMouseX = e.clientX;
+            _parallaxMouseY = e.clientY;
+            if (!_parallaxRafId) {
+                _parallaxRafId = requestAnimationFrame(doParallax);
+            }
+        });
+    }
+}
+
+function doParallax() {
+    _parallaxRafId = null;
     const bgLayer1 = document.querySelector('.grid-bg-layer-1');
     const bgLayer2 = document.querySelector('.grid-bg-layer-2');
     const bgLayer3 = document.querySelector('.grid-bg-layer-3');
     const dotLayers = document.querySelectorAll('.dot-layer');
-    
-    if (!bgLayer1 && !dotLayers.length) return;
-    
-    let animationId;
-    let mouseX = 0;
-    let mouseY = 0;
-    let lastUpdate = 0;
-    let isActive = false;
-    const throttleMs = 8;
-    
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const nx = (_parallaxMouseX / w) * 2 - 1;
+    const ny = (_parallaxMouseY / h) * 2 - 1;
+
     const layerSpeeds = [0.3, 0.6, 0.9];
-    
-    function updateParallax(timestamp) {
-        if (!isActive) {
-            animationId = null;
-            return;
-        }
-        
-        if (timestamp - lastUpdate < throttleMs) {
-            animationId = requestAnimationFrame(updateParallax);
-            return;
-        }
-        lastUpdate = timestamp;
-        
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-        
-        const normalizedX = (mouseX / windowWidth) * 2 - 1;
-        const normalizedY = (mouseY / windowHeight) * 2 - 1;
-        
-        // Move dot layers if they exist
-        dotLayers.forEach((layer, index) => {
-            const speed = layerSpeeds[index];
-            const offsetX = normalizedX * speed * 8;
-            const offsetY = normalizedY * speed * 8;
-            layer.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-        });
-        
-        // Layer 1 (grid/dots): slow -- 4px
-        if (bgLayer1) {
-            const offsetX = normalizedX * 4;
-            const offsetY = normalizedY * 3;
-            bgLayer1.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-        }
-        // Layer 2 (rings/text/shapes): medium -- 10px
-        if (bgLayer2) {
-            const offsetX = normalizedX * 10;
-            const offsetY = normalizedY * 7;
-            bgLayer2.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-        }
-        // Layer 3 (data paths/markers): fast -- 18px
-        if (bgLayer3) {
-            const offsetX = normalizedX * 18;
-            const offsetY = normalizedY * 12;
-            bgLayer3.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`;
-        }
-        
-        animationId = null;
-    }
-    
-    // Mouse move handler -- single rAF per move, no infinite loop
-    document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (!animationId) {
-            animationId = requestAnimationFrame(updateParallax);
-        }
+    dotLayers.forEach((layer, i) => {
+        const s = layerSpeeds[i] || 0.5;
+        layer.style.transform = `translate3d(${nx * s * 8}px, ${ny * s * 8}px, 0)`;
     });
+
+    if (bgLayer1) bgLayer1.style.transform = `translate3d(${nx * 4}px, ${ny * 3}px, 0)`;
+    if (bgLayer2) bgLayer2.style.transform = `translate3d(${nx * 10}px, ${ny * 7}px, 0)`;
+    if (bgLayer3) bgLayer3.style.transform = `translate3d(${nx * 18}px, ${ny * 12}px, 0)`;
 }
 
 // Refresh parallax effect when cards are repositioned

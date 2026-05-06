@@ -90,7 +90,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / MOCA Jacksonville",
     "role": "Lead Creative Technologist",
     "technologies": "Thermographic cameras, GPU processing, Projection mapping",
-    "description": "Thermographic cameras, projection mapping, Développement d'une carte thermique interactive de l'espace",
+    "description": "Infrared heat signatures transformed into live data-driven portraiture across public spaces",
     "impact": null,
     "impact-title": "SPECTRAL SUBJECTS — Turning infrared heat into live, data-driven portraiture",
     "media": [
@@ -111,7 +111,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / Rice University",
     "role": "Lead Creative Technologist",
     "technologies": "Spatial audio, LED, Custom speaker-light hardware",
-    "description": "Audio-reactive lighting, interactive sound installation, Développement d'une installation sonore et lumineuse interactive",
+    "description": "480+ speaker-lights orchestrated into a responsive climate soundscape driven by plant sensors",
     "impact": null,
     "impact-title": "CLIMATE PARLIAMENT — Orchestrating 480+ speaker-lights into a responsive climate soundscape",
     "media": [
@@ -132,7 +132,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / Artis – Naples",
     "role": "Lead Creative Technologist",
     "technologies": "Spatial audio, LED, Motion sensors",
-    "description": "Audio-reactive lighting, immersive sound environment, Développement d'un environnement sonore immersif",
+    "description": "Architectural-scale sound composition using thousands of individually addressable speakers",
     "impact": null,
     "impact-title": "FIELD ATMOSPHONIA — Composing at architectural scale with thousands of single-channel speakers",
     "media": [
@@ -153,7 +153,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / Swarovski Crystal Worlds",
     "role": "Lead Creative Technologist",
     "technologies": "Spatial audio, LED, Real-time tracking",
-    "description": "Interactive audio installation, Développement d'une installation audio interactive",
+    "description": "3,000 crystal-clad speakers activated by visitor presence with personalized audio-light states",
     "impact": null,
     "impact-title": "KRISTALLSTIMMEN — Activating 3,000 crystal-clad speakers with per-visitor audio light states",
     "media": [
@@ -174,7 +174,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / Abu Dhabi",
     "role": "Lead Creative Technologist",
     "technologies": "Projection, LED sphere, Radio streaming",
-    "description": "Interactive projection, real-time audio-reactive visuals, Développement d'une projection interactive",
+    "description": "Human silhouettes tune into global radio stations through real-time interactive projection",
     "impact": null,
     "impact-title": "SHADOW TUNER — Tuning global radio with human silhouettes in real time",
     "media": [
@@ -195,7 +195,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / Lulu Island",
     "role": "Lead Creative Technologist",
     "technologies": "Robotic lighting, Cosmic ray sensors, Projection",
-    "description": "Real-time data visualization, cosmic radiation detection, Développement d'une visualisation en temps réel",
+    "description": "Cosmic ray detections translated into kinetic curtains of light in real time",
     "impact": null,
     "impact-title": "COLLIDER — Translating cosmic rays into kinetic curtains of light",
     "media": [
@@ -384,7 +384,7 @@ window.projects = [
     "id": "listening-forest",
     "title": "LISTENING FOREST",
     "year": "2022",
-    "client": "Rafael Lozano-Hemmer / CRYSTAL BRIDGES MUSEUM - ARKAMSAS",
+    "client": "Rafael Lozano-Hemmer / CRYSTAL BRIDGES MUSEUM - ARKANSAS",
     "role": "Lead Creative Technologist",
     "technologies": "Interactive sensors, Projection, Spatial audio",
     "description": "Eight interactive outdoor installations responding to voice, heartbeat, and heat",
@@ -451,7 +451,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / MADRID CASA DE MEXICO",
     "role": "Lead Creative Technologist",
     "technologies": "Projection, Interactive sensors",
-    "description": "Exposition d'oeuvres génératives et interactives",
+    "description": "Eight generative text installations exploring liquid textuality and algorithmic literature",
     "impact": null,
     "impact-title": "CAUDALES — Curating algorithmic text works into a coherent exhibition grammar",
     "media": [
@@ -610,7 +610,7 @@ window.projects = [
     "cover": null,
     "hasMedia": true,
     "fullDescription": "High-Speed Tracking: Basketball Court was an R&D project that merged multiple sensing systems—3D LiDARs, infrared cameras, and high-speed tracking—into a real-time projection mapping setup. Graphics were overlaid directly onto gameplay, with the court and walls reacting instantly to dribbles, collisions, and ball movement. This fusion of technologies created a uniquely responsive environment where athletic gestures became dynamic visual events. The prototype not only showcased the artistic potential of projection in sports but also proved its practical value, leading directly to an NBA contract.\n**Technical details and implementation**\n- High-speed projection system with ultra-low-latency tracking of players and ball movement\n- Sophisticated camera/projector calibration system ensures perfect alignment with court geometry\n- Robust anti-glare strategies and high-lumen projection for visibility under intense gym lighting\n- Real-time gameplay overlays that respond to player actions and game dynamics\n**Challenges and solutions**\n- Achieving ultra-low latency required optimized tracking pipelines and predictive algorithms\n- Maintaining visibility under harsh gym lighting demanded high-lumen projection and careful surface preparation\n- Creating reliable tracking in dynamic sports environment required advanced computer vision and machine learning\n**Impact and results**\n- Prototype successfully proved value to professional sports partner, leading to NBA contract\n- Opened new pathways for augmented reality in training and fan experiences\n- Demonstrated how experimental media art can evolve into practical commercial applications\n**Process and methodology**\n- Closed-loop testing with professional athletes to optimize tracking accuracy and overlay timing\n- Iterative development of overlay rules and visual feedback systems\n- Comprehensive resiliency testing for sweat, dust, and frequent play conditions\n---",
-    "videoEmbed": null
+    "videoEmbed": "https://vimeo.com/428142540"
   },
   {
     "id": "ocean-park-illumination",
@@ -733,6 +733,7 @@ window.projects = [
   },
   {
     "id": "halte-00-îles-de-boucherville",
+    "hidden": true,
     "title": "HALTE 00 ÎLES-DE-BOUCHERVILLE",
     "year": "2019",
     "client": "SÉPAQ / MONTRÉAL",
@@ -951,7 +952,7 @@ window.projects = [
     "client": "Moment Factory / PARIS",
     "role": "Creative Developer",
     "technologies": "Motion capture, Generative particles, Projection",
-    "description": "Capture de mouvement + Visuel en temps réel",
+    "description": "Live motion capture driving generative visuals for 4,500-person corporate convention",
     "impact": null,
     "impact-title": "RENAULT ANNUAL MEETING — Live mocap driving generative visuals in a zero-downtime corporate show",
     "media": [
@@ -972,7 +973,7 @@ window.projects = [
     "client": "Moment Factory / WORLD",
     "role": "Creative Developer",
     "technologies": "LED walls, TouchDesigner, Live camera, Generative visuals",
-    "description": "Système de contrôle + visuel en temps réel",
+    "description": "Real-time live camera remixing into arena-scale LED wall visuals for world tour",
     "impact": null,
     "impact-title": "ARCADE FIRE INFINITE CONTENT TOUR — Live camera ingest remixed into arena-scale LED narratives",
     "media": [
@@ -1115,7 +1116,7 @@ window.projects = [
     "client": "Moment Factory / WORLD",
     "role": "Creative Developer",
     "technologies": "TouchDesigner, Kinetic lighting, Audio-reactive visuals",
-    "description": "Visuel en temps réel + Éclairage cinétique",
+    "description": "Real-time kinetic lighting and visual content for the largest touring LED installation",
     "impact": null,
     "impact-title": "RED HOT CHILI PEPPERS GETAWAY TOUR — Real-time kinetic lighting and visual landscape for global tour",
     "media": [
@@ -1201,7 +1202,7 @@ window.projects = [
     "client": "Rafael Lozano-Hemmer / Basel",
     "role": "Artist",
     "technologies": "Interactive installation, Thermal cameras, Projection",
-    "description": "Thermal imaging and interactive installations",
+    "description": "Art fair editions of Thermal Drift and interactive works, optimized for booth constraints",
     "impact": null,
     "impact-title": "BASEL 2022 PROJECTS — Refining interactive systems to gallery-grade polish and reliability",
     "media": [
@@ -1232,22 +1233,6 @@ window.projects = [
     "hasMedia": true,
     "fullDescription": "Halte 0, Parc national des Îles-de-Boucherville (2018) is a permanent interactive installation located at the park’s information desk. Designed as an immersive wall, it reveals itself as visitors pass by, giving access to an interactive map of the park’s new trails and natural features. The wall is both informative and playful, aiming to intrigue, entertain, and raise awareness about environmental issues connected to the site.\nThe installation was realized with lidar sensors and TouchDesigner, supported by a custom content management system that allows the piece to evolve over time. Interactivity is seamlessly integrated into the architecture, creating a durable long-term solution suited to the public setting.\nI contributed to the project through interaction concept, creative coding, technology integration, and technical direction, in collaboration with TUX (production), Champagne Club Sandwich (creative direction), and Ottomata (interactive direction, coding, and technical direction).\nTechnical details and implementation\n- Projection mapping onto terrain/structures; nature‑recording‑infused sound.\n- Weatherized enclosures; long‑throw projection across water.\nChallenges and solutions\n- Outdoor unpredictability → robust housings, anti‑condensation, remote monitoring.\n- Visitor safety and path lighting while preserving darkness.\nImpact and results\n- Expanded park programming; brought new audiences after dark.\n- A gentle, respectful intervention in a protected landscape.\nProcess and methodology\n- Site surveys; throw tests across water; power routing.\n- Evening‑of adjustments for wind, haze, and wildlife activity.\n---",
     "videoEmbed": "https://ottomata.com/en/halte-0-sepaq-iles-de-boucherville"
-  },
-  {
-    "id": "interactive-basketball",
-    "title": "INTERACTIVE BASKETBALL",
-    "year": "2020",
-    "client": "Moment Factory / MONTRÉAL",
-    "role": "Creative Developer",
-    "technologies": "IR tracking, Projection mapping, TouchDesigner",
-    "description": "High Speed Tracking - Using Panasonic high speed projector and tracking system",
-    "impact": null,
-    "impact-title": "INTERACTIVE BASKETBALL — High-speed tracking employing Panasonic projection and automated tracking",
-    "media": [],
-    "instagram": [],
-    "cover": null,
-    "hasMedia": false,
-    "videoEmbed": null
   },
   {
     "id": "my-morning-jacket",

@@ -108,51 +108,6 @@ const mediaIndex = {
       "name": "Arcade Fire Infinite Content Tour",
       "files": [
         {
-          "filename": "1X3A7899_JPG.jpg",
-          "path": "high-res/arcade-fire-infinite-content-tour/1X3A7899_JPG.jpg",
-          "size": 313652,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902348.9851594
-        },
-        {
-          "filename": "1X3A8264_JPG.jpg",
-          "path": "high-res/arcade-fire-infinite-content-tour/1X3A8264_JPG.jpg",
-          "size": 307301,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902349.0258727
-        },
-        {
-          "filename": "1X3A8368_JPG.jpg",
-          "path": "high-res/arcade-fire-infinite-content-tour/1X3A8368_JPG.jpg",
-          "size": 312641,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902349.0656035
-        },
-        {
-          "filename": "21743852_10155516213100168_7047934179910833416_o.jpg",
-          "path": "high-res/arcade-fire-infinite-content-tour/21743852_10155516213100168_7047934179910833416_o.jpg",
-          "size": 257322,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902349.0935688
-        },
-        {
-          "filename": "DSC00164_JPG.jpg",
-          "path": "high-res/arcade-fire-infinite-content-tour/DSC00164_JPG.jpg",
-          "size": 392307,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902349.1319387
-        },
-        {
           "filename": "image_1.jpg",
           "path": "high-res/arcade-fire-infinite-content-tour/image_1.jpg",
           "size": 280817,
@@ -223,28 +178,10 @@ const mediaIndex = {
           "extension": ".jpg",
           "hash": "high-res",
           "last_modified": 1758902349.433682
-        },
-        {
-          "filename": "Moment_Factory_Infinite_Content_Tour_11-WS.jpg",
-          "path": "high-res/arcade-fire-infinite-content-tour/Moment_Factory_Infinite_Content_Tour_11-WS.jpg",
-          "size": 280817,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902349.4817684
-        },
-        {
-          "filename": "Moment_Factory_Infinite_Content_Tour_8-WS.jpg",
-          "path": "high-res/arcade-fire-infinite-content-tour/Moment_Factory_Infinite_Content_Tour_8-WS.jpg",
-          "size": 688792,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758902349.5278301
         }
       ],
-      "total_files": 15,
-      "total_size": 5243480,
+      "total_files": 8,
+      "total_size": 2690648,
       "has_issues": false
     },
     "atmospheric-memory": {
@@ -1752,33 +1689,51 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/ozone/image_1.jpg",
-          "size": 56173,
+          "size": 338526,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.1548026
+          "last_modified": 1778021886.02485
         },
         {
           "filename": "image_2.jpg",
           "path": "high-res/ozone/image_2.jpg",
-          "size": 69616,
+          "size": 388265,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.1075647
+          "last_modified": 1778021886.02728
         },
         {
           "filename": "image_3.jpg",
           "path": "high-res/ozone/image_3.jpg",
+          "size": 352047,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778021716.5369
+        },
+        {
+          "filename": "image_4.jpg",
+          "path": "high-res/ozone/image_4.jpg",
+          "size": 374528,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "high-res",
+          "last_modified": 1778021716.75744
+        },
+        {
+          "filename": "image_5.jpg",
+          "path": "high-res/ozone/image_5.jpg",
           "size": 73558,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.1355362
+          "last_modified": 1758901984.13554
         }
       ],
-      "total_files": 3,
-      "total_size": 199347,
+      "total_files": 5,
+      "total_size": 1526924,
       "has_issues": false
     },
     "panasonic-augmented-basketball-court": {
@@ -1920,42 +1875,33 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/red-hot-chili-peppers-getaway-tour/image_1.jpg",
-          "size": 63111,
+          "size": 800559,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.3037586
+          "last_modified": 1778021910.75097
         },
         {
           "filename": "image_2.jpg",
           "path": "high-res/red-hot-chili-peppers-getaway-tour/image_2.jpg",
-          "size": 65841,
+          "size": 382185,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.2189746
+          "last_modified": 1778021910.75318
         },
         {
           "filename": "image_3.jpg",
           "path": "high-res/red-hot-chili-peppers-getaway-tour/image_3.jpg",
-          "size": 46119,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.2785313
-        },
-        {
-          "filename": "image_4.jpg",
-          "path": "high-res/red-hot-chili-peppers-getaway-tour/image_4.jpg",
           "size": 128055,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.2534876
+          "last_modified": 1758901984.25349
         }
       ],
-      "total_files": 4,
-      "total_size": 303126,
+      "total_files": 3,
+      "total_size": 1310799,
       "has_issues": false
     },
     "refractions": {
@@ -2026,87 +1972,42 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/renault-annual-meeting/image_1.jpg",
-          "size": 62503,
+          "size": 212679,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.4992251
+          "last_modified": 1778021910.90298
         },
         {
           "filename": "image_2.jpg",
           "path": "high-res/renault-annual-meeting/image_2.jpg",
-          "size": 13674,
+          "size": 204449,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.5681493
+          "last_modified": 1778021910.90534
         },
         {
           "filename": "image_3.jpg",
           "path": "high-res/renault-annual-meeting/image_3.jpg",
-          "size": 93249,
+          "size": 277097,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.4461772
+          "last_modified": 1778021910.97653
         },
         {
           "filename": "image_4.jpg",
           "path": "high-res/renault-annual-meeting/image_4.jpg",
-          "size": 30043,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.4246626
-        },
-        {
-          "filename": "image_5.jpg",
-          "path": "high-res/renault-annual-meeting/image_5.jpg",
-          "size": 18261,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.5842123
-        },
-        {
-          "filename": "image_6.jpg",
-          "path": "high-res/renault-annual-meeting/image_6.jpg",
-          "size": 19388,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.5501497
-        },
-        {
-          "filename": "image_7.jpg",
-          "path": "high-res/renault-annual-meeting/image_7.jpg",
-          "size": 33301,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.517755
-        },
-        {
-          "filename": "image_8.jpg",
-          "path": "high-res/renault-annual-meeting/image_8.jpg",
-          "size": 14767,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.5342767
-        },
-        {
-          "filename": "image_9.jpg",
-          "path": "high-res/renault-annual-meeting/image_9.jpg",
           "size": 104426,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.4802456
+          "last_modified": 1758901984.48025
         }
       ],
-      "total_files": 9,
-      "total_size": 389612,
+      "total_files": 4,
+      "total_size": 798651,
       "has_issues": false
     },
     "shadow-tuner": {
@@ -2177,42 +2078,24 @@ const mediaIndex = {
         {
           "filename": "image_1.jpg",
           "path": "high-res/sound-tracer/image_1.jpg",
-          "size": 59367,
+          "size": 260735,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.6566195
+          "last_modified": 1778021918.14754
         },
         {
           "filename": "image_2.jpg",
           "path": "high-res/sound-tracer/image_2.jpg",
-          "size": 39674,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.7212415
-        },
-        {
-          "filename": "image_3.jpg",
-          "path": "high-res/sound-tracer/image_3.jpg",
-          "size": 34980,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.6755667
-        },
-        {
-          "filename": "image_4.jpg",
-          "path": "high-res/sound-tracer/image_4.jpg",
           "size": 85347,
           "type": "image",
           "extension": ".jpg",
           "hash": "high-res",
-          "last_modified": 1758901984.7027743
+          "last_modified": 1758901984.70277
         }
       ],
-      "total_files": 4,
-      "total_size": 219368,
+      "total_files": 2,
+      "total_size": 346082,
       "has_issues": false
     },
     "spectral-subjects": {
@@ -2887,7 +2770,7 @@ const mediaIndex = {
 mediaIndex.validation = {
     "original_media_projects": 37,
     "high_res_projects": 42,
-    "total_files_in_high_res": 282,
+    "total_files_in_high_res": 269,
     "has_consistency_issues": true
 };
 
