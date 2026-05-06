@@ -1241,13 +1241,13 @@ window.projects = [
     "client": "YouTube / WORLD",
     "role": "Creative Developer",
     "technologies": "Live streaming, Real-time visuals",
-    "description": "Video frame extraction from live performance",
+    "description": "Real-time generative visuals for live-streamed concert performance",
     "impact": null,
-    "impact-title": "MY MORNING JACKET — Video frame extraction implementing performance visualization",
+    "impact-title": "MY MORNING JACKET — Real-time generative visuals for live-streamed concert performance",
     "media": [],
     "instagram": [],
     "cover": null,
-    "hasMedia": false,
-    "videoEmbed": null
+    "hasMedia": true,
+    "videoEmbed": "https://www.youtube.com/watch?v=vQwecZYvoWU"
   }
 ];

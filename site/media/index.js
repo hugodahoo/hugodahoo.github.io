@@ -2762,6 +2762,68 @@ const mediaIndex = {
       "total_files": 5,
       "total_size": 841864,
       "has_issues": false
+    },
+    "my-morning-jacket": {
+      "project_id": "my-morning-jacket",
+      "files": [
+        {
+          "filename": "image_1.jpg",
+          "path": "high-res/my-morning-jacket/image_1.jpg",
+          "size": 199753,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "728505e3",
+          "last_modified": 1778100000
+        },
+        {
+          "filename": "image_2.jpg",
+          "path": "high-res/my-morning-jacket/image_2.jpg",
+          "size": 109087,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "b460dde8",
+          "last_modified": 1778100001
+        },
+        {
+          "filename": "image_3.jpg",
+          "path": "high-res/my-morning-jacket/image_3.jpg",
+          "size": 216877,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "334d7c39",
+          "last_modified": 1778100002
+        },
+        {
+          "filename": "image_4.jpg",
+          "path": "high-res/my-morning-jacket/image_4.jpg",
+          "size": 109665,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "1d05f6d5",
+          "last_modified": 1778100003
+        },
+        {
+          "filename": "image_5.jpg",
+          "path": "high-res/my-morning-jacket/image_5.jpg",
+          "size": 136692,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "c3fae691",
+          "last_modified": 1778100004
+        },
+        {
+          "filename": "image_6.jpg",
+          "path": "high-res/my-morning-jacket/image_6.jpg",
+          "size": 107380,
+          "type": "image",
+          "extension": ".jpg",
+          "hash": "212c248b",
+          "last_modified": 1778100005
+        }
+      ],
+      "total_files": 6,
+      "total_size": 879454,
+      "has_issues": false
     }
   }
 };
@@ -2769,8 +2831,8 @@ const mediaIndex = {
 // Enhanced metadata exports for debugging
 mediaIndex.validation = {
     "original_media_projects": 37,
-    "high_res_projects": 42,
-    "total_files_in_high_res": 269,
+    "high_res_projects": 43,
+    "total_files_in_high_res": 275,
     "has_consistency_issues": true
 };
 
