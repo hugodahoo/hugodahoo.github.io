@@ -248,10 +248,32 @@ function getThumbnail(projectId) {
     
     const originalPath = imageFiles[0].path;
     
-    // Convert high-res paths to thumbnail paths for main page performance
-    const thumbnailPath = originalPath.replace('high-res/', 'thumbnails/');
+    // Convert high-res paths to thumbnail paths (all thumbnails are .jpg)
+    const thumbnailPath = originalPath
+        .replace('high-res/', 'thumbnails/')
+        .replace(/\.(png|webp|gif|tiff?)$/i, '.jpg');
     
     return `media/${thumbnailPath}`;
+}
+
+function getAllThumbnails(projectId) {
+    const media = window.projectMedia || window.mediaIndex || {};
+    const project = media.projects?.[projectId];
+    if (!project) return [];
+    const seen = new Set();
+    return project.files
+        .filter(f => f.type === 'image')
+        .map(f => {
+            const thumbPath = 'media/' + f.path
+                .replace('high-res/', 'thumbnails/')
+                .replace(/\.(png|webp|gif|tiff?)$/i, '.jpg');
+            return thumbPath;
+        })
+        .filter(p => {
+            if (seen.has(p)) return false;
+            seen.add(p);
+            return true;
+        });
 }
 
 // ── Tag-Based Clustering Engine ──────────────────────────────────────────────
@@ -678,15 +700,31 @@ function generateGridBackground(allProjects) {
     return [svg1, svg2, svg3];
 }
 
+function sortForMobile(allProjects) {
+    const featuredIds = new Set(['undercurrents', 'deriva-termica-beti-jai', 'red-hot-chili-peppers-getaway-tour']);
+    return [...allProjects].sort((a, b) => {
+        const af = featuredIds.has(a.id) ? 1 : 0;
+        const bf = featuredIds.has(b.id) ? 1 : 0;
+        if (bf !== af) return bf - af;
+        const ya = parseInt(a.year) || 0;
+        const yb = parseInt(b.year) || 0;
+        if (yb !== ya) return yb - ya;
+        return 0;
+    });
+}
+
 function renderGridLayout(container, allProjects) {
     const oldWrapper = container.querySelector('.radar-grid-wrapper');
     if (oldWrapper) oldWrapper.remove();
 
     document.querySelectorAll('.grid-bg-svg').forEach(el => el.remove());
-    const bgLayers = generateGridBackground(allProjects);
-    bgLayers.forEach(layer => document.body.appendChild(layer));
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) {
+        const bgLayers = generateGridBackground(allProjects);
+        bgLayers.forEach(layer => document.body.appendChild(layer));
+    }
 
-    const sorted = sortBySimilarity(allProjects);
+    const sorted = isMobile ? sortForMobile(allProjects) : sortBySimilarity(allProjects);
     const G = GRID_SIZE;
     const totalCells = G * G;
 
@@ -3078,27 +3116,8 @@ function initLazyThumbnailLoading() {
                     const thumbnail = getThumbnail(projectId);
                     
                     if (thumbnail) {
-                        // Create img element for GIF animation support
                         const img = document.createElement('img');
                         img.src = thumbnail;
-                        
-                        // Get the card and its offset to determine object-position
-                        const card = thumbnailDiv.closest('.project-block');
-                        
-                        // Wait for image to load to get aspect ratio
-                        img.onload = function() {
-                            const aspectRatio = img.naturalWidth / img.naturalHeight;
-                            
-                            // Make card match the image's aspect ratio
-                            if (card && window.innerWidth <= 768) {
-                                const cardWidth = parseFloat(card.style.width) || 412;
-                                const cardHeight = cardWidth / aspectRatio; // Match image's aspect ratio
-                                card.style.height = cardHeight + 'px';
-                                
-                                // Debug removed
-                            }
-                        };
-                        
                         img.style.width = '100%';
                         img.style.height = '100%';
                         img.style.objectFit = 'cover';
@@ -3107,9 +3126,13 @@ function initLazyThumbnailLoading() {
                         img.style.top = '0';
                         img.style.left = '0';
                         
-                        // Clear any existing content and add the image
                         thumbnailDiv.innerHTML = '';
                         thumbnailDiv.appendChild(img);
+
+                        const allThumbs = getAllThumbnails(projectId);
+                        if (allThumbs.length > 1) {
+                            thumbnailDiv.dataset.images = JSON.stringify(allThumbs);
+                        }
                     } else {
                         const card = thumbnailDiv.closest('.project-block');
                         if (card) card.style.display = 'none';
@@ -3165,6 +3188,142 @@ function initLazyThumbnailLoading() {
             }
         });
     }
+}
+
+// ── Mobile Slideshow ─────────────────────────────────────────────────────────
+
+// ── Shared Slideshow Engine ───────────────────────────────────────────────────
+
+const _slideshowState = new Map();
+
+function startSlideshow(card) {
+    if (_slideshowState.has(card)) return;
+    const overlay = card.querySelector('.thumbnail-overlay');
+    if (!overlay) return;
+
+    const raw = overlay.dataset.images;
+    if (!raw) return;
+
+    let images;
+    try { images = JSON.parse(raw); } catch(e) { return; }
+    if (images.length < 2) return;
+
+    const currentImg = overlay.querySelector('img:not(.slideshow-next)');
+    if (!currentImg) return;
+
+    let currentIdx = 0;
+    const nextImg = document.createElement('img');
+    nextImg.className = 'slideshow-next';
+    nextImg.style.position = 'absolute';
+    nextImg.style.top = '0';
+    nextImg.style.left = '0';
+    nextImg.style.width = '100%';
+    nextImg.style.height = '100%';
+    nextImg.style.objectFit = 'cover';
+    nextImg.style.objectPosition = 'center';
+    overlay.appendChild(nextImg);
+
+    const intervalId = setInterval(() => {
+        currentIdx = (currentIdx + 1) % images.length;
+        nextImg.src = images[currentIdx];
+        nextImg.onload = () => {
+            nextImg.classList.add('visible');
+            setTimeout(() => {
+                currentImg.src = images[currentIdx];
+                nextImg.classList.remove('visible');
+            }, 850);
+        };
+    }, 3000);
+
+    _slideshowState.set(card, { intervalId, nextImg });
+}
+
+function stopSlideshow(card) {
+    const state = _slideshowState.get(card);
+    if (!state) return;
+    clearInterval(state.intervalId);
+    if (state.nextImg.parentNode) state.nextImg.remove();
+    _slideshowState.delete(card);
+}
+
+// ── Mobile: visibility-based slideshow ────────────────────────────────────────
+
+function initMobileSlideshow() {
+    if (window.innerWidth > 768) return;
+
+    const visibilityMap = new Map();
+    let retryTimer = null;
+
+    function updateSlideshows() {
+        const sorted = [...visibilityMap.entries()]
+            .filter(([, ratio]) => ratio > 0.2)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 4)
+            .map(([card]) => card);
+
+        const activeSet = new Set(sorted);
+
+        for (const card of _slideshowState.keys()) {
+            if (!activeSet.has(card)) stopSlideshow(card);
+        }
+
+        let started = 0;
+        for (const card of sorted) {
+            const overlay = card.querySelector('.thumbnail-overlay');
+            if (overlay && overlay.dataset.images) {
+                startSlideshow(card);
+                started++;
+            }
+        }
+
+        if (started === 0 && !retryTimer) {
+            retryTimer = setTimeout(() => {
+                retryTimer = null;
+                updateSlideshows();
+            }, 2000);
+        }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            visibilityMap.set(entry.target, entry.intersectionRatio);
+        });
+        updateSlideshows();
+    }, {
+        threshold: [0, 0.25, 0.5, 0.75, 1.0]
+    });
+
+    setTimeout(() => {
+        document.querySelectorAll('.project-block').forEach(card => {
+            observer.observe(card);
+        });
+    }, 500);
+}
+
+// ── Desktop: hover-based slideshow ────────────────────────────────────────────
+
+function initDesktopSlideshow() {
+    if (window.innerWidth <= 768) return;
+
+    function attach() {
+        document.querySelectorAll('.project-block').forEach(card => {
+            if (card._slideshowHover) return;
+            card._slideshowHover = true;
+
+            card.addEventListener('mouseenter', () => {
+                const overlay = card.querySelector('.thumbnail-overlay');
+                if (overlay && overlay.dataset.images) {
+                    startSlideshow(card);
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                stopSlideshow(card);
+            });
+        });
+    }
+
+    setTimeout(attach, 600);
 }
 
 // Initialize
@@ -3292,6 +3451,8 @@ function initializeNeuralNetwork() {
         
         initBackgroundImageHover();
         initLazyThumbnailLoading();
+        initMobileSlideshow();
+        initDesktopSlideshow();
         
         
     });

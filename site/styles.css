@@ -1766,8 +1766,9 @@ body::-webkit-scrollbar-thumb:hover {
 @media (max-width: 768px) {
     .radar-grid-wrapper {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         grid-template-rows: auto;
+        grid-auto-flow: dense;
         gap: 2px;
         width: 100%;
         margin-left: 0;
@@ -1795,8 +1796,22 @@ body::-webkit-scrollbar-thumb:hover {
     .grid-filler-invisible {
         display: none;
     }
-    .radar-grid-wrapper {
-        grid-auto-flow: dense;
+
+    .slideshow-next {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+        z-index: 2 !important;
+        mix-blend-mode: normal !important;
+    }
+    .slideshow-next.visible {
+        opacity: 1 !important;
     }
 }
 
@@ -2422,7 +2437,7 @@ body.hover-as-default .project-block .thumbnail-overlay {
     }
 
     .project-section {
-        padding: 68px 0 0 0;
+        padding: 0;
         position: relative;
         overflow: visible;
     }
