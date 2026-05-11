@@ -1333,6 +1333,7 @@ body::-webkit-scrollbar-thumb:hover {
     .project-overlay {
         width: 100vw;
         height: 95vh;
+        height: 95dvh;
         position: fixed;
         top: auto;
         bottom: 0;
@@ -1369,8 +1370,8 @@ body::-webkit-scrollbar-thumb:hover {
     }
     
     .project-overlay-content {
-        height: calc(95vh - 28px);
-        max-height: calc(95vh - 28px);
+        height: calc(95dvh - 28px);
+        max-height: calc(95dvh - 28px);
         padding: 0 0.75rem 0.75rem;
         overflow-y: auto;
         overflow-x: hidden;
@@ -2748,6 +2749,7 @@ html.no-scroll,
 html.no-scroll body {
     overflow: hidden !important;
     height: 100vh;
+    height: 100dvh;
 }
 
 @media (max-width: 768px) {

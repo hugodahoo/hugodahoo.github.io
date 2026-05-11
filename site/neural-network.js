@@ -1205,7 +1205,7 @@ function addShapeKeyboardListener() {
         }
     });
     
-    // Add window resize listener for responsive repositioning (desktop only)
+    // Desktop-only resize: reposition cards when viewport changes
     window.addEventListener('resize', debounce(function() {
         if (window.innerWidth <= 768) return;
         
@@ -1219,6 +1219,19 @@ function addShapeKeyboardListener() {
             });
         }
     }, 250));
+
+    // Breakpoint crossing: full re-render when switching mobile <-> desktop
+    if (window.matchMedia) {
+        const mql = window.matchMedia('(max-width: 768px)');
+        let lastMobile = mql.matches;
+        mql.addEventListener('change', function(e) {
+            if (e.matches !== lastMobile) {
+                lastMobile = e.matches;
+                isInitialized = false;
+                initializeNeuralNetwork();
+            }
+        });
+    }
     
     keyboardListenerAdded = true;
     
