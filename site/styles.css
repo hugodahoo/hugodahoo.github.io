@@ -227,66 +227,6 @@ body.hover-as-default .project-block .block-surface {
 }
 */
 
-/* Mobile card expansion */
-.project-block.mobile-expanded {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1.5);
-    width: 80vw;
-    height: 60vh;
-    z-index: 10000;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.project-block.mobile-expanded .block-surface {
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-}
-
-.project-block.mobile-expanded .thumbnail-overlay {
-    width: 100%;
-    height: 100%;
-    transform: none !important;
-    border-radius: 16px;
-}
-
-.project-block.mobile-expanded .project-hover-text {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    transform: none;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    border-radius: 0 0 16px 16px;
-    padding: 20px;
-    color: white;
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-}
-
-/* Mobile overlay background */
-.mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s ease;
-}
-
-.mobile-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
 
 /* Project text styling now shared via .project-overlay selectors */
 
@@ -424,27 +364,99 @@ body.hover-as-default .project-block .block-surface {
 }
 
 /* Header styling - hide old header when mobile header is present */
-header:not(.mobile-header) {
+header:not(.mobile-hero) {
     display: none !important;
 }
 
-.mobile-header {
-    padding: 1rem 1.5rem;
+/* Mobile Hero Header — scrolls with content */
+.mobile-hero {
+    display: none;
+    background: #111;
+    padding: 2rem 1.25rem 1.5rem;
+    position: relative;
+    z-index: 100;
+}
+
+.mobile-hero-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.mobile-hero-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+}
+
+.mobile-hero-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    margin: 0.35rem 0 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.mobile-hero-sep {
+    color: rgba(144, 238, 144, 0.5);
+    margin: 0 0.15em;
+}
+
+.mobile-hero-social {
+    display: flex;
+    gap: 12px;
+}
+
+.mobile-hero-social a {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.35);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.mobile-hero-social a:active {
+    color: rgba(144, 238, 144, 0.8);
+}
+
+/* Mobile Sticky Mini Bar — fixed, revealed on scroll-up */
+.mobile-sticky-bar {
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    height: 44px;
+    background: rgba(17, 17, 17, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     z-index: 99999;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
-    display: flex !important;
-    visibility: visible;
-    opacity: 1;
     align-items: center;
-    justify-content: space-between;
-    height: 60px;
+    justify-content: center;
+    transform: translateY(-100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.mobile-sticky-bar.visible {
+    transform: translateY(0);
+}
+
+.mobile-sticky-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
 }
 
 header a {
@@ -610,6 +622,10 @@ body::-webkit-scrollbar-thumb:hover {
 #project-overlay-main {
     position: relative;
     z-index: 100;
+}
+
+.bottom-sheet-handle {
+    display: none;
 }
 
 /* Alternating text-image layout for project overlay */
@@ -1312,64 +1328,73 @@ body::-webkit-scrollbar-thumb:hover {
     border-bottom-color: rgba(144, 238, 144, 0.9);
 }
 
-/* Responsive design - Enhanced for mobile overlay */
+/* Responsive design - Mobile Bottom Sheet Overlay */
 @media (max-width: 768px) {
-    /* Mobile overlay container positioning fixes */
     .project-overlay {
-        /* Ensure full mobile viewport coverage */
         width: 100vw;
-        height: 100vh;
-        min-height: 100vh;
+        height: 95vh;
         position: fixed;
-        top: 0;
+        top: auto;
+        bottom: 0;
         left: 0;
-        /* Fix mobile viewport issues */
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0);
-        /* Enhanced mobile scrolling */
+        border-radius: 16px 16px 0 0;
+        transform: translateY(100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease, visibility 0.25s ease;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
+        background: #fff;
+        backdrop-filter: none;
+    }
+    .project-overlay.active {
+        transform: translateY(0);
+    }
+
+    /* Bottom-sheet drag handle */
+    .bottom-sheet-handle {
+        display: flex;
+        justify-content: center;
+        padding: 10px 0 4px;
+        cursor: grab;
+        position: sticky;
+        top: 0;
+        z-index: 10005;
+        background: #fff;
+        border-radius: 16px 16px 0 0;
+    }
+    .handle-pill {
+        width: 36px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgba(0,0,0,0.18);
     }
     
     .project-overlay-content {
-        /* Mobile-optimized container */
-        height: 100vh;
-        max-height: 100vh;
-        padding: 120px 0.5rem 0.5rem 0.5rem;
+        height: calc(95vh - 28px);
+        max-height: calc(95vh - 28px);
+        padding: 0 0.75rem 0.75rem;
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        /* Ensure content is visible */
-        background: rgba(255, 255, 255, 0.95) !important;
-        position: relative;
-    }
-    
-    /* Mobile video embed spacing */
-    .project-overlay .video-embed-section {
-        margin-top: 60px; /* Additional space from header */
-    }
-    
-    .project-overlay .video-embed {
-        margin-top: 40px;
+        background: #fff !important;
     }
     
     .project-overlay-header {
-        padding: 1.5rem 1rem;
+        padding: 1rem 0.75rem;
         position: sticky;
         top: 0;
-        z-index: 10002;  /* Ensure header visible on scroll */
+        z-index: 10002;
     }
     
     .project-overlay .project-header h1 {
-        font-size: 2rem;
-        letter-spacing: 0.15em;
+        font-size: 1.6rem;
+        letter-spacing: 0.1em;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         line-height: 1.1;
     }
     
     .project-overlay .project-title-bar {
-        padding: 1.5rem 1rem 1rem 1rem;
-        gap: 1rem;
+        padding: 1rem 0.75rem 0.75rem;
+        gap: 0.75rem;
     }
 
     .back-arrow {
@@ -1380,15 +1405,15 @@ body::-webkit-scrollbar-thumb:hover {
     }
     
     .project-overlay .project-title-bar-name {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
     }
     
     .project-overlay .project-content {
-        padding: 0.5rem 1rem 3rem 1rem;
+        padding: 0.5rem 0.75rem 3rem;
     }
     
     .project-overlay .text-section {
-        padding: 1rem;
+        padding: 0.75rem;
         margin: 0;
     }
     
@@ -1406,14 +1431,12 @@ body::-webkit-scrollbar-thumb:hover {
         gap: 1rem;
     }
     
-    /* Mobile-specific image width improvements */
     .project-overlay .image-section {
         width: 100%;
         max-width: 100%;
-        margin: 1rem 0;
+        margin: 0.75rem 0;
     }
     
-    /* Mobile text overflow fixes */
     .project-overlay .text-with-image .text-section {
         text-align: left;
         margin: 0;
@@ -1426,36 +1449,30 @@ body::-webkit-scrollbar-thumb:hover {
         margin: 0 0 1.5rem 0;
     }
     
-    /* Mobile bullet points spacing */
     .project-overlay .bullet-points-section {
-        margin: 1.5rem 1rem 2rem 1rem;
+        margin: 1.5rem 0.75rem 2rem;
         padding: 1rem;
     }
     
-    /* Mobile grid layout */
     .project-overlay .image-grid {
-        grid-template-columns: 1fr;  /* Single column on mobile */
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
 }
 
-/* Extra small mobile screens (iPhone SE, older phones) */
+/* Extra small mobile screens */
 @media (max-width: 480px) {
     .project-overlay .project-header h1 {
-        font-size: 1.8rem;
-        letter-spacing: 0.1em;
+        font-size: 1.5rem;
+        letter-spacing: 0.08em;
     }
     
     .project-overlay .project-content {
-        padding: 0.25rem 0.75rem 3rem 0.75rem;
-    }
-    
-    .project-overlay-header {
-        padding: 1rem 0.75rem;
+        padding: 0.25rem 0.5rem 3rem;
     }
     
     .project-overlay .text-section {
-        padding: 0.75rem;
+        padding: 0.5rem;
         font-size: 0.95rem;
     }
 }
@@ -1762,27 +1779,41 @@ body::-webkit-scrollbar-thumb:hover {
     z-index: 10;
 }
 
-/* Mobile: responsive grid */
+/* Mobile: Bento grid layout */
 @media (max-width: 768px) {
     .radar-grid-wrapper {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        grid-template-rows: auto;
+        grid-template-columns: repeat(2, 1fr);
         grid-auto-flow: dense;
-        gap: 2px;
-        width: 100%;
-        margin-left: 0;
+        gap: 4px;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
         height: auto;
-        padding: 68px 0 0 0;
-        margin-top: 0;
+        padding: 4px;
         align-content: start;
+        box-sizing: border-box;
+        background: #111;
+        overflow: hidden;
     }
     .radar-grid-wrapper .project-block {
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 1;
+        border-radius: 12px;
+        min-width: 0;
+        min-height: 0;
+        overflow: hidden;
+        width: auto;
+        height: auto;
     }
     .radar-grid-wrapper .project-block.featured-project {
-        grid-column: span 2;
+        grid-column: 1 / -1;
         grid-row: auto;
+        aspect-ratio: 16 / 10;
+        border-radius: 14px;
+    }
+    /* Every 7th non-featured card spans full width for rhythm */
+    .radar-grid-wrapper .project-block.bento-wide {
+        grid-column: 1 / -1;
         aspect-ratio: 16 / 9;
     }
     .grid-bg-svg {
@@ -1809,6 +1840,7 @@ body::-webkit-scrollbar-thumb:hover {
         transition: opacity 0.8s ease;
         z-index: 2 !important;
         mix-blend-mode: normal !important;
+        border-radius: inherit;
     }
     .slideshow-next.visible {
         opacity: 1 !important;
@@ -2233,32 +2265,13 @@ body.hover-as-default .project-block .thumbnail-overlay {
 }
 
 
-/* Mobile Header - consolidated rules above */
-
-.hamburger-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-    padding: 8px;
-}
-
-.hamburger-line {
-    width: 60px;
-    height: 2px;
-    background: #000;
-    transition: all 0.3s ease;
-}
-
+/* Desktop sidebar vertical name */
 .vertical-name {
     writing-mode: vertical-rl;
     text-orientation: mixed;
     transform: rotate(180deg);
     position: relative;
     z-index: 100001;
-}
-
-.vertical-name {
     cursor: pointer;
     transition: opacity 0.3s ease;
 }
@@ -2276,10 +2289,10 @@ body.hover-as-default .project-block .thumbnail-overlay {
     text-transform: uppercase;
 }
 
-/* Mobile Navigation Menu */
+/* Desktop Sidebar Navigation Menu (hidden on mobile) */
 .mobile-nav-menu {
     position: fixed;
-    top: 60px;
+    top: 0;
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.97);
@@ -2288,16 +2301,8 @@ body.hover-as-default .project-block .thumbnail-overlay {
     z-index: 99998;
     padding: 20px;
     transform: translateY(-100%);
-    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
     opacity: 0;
     visibility: hidden;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.mobile-nav-menu.open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
 }
 
 .nav-line {
@@ -2405,63 +2410,50 @@ body.hover-as-default .project-block .thumbnail-overlay {
     color: rgba(0, 0, 0, 0.8);
 }
 
-/* Hamburger animation */
-.hamburger-menu.active .hamburger-line:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger-menu.active .hamburger-line:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger-menu.active .hamburger-line:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
 /* Mobile adaptations — consolidated */
 @media (max-width: 768px) {
-    .mobile-header {
+    .mobile-hero {
+        display: block;
+    }
+    .mobile-sticky-bar {
         display: flex;
-    }
-    body .mobile-header {
-        display: flex;
-    }
-
-    .vertical-name {
-        writing-mode: horizontal-tb;
-        transform: none;
-    }
-    .vertical-name span {
-        font-size: 13px;
-        letter-spacing: 4px;
     }
 
     .project-section {
         padding: 0;
         position: relative;
-        overflow: visible;
+        overflow: hidden;
+        background: #111;
+        width: 100%;
     }
 
     .project-grid {
         height: auto;
         max-height: none;
-        overflow: visible;
+        overflow: hidden;
         padding: 0;
+        background: #111;
+        width: 100%;
+        cursor: default;
     }
 
     .project-block {
         padding: 0 !important;
         box-sizing: border-box;
         touch-action: manipulation;
-        border-radius: 0;
-        box-shadow: none;
+        border-radius: 12px;
+        box-shadow: none !important;
         border: none;
         overflow: hidden;
+        position: relative;
+        backdrop-filter: none;
+        perspective: none;
+        transform-style: flat;
     }
 
-    .project-block:hover,
     .project-block:active {
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        transform: scale(0.97);
+        transition: transform 0.1s ease;
     }
 
     .connection-path {
@@ -2473,7 +2465,7 @@ body.hover-as-default .project-block .thumbnail-overlay {
     }
 
     .project-block .block-title {
-        font-size: 9px;
+        display: none;
     }
 
     .project-block .thumbnail-overlay img {
@@ -2481,6 +2473,98 @@ body.hover-as-default .project-block .thumbnail-overlay {
         width: 100% !important;
         height: 100% !important;
         border-radius: 0 !important;
+        max-width: 100%;
+    }
+    .project-block .thumbnail-overlay {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    /* Kill ALL desktop hover expansion on mobile */
+    .project-block::before {
+        display: none !important;
+    }
+    .project-block:hover {
+        z-index: 10 !important;
+    }
+    .block-surface {
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        box-shadow: none !important;
+        overflow: hidden;
+    }
+    .radar-grid-wrapper .project-block:hover .block-surface {
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+    }
+
+    /* Card scrim — always-visible title on mobile */
+    .card-scrim {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 24px 10px 8px;
+        background: linear-gradient(transparent, rgba(0,0,0,0.55));
+        z-index: 5;
+        pointer-events: none;
+        border-radius: 0 0 12px 12px;
+    }
+    .card-scrim-title {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        line-height: 1.2;
+        display: block;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    /* Year badge — frosted pill top-right */
+    .card-year-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.55rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.85);
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        padding: 2px 7px;
+        border-radius: 20px;
+        z-index: 5;
+        letter-spacing: 0.04em;
+        pointer-events: none;
+    }
+
+    /* Slideshow indicator dots */
+    .card-slideshow-dots {
+        position: absolute;
+        bottom: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 4px;
+        z-index: 6;
+        pointer-events: none;
+    }
+    .card-slideshow-dots .dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.35);
+        transition: background 0.3s;
+    }
+    .card-slideshow-dots .dot.active {
+        background: rgba(255,255,255,0.9);
     }
 }
 
@@ -2501,15 +2585,30 @@ html.no-scroll body {
         overflow-y: auto !important;
         height: auto;
     }
+    body {
+        background: #111 !important;
+    }
     body.neural-network-style {
         height: auto;
         overflow-y: auto;
+        background: #111;
+    }
+    html {
+        overflow-x: hidden !important;
+    }
+    body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100vw;
     }
     .main-container {
         height: auto !important;
+        width: 100%;
         overflow-y: auto !important;
-        overflow-x: hidden;
+        overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        background: #111;
     }
     .project-grid {
         height: auto;
@@ -2552,6 +2651,51 @@ body.neural-network-style {
 @keyframes fadeInText {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Mobile Entrance Animations ──────────────────────────────────────────── */
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .project-block.card-enter {
+        animation: cardEntrance 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    /* Loading skeleton shimmer */
+    .project-block .thumbnail-overlay:not(.loaded)::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            110deg,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.06) 40%,
+            rgba(255,255,255,0.12) 50%,
+            rgba(255,255,255,0.06) 60%,
+            rgba(255,255,255,0) 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        z-index: 1;
+        border-radius: inherit;
+    }
+    .project-block .thumbnail-overlay:not(.loaded) {
+        background: #1a1a1a;
+    }
+}
+
+@keyframes shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
 }
 
 /* Reduce motion for users who prefer it */
@@ -2600,19 +2744,14 @@ body.neural-network-style {
         letter-spacing: 3px !important;
     }
     
-    /* Hide mobile header on desktop but keep hamburger menu */
-    .mobile-header {
+    /* Hide mobile elements on desktop */
+    .mobile-hero {
+        display: none !important;
+    }
+    .mobile-sticky-bar {
         display: none !important;
     }
     
-    /* Ensure hamburger menu is visible on desktop */
-    .mobile-nav-toggle {
-        display: block !important;
-        position: fixed !important;
-        top: 20px !important;
-        left: 20px !important;
-        z-index: 1001 !important;
-    }
     
     /* Adjust main content to account for sidebar */
     .main-container {

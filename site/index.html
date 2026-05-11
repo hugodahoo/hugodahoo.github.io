@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles.css?v=179">
+        <link rel="stylesheet" href="styles.css?v=206">
     
     <!-- Preload critical resources with high priority for local development -->
     <link rel="preload" href="data.js" as="script" fetchpriority="high">
@@ -29,19 +29,26 @@
     </div>
     
     <div class="main-container">
-        <!-- Mobile Header -->
-            <header class="mobile-header">
-                <div class="vertical-name" id="vertical-name">
-                    <span>HUGO DAOUST</span>
+        <!-- Mobile Hero Header (scrolls with content) -->
+        <header class="mobile-hero" id="mobile-hero">
+            <div class="mobile-hero-inner">
+                <div class="mobile-hero-text">
+                    <h1 class="mobile-hero-name">Hugo Daoust</h1>
+                    <p class="mobile-hero-subtitle">Creative Technologist <span class="mobile-hero-sep">/</span> Montreal</p>
                 </div>
-                <div class="hamburger-menu" id="hamburger-menu">
-                    <div class="hamburger-line"></div>
-                    <div class="hamburger-line"></div>
-                    <div class="hamburger-line"></div>
+                <div class="mobile-hero-social">
+                    <a href="https://www.linkedin.com/in/hugo-daoust-4174b610a/" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
+                    <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
                 </div>
-            </header>
-        
-        <!-- Mobile Navigation Menu -->
+            </div>
+        </header>
+
+        <!-- Sticky mini bar (revealed on scroll-up) -->
+        <div class="mobile-sticky-bar" id="mobile-sticky-bar">
+            <span class="mobile-sticky-name">Hugo Daoust</span>
+        </div>
+
+        <!-- Desktop Sidebar Nav (unchanged) -->
         <nav class="mobile-nav-menu" id="mobile-nav-menu">
             <div class="nav-name">
                 <a href="index.html" class="nav-name-link">HUGO DAOUST</a>
@@ -69,7 +76,7 @@
         .main-container { min-height: 100vh; position: relative; }
         .concentric-squares { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; }
         .project-section { position: relative; z-index: 10; }
-        .project-grid { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+        .project-grid { display: block; padding: 0; }
         .loading { 
             text-align: center; 
             padding: 50px; 
@@ -142,7 +149,7 @@
                         window.projectMedia = JSON.parse(cachedMedia);
                         // Load neural network script
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=324';
+                        neuralScript.src = 'neural-network.js?v=351';
                         neuralScript.onload = () => {
                             setTimeout(() => {
                                 
@@ -180,7 +187,7 @@
                         
                         
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=324';
+                        neuralScript.src = 'neural-network.js?v=351';
                         neuralScript.onload = () => {
                             // Small delay to ensure data is fully loaded
                             setTimeout(() => {
@@ -229,35 +236,50 @@
     </script>
     
     <script>
-        // Mobile hamburger menu functionality
+        // Mobile sticky bar: show on scroll-up, hide on scroll-down
         document.addEventListener('DOMContentLoaded', function() {
-            const hamburgerMenu = document.getElementById('hamburger-menu');
-            const mobileNavMenu = document.getElementById('mobile-nav-menu');
-            const verticalName = document.getElementById('vertical-name');
-            
-            if (hamburgerMenu && mobileNavMenu) {
-                hamburgerMenu.addEventListener('click', function() {
-                    hamburgerMenu.classList.toggle('active');
-                    mobileNavMenu.classList.toggle('open');
+            if (window.innerWidth > 768) return;
+            const stickyBar = document.getElementById('mobile-sticky-bar');
+            const hero = document.getElementById('mobile-hero');
+            if (!stickyBar || !hero) return;
+
+            let lastY = 0;
+            let ticking = false;
+            const scrollEl = document.querySelector('.main-container') || window;
+            const getScrollY = () => scrollEl === window ? window.scrollY : scrollEl.scrollTop;
+
+            function onScroll() {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => {
+                    const y = getScrollY();
+                    const heroBottom = hero.offsetHeight;
+                    if (y > heroBottom) {
+                        stickyBar.classList.toggle('visible', y < lastY);
+                    } else {
+                        stickyBar.classList.remove('visible');
+                    }
+                    lastY = y;
+                    ticking = false;
                 });
             }
-            
-            // Close any open overlays when clicking on name
-            if (verticalName) {
-                verticalName.addEventListener('click', function() {
-                    // Close mobile navigation menu if open
-                    if (mobileNavMenu && mobileNavMenu.classList.contains('open')) {
-                        mobileNavMenu.classList.remove('open');
-                        hamburgerMenu.classList.remove('active');
-                    }
-                    
-                    // Close any project overlays if open
-                    if (typeof closeProjectOverlay === 'function') {
-                        closeProjectOverlay();
-                    }
-                });
+
+            if (scrollEl === window) {
+                window.addEventListener('scroll', onScroll, { passive: true });
+            } else {
+                scrollEl.addEventListener('scroll', onScroll, { passive: true });
             }
-            
+
+            // Tap sticky bar to scroll to top
+            stickyBar.addEventListener('click', () => {
+                if (scrollEl === window) window.scrollTo({ top: 0, behavior: 'smooth' });
+                else scrollEl.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Tap hero name to close overlays
+            hero.addEventListener('click', function() {
+                if (typeof closeProjectOverlay === 'function') closeProjectOverlay();
+            });
         });
     </script>
     

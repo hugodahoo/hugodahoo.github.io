@@ -725,55 +725,7 @@ function renderGridLayout(container, allProjects) {
     }
 
     const sorted = isMobile ? sortForMobile(allProjects) : sortBySimilarity(allProjects);
-    const G = GRID_SIZE;
-    const totalCells = G * G;
-
     const featuredIds = new Set(['undercurrents', 'deriva-termica-beti-jai', 'red-hot-chili-peppers-getaway-tour']);
-
-    const grid = Array.from({ length: G }, () => Array(G).fill(null));
-    const occupied = Array.from({ length: G }, () => Array(G).fill(false));
-
-    const remaining = sorted;
-    let pi = 0;
-
-    for (let r = 0; r < G && pi < remaining.length; r++) {
-        for (let c = 0; c < G && pi < remaining.length; c++) {
-            if (occupied[r][c]) continue;
-
-            const isFeatured = featuredIds.has(remaining[pi].id);
-
-            if (isFeatured && r + 1 < G && c + 1 < G &&
-                !occupied[r][c+1] && !occupied[r+1][c] && !occupied[r+1][c+1]) {
-                grid[r][c] = { project: remaining[pi], featured: true };
-                occupied[r][c] = true;
-                occupied[r][c+1] = true;
-                occupied[r+1][c] = true;
-                occupied[r+1][c+1] = true;
-                pi++;
-                continue;
-            }
-
-            if ((r + c) % 4 === 3 && !isFeatured) {
-                continue;
-            }
-
-            grid[r][c] = { project: remaining[pi], featured: false };
-            occupied[r][c] = true;
-            pi++;
-        }
-    }
-
-    while (pi < remaining.length) {
-        for (let r = 0; r < G && pi < remaining.length; r++) {
-            for (let c = 0; c < G && pi < remaining.length; c++) {
-                if (!occupied[r][c]) {
-                    grid[r][c] = { project: remaining[pi], featured: false };
-                    occupied[r][c] = true;
-                    pi++;
-                }
-            }
-        }
-    }
 
     const cards = Array.from(container.querySelectorAll('.project-block'));
     const cardMap = new Map();
@@ -782,32 +734,83 @@ function renderGridLayout(container, allProjects) {
     const wrapper = document.createElement('div');
     wrapper.className = 'radar-grid-wrapper';
 
-    for (let r = 0; r < G; r++) {
-        for (let c = 0; c < G; c++) {
-            const cell = grid[r][c];
+    if (isMobile) {
+        // Mobile: simple sequential append — CSS grid handles layout
+        let regularIdx = 0;
+        sorted.forEach(p => {
+            const card = cardMap.get(p.id);
+            if (!card) return;
+            card.style.cssText = 'position:relative;';
+            if (featuredIds.has(p.id)) {
+                card.classList.add('featured-project');
+            } else {
+                regularIdx++;
+                if (regularIdx % 7 === 0) {
+                    card.classList.add('bento-wide');
+                }
+            }
+            wrapper.appendChild(card);
+        });
+    } else {
+        // Desktop: 10x10 grid placement with fillers
+        const G = GRID_SIZE;
+        const grid = Array.from({ length: G }, () => Array(G).fill(null));
+        const occupied = Array.from({ length: G }, () => Array(G).fill(false));
+        const remaining = sorted;
+        let pi = 0;
 
-            if (cell && cell.project) {
-                const p = cell.project;
-                const card = cardMap.get(p.id);
-                if (card) {
-                    card.style.cssText = 'position:relative;';
-                    if (cell.featured) card.classList.add('featured-project');
-                    wrapper.appendChild(card);
+        for (let r = 0; r < G && pi < remaining.length; r++) {
+            for (let c = 0; c < G && pi < remaining.length; c++) {
+                if (occupied[r][c]) continue;
+                const isFeatured = featuredIds.has(remaining[pi].id);
+                if (isFeatured && r + 1 < G && c + 1 < G &&
+                    !occupied[r][c+1] && !occupied[r+1][c] && !occupied[r+1][c+1]) {
+                    grid[r][c] = { project: remaining[pi], featured: true };
+                    occupied[r][c] = true;
+                    occupied[r][c+1] = true;
+                    occupied[r+1][c] = true;
+                    occupied[r+1][c+1] = true;
+                    pi++;
+                    continue;
+                }
+                if ((r + c) % 4 === 3 && !isFeatured) continue;
+                grid[r][c] = { project: remaining[pi], featured: false };
+                occupied[r][c] = true;
+                pi++;
+            }
+        }
+
+        while (pi < remaining.length) {
+            for (let r = 0; r < G && pi < remaining.length; r++) {
+                for (let c = 0; c < G && pi < remaining.length; c++) {
+                    if (!occupied[r][c]) {
+                        grid[r][c] = { project: remaining[pi], featured: false };
+                        occupied[r][c] = true;
+                        pi++;
+                    }
+                }
+            }
+        }
+
+        for (let r = 0; r < G; r++) {
+            for (let c = 0; c < G; c++) {
+                const cell = grid[r][c];
+                if (cell && cell.project) {
+                    const card = cardMap.get(cell.project.id);
+                    if (card) {
+                        card.style.cssText = 'position:relative;';
+                        if (cell.featured) card.classList.add('featured-project');
+                        wrapper.appendChild(card);
+                    } else {
+                        const filler = document.createElement('div');
+                        filler.className = 'grid-filler-invisible';
+                        wrapper.appendChild(filler);
+                    }
                 } else {
                     const filler = document.createElement('div');
                     filler.className = 'grid-filler-invisible';
                     wrapper.appendChild(filler);
                 }
-            } else if (cell && !cell.project) {
-                const card = cardMap.get(cell.id);
-                if (card) {
-                    card.style.cssText = 'position:relative;';
-                    wrapper.appendChild(card);
-                }
-            } else {
-                const filler = document.createElement('div');
-                filler.className = 'grid-filler-invisible';
-                wrapper.appendChild(filler);
             }
         }
     }
@@ -1235,36 +1238,7 @@ function debounce(func, wait) {
 // (Mobile neural overlay resize handler removed)
 
 // Mobile navigation functionality
-function initializeMobileNavigation() {
-    if (window.innerWidth > 768) return; // Only for mobile
-    
-    const navToggles = document.querySelectorAll('.nav-toggle');
-    const projectSection = document.querySelector('.project-section');
-    
-    navToggles.forEach(toggle => {
-        toggle.addEventListener('click', () => {
-            // Remove active class from all toggles
-            navToggles.forEach(t => t.classList.remove('active'));
-            
-            // Add active class to clicked toggle
-            toggle.classList.add('active');
-            
-            const section = toggle.getAttribute('data-section');
-            
-            if (section === 'portfolio') {
-                // Show portfolio
-                projectSection.style.display = 'block';
-                
-            } else if (section === 'skills') {
-                // Hide portfolio for now (we can add skills content later)
-                projectSection.style.display = 'none';
-                
-            }
-        });
-    });
-    
-    
-}
+// initializeMobileNavigation removed — hero header replaces hamburger nav
 
 // Test function - can be called from browser console
 function testShapes() {
@@ -2564,242 +2538,85 @@ function showProjectOverlay(projectId) {
     // Set the cached HTML content
     main.innerHTML = cachedProject.html;
     
-    // Add swipe detection for mobile
+    // Mobile bottom-sheet setup
     if (window.innerWidth <= 768) {
-        let startX = 0;
-        let startY = 0;
-        let startTime = 0;
-        let isSwipeGesture = false;
-        
-        
-        
-        overlay.addEventListener('touchstart', function(e) {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            startTime = Date.now();
-            isSwipeGesture = false;
-            
-            
-        }, { passive: false });
-        
-        overlay.addEventListener('touchmove', function(e) {
-            if (!startX || !startY) return;
-            
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
-            const deltaX = currentX - startX;
-            const deltaY = currentY - startY;
-            
-            
-            
-            // If horizontal movement is significant and more than vertical, prevent default
-            if (Math.abs(deltaX) > 20 && Math.abs(deltaX) > Math.abs(deltaY)) {
-                isSwipeGesture = true;
-                
-                e.preventDefault(); // Prevent browser back gesture
-            }
-        }, { passive: false });
-        
-        overlay.addEventListener('touchend', function(e) {
-            if (!startX || !startY) return;
-            
-            const endX = e.changedTouches[0].clientX;
-            const endY = e.changedTouches[0].clientY;
-            const endTime = Date.now();
-            
-            const deltaX = endX - startX;
-            const deltaY = endY - startY;
-            const deltaTime = endTime - startTime;
-            
-            
-            
-            // Check for right swipe (deltaX > 50px, horizontal movement > vertical, fast gesture)
-            if (isSwipeGesture && deltaX > 50 && Math.abs(deltaX) > Math.abs(deltaY) && deltaTime < 500) {
-                
-                e.preventDefault();
-                e.stopPropagation();
-                closeProjectOverlay();
-            } else {
-                
-            }
-            
-            // Reset values
-            startX = 0;
-            startY = 0;
-            startTime = 0;
-            isSwipeGesture = false;
-        }, { passive: false });
-    }
-    
-    // Mobile viewport fixes
-    if (window.innerWidth <= 768) {
-        // Save scroll position
         const savedScrollPosition = window.pageYOffset;
-        
-        // Force mobile overlay to be positioned correctly
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100vw';
-        overlay.style.height = '100vh';
-        overlay.style.zIndex = '10000';
-        overlay.style.display = 'block';
-        overlay.style.opacity = '1';
-        // Remove transform override to allow CSS animation
-        overlay.style.overflowY = 'hidden';
-        
-        // Ensure the content container is also mobile-positioned
-        const contentElement = overlay.querySelector('.project-overlay-content');
-        if (contentElement) {
-            contentElement.style.height = '100vh';
-            contentElement.style.maxHeight = '100vh';
-            contentElement.style.overflowY = 'auto';
-            contentElement.style.padding = '0.5rem';
-            contentElement.style.width = '100%';
+
+        // Add bottom-sheet class and drag handle
+        overlay.classList.add('bottom-sheet');
+        let handle = overlay.querySelector('.bottom-sheet-handle');
+        if (!handle) {
+            handle = document.createElement('div');
+            handle.className = 'bottom-sheet-handle';
+            handle.innerHTML = '<span class="handle-pill"></span>';
+            overlay.insertBefore(handle, overlay.firstChild);
         }
-        
-        // Ensure main content area is visible
-        const mainElement = main;
-        if (mainElement) {
-            mainElement.style.position = 'relative';
-            mainElement.style.zIndex = '10002';
-            mainElement.style.height = 'auto';
-            mainElement.style.minHeight = '100vh';
-            mainElement.style.overflow = 'visible';
-            mainElement.style.backgroundColor = 'transparent';
-            mainElement.style.opacity = '1';
-            mainElement.style.display = 'block';
-        }
-        
-        // Force the overlay to show content instead of just "darkening"
-        setTimeout(() => {
-            overlay.style.display = 'block';
-            
-            // Force initial state for animation
-            overlay.style.transform = 'translateX(100%)';
-            overlay.style.opacity = '0';
-            overlay.style.visibility = 'hidden';
-            
-            // Debug animation states for mobile
-            
-            
-            
-            
-            
-            
-            
-            // Force a reflow to ensure the initial state is applied
-            overlay.offsetHeight;
-            
-            // Now add the active class to trigger animation
-            overlay.classList.add('active');
-            
-            // Remove inline styles and reset scroll after overlay is visible
-            setTimeout(() => {
-                overlay.style.transform = '';
-                overlay.style.opacity = '';
-                overlay.style.visibility = '';
-                overlay.scrollTop = 0;
-                if (contentElement) contentElement.scrollTop = 0;
-            }, 10);
-            
-            // Debug after adding active class
-            setTimeout(() => {
-                
-                
-                
-                
-                
-                
-                
-            }, 100);
-            
-            // Allow CSS animation to work
-            // Debug log for mobile
-            
-        }, 50);
-        
-        // Prevent body scroll on mobile
+
+        // Prevent body scroll while sheet is open
         document.body.style.position = 'fixed';
         document.body.style.top = `-${savedScrollPosition}px`;
         document.body.style.width = '100%';
-        
-        // Add swipe gesture support for mobile
-        let startX = 0;
-        let startY = 0;
-        let isSwipeGesture = false;
-        
-        overlay.addEventListener('touchstart', function(e) {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-            isSwipeGesture = false;
+
+        // Drag-to-dismiss on the handle area
+        let dragStartY = 0;
+        let dragging = false;
+        let sheetTranslate = 0;
+
+        handle.addEventListener('touchstart', (e) => {
+            dragStartY = e.touches[0].clientY;
+            dragging = true;
+            overlay.style.transition = 'none';
         }, { passive: true });
-        
-        overlay.addEventListener('touchmove', function(e) {
-            if (!startX || !startY) return;
-            
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
-            
-            const diffX = startX - currentX;
-            const diffY = startY - currentY;
-            
-            // Check if this is a horizontal swipe (more horizontal than vertical movement)
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-                isSwipeGesture = true;
+
+        overlay.addEventListener('touchmove', (e) => {
+            if (!dragging) return;
+            const dy = e.touches[0].clientY - dragStartY;
+            if (dy > 0) {
+                sheetTranslate = dy;
+                overlay.style.transform = `translateY(${dy}px)`;
             }
         }, { passive: true });
-        
-        overlay.addEventListener('touchend', function(e) {
-            if (!startX || !startY) return;
-            
-            const endX = e.changedTouches[0].clientX;
-            const diffX = startX - endX;
-            
-            // Left swipe detected (swipe left to go back)
-            if (isSwipeGesture && diffX > 100) {
-                
+
+        overlay.addEventListener('touchend', () => {
+            if (!dragging) return;
+            dragging = false;
+            overlay.style.transition = '';
+            if (sheetTranslate > 120) {
                 closeProjectOverlay();
+            } else {
+                overlay.style.transform = '';
             }
-            
-            // Reset values
-            startX = 0;
-            startY = 0;
-            isSwipeGesture = false;
+            sheetTranslate = 0;
         }, { passive: true });
-        
-        // Restore scroll position when overlay closes
-        overlay.addEventListener('closemobile', function() {
+
+        // Restore scroll on close
+        overlay.addEventListener('closemobile', () => {
             document.body.style.position = '';
             document.body.style.top = '';
             document.body.style.width = '';
             window.scrollTo(0, savedScrollPosition);
         });
+
+        // Position the content
+        const contentElement = overlay.querySelector('.project-overlay-content');
+        if (contentElement) {
+            contentElement.style.overflowY = 'auto';
+            contentElement.style.height = '100%';
+        }
     }
     
     // Show overlay with animation
     overlay.style.display = 'block';
     
-    // Force initial state for animation
-    overlay.style.transform = 'translateX(100%)';
+    const isMobileOverlay = window.innerWidth <= 768;
+    overlay.style.transform = isMobileOverlay ? 'translateY(100%)' : 'translateX(100%)';
     overlay.style.opacity = '0';
     overlay.style.visibility = 'hidden';
     
-    // Debug animation states
+    overlay.offsetHeight; // reflow
     
-    
-    
-    
-    
-    
-    
-    // Force a reflow to ensure the initial state is applied
-    overlay.offsetHeight;
-    
-    // Now add the active class to trigger animation
     overlay.classList.add('active');
     
-    // Remove inline styles and reset scroll after overlay is visible
     setTimeout(() => {
         overlay.style.transform = '';
         overlay.style.opacity = '';
@@ -2808,17 +2625,6 @@ function showProjectOverlay(projectId) {
         const scrollContainer = overlay.querySelector('.project-overlay-content');
         if (scrollContainer) scrollContainer.scrollTop = 0;
     }, 10);
-    
-    // Debug after adding active class
-    setTimeout(() => {
-        
-        
-        
-        
-        
-        
-        
-    }, 100);
     
     isOverlayOpen = true;
     
@@ -2907,6 +2713,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
     const regularProjects = projectsWithMedia.filter(p => !p.featured);
     const orderedProjects = [...featuredProjects, ...regularProjects];
 
+    const isMobileRender = window.innerWidth <= 768;
     const htmlContent = orderedProjects.map((p, index) => {
         const shortTitle = p.title || p.id || 'Untitled Project';
         const categories = ['installation', 'generative', 'performance', 'commercial'];
@@ -2916,6 +2723,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         
         const className = `project-block category-${category} variation-${variation}${featuredClass}`;
         const projectNumber = String(index + 1).padStart(2, '0');
+        const yearStr = p.year ? String(p.year) : '';
         return `<article class="${className}" data-project-title="${p.title}" data-project-id="${p.id}" data-score-x="${(p._scores?.x || 0.5).toFixed(3)}" data-score-y="${(p._scores?.y || 0.5).toFixed(3)}">
             <a href="project.html?id=${p.id}" class="project-link">
                 <div class="block-surface">
@@ -2926,6 +2734,11 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
                         ${p.client && p.client !== 'N/A' ? `<div class="project-artist">${p.client}</div>` : ''}
                         ${p.year ? `<div class="project-year">${p.year}</div>` : ''}
                     </div>
+                    ${isMobileRender ? `<div class="card-scrim">
+                        <span class="card-scrim-title">${shortTitle}</span>
+                    </div>
+                    ${yearStr ? `<span class="card-year-badge">${yearStr}</span>` : ''}
+                    <div class="card-slideshow-dots"></div>` : ''}
                 </div>
             </a>
         </article>`;
@@ -2995,13 +2808,6 @@ function initBackgroundImageHover() {
     const backgroundOverlay = document.createElement('div');
     backgroundOverlay.className = 'project-background-image';
     document.body.appendChild(backgroundOverlay);
-    
-    // Side panel for image preview removed - functionality disabled
-    
-    // Create mobile overlay background
-    const mobileOverlay = document.createElement('div');
-    mobileOverlay.className = 'mobile-overlay';
-    document.body.appendChild(mobileOverlay);
     
     if (isMobile) {
         // Mobile: Use the same overlay system, not card expansion
@@ -3211,6 +3017,17 @@ function startSlideshow(card) {
     const currentImg = overlay.querySelector('img:not(.slideshow-next)');
     if (!currentImg) return;
 
+    // Build slideshow dots on mobile
+    const dotsContainer = card.querySelector('.card-slideshow-dots');
+    if (dotsContainer && dotsContainer.children.length === 0) {
+        const dotCount = Math.min(images.length, 5);
+        for (let i = 0; i < dotCount; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dotsContainer.appendChild(dot);
+        }
+    }
+
     let currentIdx = 0;
     const nextImg = document.createElement('img');
     nextImg.className = 'slideshow-next';
@@ -3228,6 +3045,15 @@ function startSlideshow(card) {
         nextImg.src = images[currentIdx];
         nextImg.onload = () => {
             nextImg.classList.add('visible');
+            // Update dots
+            if (dotsContainer) {
+                const dots = dotsContainer.querySelectorAll('.dot');
+                const dotCount = dots.length;
+                if (dotCount > 0) {
+                    dots.forEach(d => d.classList.remove('active'));
+                    dots[currentIdx % dotCount].classList.add('active');
+                }
+            }
             setTimeout(() => {
                 currentImg.src = images[currentIdx];
                 nextImg.classList.remove('visible');
@@ -3378,6 +3204,34 @@ function injectClusterLabels(container, allProjects) {
     });
 }
 
+// ── Mobile Entrance Animations ────────────────────────────────────────────────
+
+function initMobileEntranceAnimations() {
+    if (window.innerWidth > 768) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('card-enter')) {
+                const idx = parseInt(entry.target.dataset.entranceIdx || '0', 10);
+                const delay = Math.min(idx * 50, 300);
+                entry.target.style.animationDelay = delay + 'ms';
+                entry.target.classList.add('card-enter');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    setTimeout(() => {
+        let idx = 0;
+        document.querySelectorAll('.project-block').forEach(card => {
+            card.dataset.entranceIdx = String(idx % 6);
+            card.style.opacity = '0';
+            observer.observe(card);
+            idx++;
+        });
+    }, 200);
+}
+
 // ── Mobile Scatter Layout (retired — mobile now uses renderGridLayout) ───────
 
 function initializeNeuralNetwork() {
@@ -3453,6 +3307,7 @@ function initializeNeuralNetwork() {
         initLazyThumbnailLoading();
         initMobileSlideshow();
         initDesktopSlideshow();
+        initMobileEntranceAnimations();
         
         
     });
@@ -3555,7 +3410,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initParallaxEffect();
     
     // Initialize mobile navigation
-    initializeMobileNavigation();
     
     // Add keyboard controls for shape cycling
     addShapeKeyboardListener();
@@ -3581,7 +3435,6 @@ if (document.readyState === 'loading') {
         initParallaxEffect();
         
         // Initialize mobile navigation
-        initializeMobileNavigation();
     });
 } else {
     generateConcentricSquares();
@@ -3590,7 +3443,6 @@ if (document.readyState === 'loading') {
     initParallaxEffect();
     
     // Initialize mobile navigation
-    initializeMobileNavigation();
     
     // Add keyboard controls for shape cycling
     addShapeKeyboardListener();
