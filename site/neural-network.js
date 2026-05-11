@@ -1205,11 +1205,11 @@ function addShapeKeyboardListener() {
         }
     });
     
-    // Add window resize listener for responsive repositioning
+    // Add window resize listener for responsive repositioning (desktop only)
     window.addEventListener('resize', debounce(function() {
+        if (window.innerWidth <= 768) return;
         
         if (isNeuralNetworkStyle) {
-            // Re-layout all cards on resize
             resetPositionedCards();
             const allBlocks = document.querySelectorAll('.project-block');
             allBlocks.forEach((block, index) => {
