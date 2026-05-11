@@ -5,7 +5,7 @@ const path = require('path');
 const MEDIA = path.join(__dirname, 'site', 'media');
 const HIGH_RES = path.join(MEDIA, 'high-res');
 const THUMBS = path.join(MEDIA, 'thumbnails');
-const MAX_WIDTH = 400;
+const MAX_WIDTH = 800;
 const SKIP_DIRS = new Set(['high-res', 'thumbnails']);
 
 async function run() {
@@ -56,7 +56,7 @@ async function run() {
             try {
                 await sharp(src)
                     .resize({ width: MAX_WIDTH, withoutEnlargement: true })
-                    .jpeg({ quality: 75 })
+                    .jpeg({ quality: 72, mozjpeg: true })
                     .toFile(tmp);
 
                 fs.renameSync(tmp, dest);
