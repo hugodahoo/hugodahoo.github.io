@@ -2713,54 +2713,37 @@ const mediaIndex = {
     "undercurrents": {
       "name": "Undercurrents",
       "files": [
-        {
-          "filename": "undercurrents_houston_2026_ne_001.jpg",
-          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_001.jpg",
-          "size": 200738,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1778018560
-        },
-        {
-          "filename": "undercurrents_houston_2026_ne_004.jpg",
-          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_004.jpg",
-          "size": 232207,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1778018564
-        },
-        {
-          "filename": "undercurrents_houston_2026_ne_006.jpg",
-          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_006.jpg",
-          "size": 124671,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1778018569
-        },
-        {
-          "filename": "undercurrents_houston_2026_ne_009.jpg",
-          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_009.jpg",
-          "size": 151568,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1778018589
-        },
-        {
-          "filename": "undercurrents_houston_2026_ne_011.jpg",
-          "path": "high-res/undercurrents/undercurrents_houston_2026_ne_011.jpg",
-          "size": 132680,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1778018593
-        }
+        { "filename": "undercurrents_houston_2026_ne_001.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_001.jpg", "size": 200738, "type": "image", "extension": ".jpg", "hash": "c7e9ada3", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_002.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_002.jpg", "size": 31460, "type": "image", "extension": ".jpg", "hash": "f9b332c2", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_004.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_004.jpg", "size": 232207, "type": "image", "extension": ".jpg", "hash": "92b9d864", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_005.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_005.jpg", "size": 29513, "type": "image", "extension": ".jpg", "hash": "4711eab8", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_006.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_006.jpg", "size": 124671, "type": "image", "extension": ".jpg", "hash": "d42fa24c", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_009.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_009.jpg", "size": 151568, "type": "image", "extension": ".jpg", "hash": "f860cee1", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_010.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_010.jpg", "size": 29473, "type": "image", "extension": ".jpg", "hash": "fe86e87e", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_011.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_011.jpg", "size": 132680, "type": "image", "extension": ".jpg", "hash": "25c6918d", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_012.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_012.jpg", "size": 30430, "type": "image", "extension": ".jpg", "hash": "887a7b1a", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_014.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_014.jpg", "size": 21296, "type": "image", "extension": ".jpg", "hash": "f9d60b39", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_015.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_015.jpg", "size": 29551, "type": "image", "extension": ".jpg", "hash": "07050444", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_017.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_017.jpg", "size": 25033, "type": "image", "extension": ".jpg", "hash": "8fd61c05", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_018.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_018.jpg", "size": 21956, "type": "image", "extension": ".jpg", "hash": "89791903", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_021.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_021.jpg", "size": 19504, "type": "image", "extension": ".jpg", "hash": "2e55b492", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_025.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_025.jpg", "size": 17868, "type": "image", "extension": ".jpg", "hash": "ddd7f4a2", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_027.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_027.jpg", "size": 29883, "type": "image", "extension": ".jpg", "hash": "2712a25b", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_028.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_028.jpg", "size": 30285, "type": "image", "extension": ".jpg", "hash": "9b8d202e", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_029.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_029.jpg", "size": 32748, "type": "image", "extension": ".jpg", "hash": "35827239", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_030.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_030.jpg", "size": 33447, "type": "image", "extension": ".jpg", "hash": "25ac609c", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_032.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_032.jpg", "size": 27250, "type": "image", "extension": ".jpg", "hash": "fe813c7b", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_033.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_033.jpg", "size": 31202, "type": "image", "extension": ".jpg", "hash": "34af6934", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_035.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_035.jpg", "size": 35413, "type": "image", "extension": ".jpg", "hash": "0147490d", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_036.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_036.jpg", "size": 29024, "type": "image", "extension": ".jpg", "hash": "fcc56221", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_ne_037.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_ne_037.jpg", "size": 28689, "type": "image", "extension": ".jpg", "hash": "bc9d207a", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_rlh_001.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_rlh_001.jpg", "size": 34625, "type": "image", "extension": ".jpg", "hash": "79052b2f", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_rlh_002.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_rlh_002.jpg", "size": 40050, "type": "image", "extension": ".jpg", "hash": "ac91a731", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_rlh_003.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_rlh_003.jpg", "size": 39973, "type": "image", "extension": ".jpg", "hash": "15c87e2b", "last_modified": 1778100000 },
+        { "filename": "undercurrents_houston_2026_rlh_004.jpg", "path": "high-res/undercurrents/undercurrents_houston_2026_rlh_004.jpg", "size": 41191, "type": "image", "extension": ".jpg", "hash": "a662328c", "last_modified": 1778100000 }
       ],
-      "total_files": 5,
-      "total_size": 841864,
+      "total_files": 28,
+      "total_size": 1531728,
       "has_issues": false
     },
     "my-morning-jacket": {
@@ -2832,7 +2815,7 @@ const mediaIndex = {
 mediaIndex.validation = {
     "original_media_projects": 37,
     "high_res_projects": 43,
-    "total_files_in_high_res": 275,
+    "total_files_in_high_res": 298,
     "has_consistency_issues": true
 };
 

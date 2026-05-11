@@ -1,10 +1,18 @@
 <!doctype html>
-<html lang="fr" class="no-scroll">
+<html lang="en" class="no-scroll">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hugo Daoust – Creative Technologist</title>
     <meta name="description" content="Interactive installations, projection mapping, computer vision, and real-time systems.">
+    
+    <!-- i18n: load translation engine before anything else -->
+    <script src="i18n.js?v=1"></script>
+    <script src="data-fr.js?v=1"></script>
+    <script>
+        document.title = i18n.t('meta.title');
+        document.querySelector('meta[name="description"]').content = i18n.t('meta.description');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet">
@@ -34,11 +42,14 @@
             <div class="mobile-hero-inner">
                 <div class="mobile-hero-text">
                     <h1 class="mobile-hero-name">Hugo Daoust</h1>
-                    <p class="mobile-hero-subtitle">Creative Technologist <span class="mobile-hero-sep">/</span> Montreal</p>
+                    <p class="mobile-hero-subtitle"><script>document.write(i18n.t('hero.subtitle'))</script> <span class="mobile-hero-sep">/</span> <script>document.write(i18n.t('nav.location'))</script></p>
                 </div>
                 <div class="mobile-hero-social">
-                    <a href="https://www.linkedin.com/in/hugo-daoust-4174b610a/" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
+                    <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
                     <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+                    <button class="lang-switch" onclick="i18n.switchLang()" aria-label="Switch language">
+                        <script>document.write(i18n.t('lang.switch'))</script>
+                    </button>
                 </div>
             </div>
         </header>
@@ -54,19 +65,43 @@
                 <a href="index.html" class="nav-name-link">HUGO DAOUST</a>
             </div>
             <div class="nav-identity">
-                <span class="nav-title">Creative Technologist</span>
-                <span class="nav-location">Montreal</span>
+                <span class="nav-title"><script>document.write(i18n.t('nav.title'))</script></span>
+                <span class="nav-location"><script>document.write(i18n.t('nav.location'))</script></span>
             </div>
             <div class="nav-line"></div>
             <div class="nav-social">
-                <a href="https://www.linkedin.com/in/hugo-daoust-4174b610a/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">LI</a>
+                <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">LI</a>
                 <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" class="nav-social-link" aria-label="Instagram">IG</a>
+                <button class="lang-switch" onclick="i18n.switchLang()" aria-label="Switch language">
+                    <script>document.write(i18n.t('lang.switch'))</script>
+                </button>
+            </div>
+            <div class="nav-bio">
+                <script>document.write(i18n.t('nav.bio'))</script>
+            </div>
+            <div class="nav-contact">
+                <a href="mailto:info@hugodaoust.com" class="nav-contact-link">info@hugodaoust.com</a>
             </div>
         </nav>
         
         <section class="project-section" id="section-1">
             <main id="list-1" class="project-grid"></main>
         </section>
+
+        <!-- Contact Footer -->
+        <footer class="site-footer" id="site-footer">
+            <div class="footer-inner">
+                <div class="footer-line"></div>
+                <h2 class="footer-heading"><script>document.write(i18n.t('footer.heading'))</script></h2>
+                <a href="mailto:info@hugodaoust.com" class="footer-email">info@hugodaoust.com</a>
+                <div class="footer-social">
+                    <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener">LinkedIn</a>
+                    <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener">Instagram</a>
+                </div>
+                <p class="footer-location"><script>document.write(i18n.t('footer.location'))</script></p>
+                <p class="footer-copy">&copy; 2026 Hugo Daoust</p>
+            </div>
+        </footer>
     </div>
     
     <!-- Critical CSS inline for faster rendering -->
@@ -124,7 +159,7 @@
         // Show loading state immediately
         document.addEventListener('DOMContentLoaded', function() {
             const projectGrid = document.getElementById('list-1');
-            projectGrid.innerHTML = '<div class="loading loading-dots">Loading projects</div>';
+            projectGrid.innerHTML = '<div class="loading loading-dots">' + i18n.t('loading.projects') + '</div>';
         });
     </script>
     
@@ -220,7 +255,7 @@
         document.addEventListener('DOMContentLoaded', async function() {
             const projectGrid = document.getElementById('list-1');
             if (projectGrid) {
-                projectGrid.innerHTML = '<div class="loading loading-dots">Loading projects</div>';
+                projectGrid.innerHTML = '<div class="loading loading-dots">' + i18n.t('loading.projects') + '</div>';
             }
             
             try {
@@ -229,7 +264,7 @@
             } catch (error) {
                 console.error('Error loading data:', error);
                 if (projectGrid) {
-                    projectGrid.innerHTML = '<div class="loading">Error loading projects</div>';
+                    projectGrid.innerHTML = '<div class="loading">' + i18n.t('loading.error') + '</div>';
                 }
             }
         });

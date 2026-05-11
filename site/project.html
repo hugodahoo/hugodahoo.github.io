@@ -1,12 +1,17 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Projet ? Hugo Daoust</title>
+    <title>Hugo Daoust</title>
+    
+    <!-- i18n: load translation engine before anything else -->
+    <script src="i18n.js?v=1"></script>
+    <script src="data-fr.js?v=1"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet">
@@ -29,12 +34,17 @@
     <nav class="mobile-nav-menu" id="mobile-nav-menu">
         <div class="nav-line"></div>
         <div class="nav-items">
-            <a href="index.html" class="nav-item">INDEX</a>
-            <a href="index.html#about" class="nav-item">ABOUT</a>
-            <a href="index.html#journal" class="nav-item">JOURNAL</a>
+            <a class="nav-item" id="nav-index">INDEX</a>
+            <a class="nav-item" id="nav-about">ABOUT</a>
+            <a class="nav-item" id="nav-journal">JOURNAL</a>
         </div>
         <div class="nav-line"></div>
     </nav>
+    <script>
+        document.getElementById('nav-index').href = i18n.localHref('index.html');
+        document.getElementById('nav-about').href = i18n.localHref('index.html#about');
+        document.getElementById('nav-journal').href = i18n.localHref('index.html#journal');
+    </script>
     <main id="project"></main>
     
     <!-- Neural network background with 3 layers -->
@@ -107,9 +117,10 @@
                     const vid = m[1];
                     return `<div class="media"><iframe width="560" height="315" src="https://www.youtube.com/embed/${vid}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
                 }
-                if ((m = url.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/))) {
+                if ((m = url.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)(?:\/([a-f0-9]+))?/))) {
                     const vid = m[1];
-                    return `<div class="media"><iframe src="https://player.vimeo.com/video/${vid}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+                    const hash = m[2] ? `h=${m[2]}&` : '';
+                    return `<div class="media"><iframe src="https://player.vimeo.com/video/${vid}?${hash}autoplay=1&muted=1&loop=1" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
                 }
                 const isVideo = /\.(mp4|webm|mov)$/i.test(url);
                 return isVideo ? `<video controls src="${url}" preload="metadata"></video>` : `<img loading="lazy" src="${url}" alt="${title}">`;
@@ -119,12 +130,13 @@
         }
         
         if (!p) {
-            root.innerHTML = `<p>Projet introuvable.</p>`;
+            root.innerHTML = `<p>${i18n.t('project.not_found')}</p>`;
             
         } else {
+            document.title = p.title + ' – Hugo Daoust';
             
             // Use fullDescription if available, otherwise fall back to description
-            const mainDescription = p.fullDescription || p.description || "";
+            const mainDescription = i18n.tp(p, 'fullDescription') || i18n.tp(p, 'description') || "";
             
             // Parse description using same logic as the overlay (neural-network.js)
             let mainDescHtml = '';
@@ -142,61 +154,48 @@
                 let currentSection = '';
                 let inBulletSection = false;
                 
+                let isChallengesSection = false;
+                
                 formattedDesc.forEach(line => {
-                    if (line.startsWith('**') && line.endsWith('**')) {
+                    const isSectionHeader = (line.startsWith('**') && line.endsWith('**')) ||
+                        line === 'Technical details and implementation' || line === 'Détails techniques et implémentation' ||
+                        line === 'Challenges and solutions' || line === 'Défis et solutions' ||
+                        line === 'Impact and results' || line === 'Impact et résultats' ||
+                        line === 'Process and methodology' || line === 'Processus et méthodologie';
+                    
+                    if (isSectionHeader) {
                         if (currentSection) {
-                            if (inBulletSection) bulletHtml += '</ul>';
-                            else mainHtml += '</ul>';
+                            if (isChallengesSection) bulletHtml += '</ul>';
+                            else if (!inBulletSection) mainHtml += '</ul>';
                         }
-                        const sectionTitle = line.substring(2, line.length - 2);
-                        inBulletSection = sectionTitle.includes('Technical details') || 
-                                        sectionTitle.includes('Challenges') || 
-                                        sectionTitle.includes('Impact') || 
-                                        sectionTitle.includes('Process');
-                        let dataSection = '';
-                        if (sectionTitle.includes('Technical details')) dataSection = 'technical';
-                        else if (sectionTitle.includes('Challenges')) dataSection = 'challenges';
-                        else if (sectionTitle.includes('Impact')) dataSection = 'impact';
-                        else if (sectionTitle.includes('Process')) dataSection = 'process';
-                        const headerHtml = '<h3 data-section="' + dataSection + '">' + sectionTitle + '</h3><ul>';
-                        if (inBulletSection) bulletHtml += headerHtml;
-                        else mainHtml += headerHtml;
+                        const sectionTitle = (line.startsWith('**') && line.endsWith('**')) ? line.substring(2, line.length - 2) : line;
+                        inBulletSection = sectionTitle.includes('Technical details') || sectionTitle.includes('Détails techniques') ||
+                                        sectionTitle.includes('Challenges') || sectionTitle.includes('Défis') ||
+                                        sectionTitle.includes('Impact') ||
+                                        sectionTitle.includes('Process') || sectionTitle.includes('Processus');
+                        isChallengesSection = sectionTitle.includes('Challenges') || sectionTitle.includes('Défis');
+                        if (isChallengesSection) {
+                            bulletHtml += '<h3 data-section="challenges">' + sectionTitle + '</h3><ul>';
+                        }
                         currentSection = sectionTitle;
-                    } else if (line === 'Technical details and implementation' || 
-                               line === 'Challenges and solutions' || 
-                               line === 'Impact and results' || 
-                               line === 'Process and methodology') {
-                        if (currentSection) {
-                            if (inBulletSection) bulletHtml += '</ul>';
-                            else mainHtml += '</ul>';
-                        }
-                        inBulletSection = true;
-                        let dataSection = '';
-                        if (line.includes('Technical details')) dataSection = 'technical';
-                        else if (line.includes('Challenges')) dataSection = 'challenges';
-                        else if (line.includes('Impact')) dataSection = 'impact';
-                        else if (line.includes('Process')) dataSection = 'process';
-                        const headerHtml = '<h3 data-section="' + dataSection + '">' + line + '</h3><ul>';
-                        bulletHtml += headerHtml;
-                        currentSection = line;
                     } else if (line.startsWith('- ') || line.startsWith('\u2022')) {
                         const bulletText = line.startsWith('- ') ? line.substring(2) : line.substring(1).trim();
-                        if (inBulletSection) bulletHtml += '<li>' + bulletText + '</li>';
-                        else mainHtml += '<li>' + bulletText + '</li>';
+                        if (isChallengesSection) bulletHtml += '<li>' + bulletText + '</li>';
+                        else if (!inBulletSection) mainHtml += '<li>' + bulletText + '</li>';
                     } else {
                         if (currentSection) {
-                            if (inBulletSection) bulletHtml += '</ul>';
-                            else mainHtml += '</ul>';
+                            if (isChallengesSection) bulletHtml += '</ul>';
+                            else if (!inBulletSection) mainHtml += '</ul>';
                             currentSection = '';
                             inBulletSection = false;
+                            isChallengesSection = false;
                         }
-                        if (inBulletSection) bulletHtml += '<p>' + line + '</p>';
-                        else mainHtml += '<p>' + line + '</p>';
+                        if (!inBulletSection) mainHtml += '<p>' + line + '</p>';
                     }
                 });
                 if (currentSection) {
-                    if (inBulletSection) bulletHtml += '</ul>';
-                    else mainHtml += '</ul>';
+                    if (isChallengesSection) bulletHtml += '</ul>';
+                    else if (!inBulletSection) mainHtml += '</ul>';
                 }
                 mainDescHtml = mainHtml;
                 bulletPointsHtml = bulletHtml;
@@ -219,7 +218,7 @@
             }
             
             // Impact title
-            const impactTitle = p['impact-title'] || '';
+            const impactTitle = i18n.tp(p, 'impact-title') || '';
             if (impactTitle) {
                 let descOnly = impactTitle;
                 const di = impactTitle.indexOf(' \u2014 ');
@@ -241,25 +240,27 @@
                 contentBlocks.push('<div class="content-block image-grid-section"><div class="image-grid">' + gridHtml + '</div></div>');
             }
             
-            // Technical bullet points
+            // Challenges and solutions
             if (bulletPointsHtml.trim()) {
                 contentBlocks.push('<div class="content-block bullet-points-section"><div class="text-section bullet-points">' + bulletPointsHtml + '</div></div>');
             }
             
             // Render using same structure as the overlay
+            const translatedRole = i18n.tRole(p.role);
+            const backHref = i18n.localHref('index.html');
             const htmlContent = `
-                <a href="index.html" class="back-link">Back to projects</a>
+                <a href="${backHref}" class="back-link">${i18n.t('project.back')}</a>
                 <article class="project-article">
                     <header class="project-header" ${projectMediaFiles.length > 0 ? 'style="background-image: url(media/' + projectMediaFiles[0].path + ');"' : ''}>
                         <div class="header-overlay"></div>
                         <div class="header-content">
                             <h1>${p.title}</h1>
-                            <p class="meta">${[p.year, p.client, p.role].filter(Boolean).join(" \u00b7 ")}</p>
+                            <p class="meta">${[p.year, p.client, translatedRole].filter(Boolean).join(" \u00b7 ")}</p>
                             <p class="tech">${p.technologies || ""}</p>
                         </div>
                     </header>
                     <div class="project-title-bar">
-                        <a class="back-arrow" href="index.html" aria-label="Back to projects">&larr;</a>
+                        <a class="back-arrow" href="${backHref}" aria-label="${i18n.t('overlay.back_aria')}">&larr;</a>
                         <div class="project-title-bar-text">
                             <h2 class="project-title-bar-name">${p.title}</h2>
                             <p class="project-title-bar-meta">${[p.year, p.client].filter(Boolean).join(" \u00b7 ")}</p>

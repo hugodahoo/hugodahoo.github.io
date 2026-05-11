@@ -745,7 +745,9 @@ function renderGridLayout(container, allProjects) {
                 card.classList.add('featured-project');
             } else {
                 regularIdx++;
-                if (regularIdx % 7 === 0) {
+                // Wide card after every pair of 3 rows (every 6th regular)
+                // but only if it falls on an even count so it starts a new row
+                if (regularIdx > 0 && regularIdx % 8 === 0) {
                     card.classList.add('bento-wide');
                 }
             }
@@ -2106,7 +2108,7 @@ function formatTitleWithItalics(title) {
 
 function generateProjectHTML(project, mediaIndex) {
     const extra = (mediaIndex || {}).projects || {};
-    const mainDescription = project.fullDescription || project.description || "";
+    const mainDescription = (typeof i18n !== 'undefined' ? (i18n.tp(project, 'fullDescription') || i18n.tp(project, 'description')) : (project.fullDescription || project.description)) || "";
     
     // Separate main description from bullet points
     let mainDescHtml = '';
@@ -2124,132 +2126,67 @@ function generateProjectHTML(project, mediaIndex) {
         let currentSection = '';
         let inBulletSection = false;
         
+        let isChallengesSection = false;
+        
         formattedDesc.forEach(line => {
-            // Check for section headers (with ** markdown formatting)
-            if (line.startsWith('**') && line.endsWith('**')) {
-                // Section header - remove ** markers
+            const isSectionHeader = (line.startsWith('**') && line.endsWith('**')) ||
+                line === 'Technical details and implementation' || line === 'Détails techniques et implémentation' ||
+                line === 'Challenges and solutions' || line === 'Défis et solutions' ||
+                line === 'Impact and results' || line === 'Impact et résultats' ||
+                line === 'Process and methodology' || line === 'Processus et méthodologie';
+            
+            if (isSectionHeader) {
                 if (currentSection) {
-                    if (inBulletSection) {
-                        bulletHtml += '</ul>';
-                    } else {
-                        mainHtml += '</ul>';
-                    }
+                    if (isChallengesSection) bulletHtml += '</ul>';
+                    else if (inBulletSection) { /* skip non-challenges closing */ }
+                    else mainHtml += '</ul>';
                 }
-                const sectionTitle = line.substring(2, line.length - 2);
+                const sectionTitle = (line.startsWith('**') && line.endsWith('**')) ? line.substring(2, line.length - 2) : line;
                 
-                // Determine if this is a bullet point section
-                inBulletSection = sectionTitle.includes('Technical details') || 
-                                sectionTitle.includes('Challenges') || 
-                                sectionTitle.includes('Impact') || 
-                                sectionTitle.includes('Process');
+                inBulletSection = sectionTitle.includes('Technical details') || sectionTitle.includes('Détails techniques') ||
+                                sectionTitle.includes('Challenges') || sectionTitle.includes('Défis') ||
+                                sectionTitle.includes('Impact') ||
+                                sectionTitle.includes('Process') || sectionTitle.includes('Processus');
                 
-                // Add data attribute for styling
-                let dataSection = '';
-                if (sectionTitle.includes('Technical details')) dataSection = 'technical';
-                else if (sectionTitle.includes('Challenges')) dataSection = 'challenges';
-                else if (sectionTitle.includes('Impact')) dataSection = 'impact';
-                else if (sectionTitle.includes('Process')) dataSection = 'process';
+                isChallengesSection = sectionTitle.includes('Challenges') || sectionTitle.includes('Défis');
                 
-                const headerHtml = `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
-                
-                if (inBulletSection) {
-                    bulletHtml += headerHtml;
-                } else {
-                    mainHtml += headerHtml;
-                }
-                currentSection = sectionTitle;
-            } else if (line === 'Technical details and implementation' || 
-                       line === 'Challenges and solutions' || 
-                       line === 'Impact and results' || 
-                       line === 'Process and methodology') {
-                // Section header - plain text format
-                if (currentSection) {
-                    if (inBulletSection) {
-                        bulletHtml += '</ul>';
-                    } else {
-                        mainHtml += '</ul>';
-                    }
-                }
-                const sectionTitle = line;
-                
-                // Determine if this is a bullet point section
-                inBulletSection = sectionTitle.includes('Technical details') || 
-                                sectionTitle.includes('Challenges') || 
-                                sectionTitle.includes('Impact') || 
-                                sectionTitle.includes('Process');
-                
-                // Add data attribute for styling
-                let dataSection = '';
-                if (sectionTitle.includes('Technical details')) dataSection = 'technical';
-                else if (sectionTitle.includes('Challenges')) dataSection = 'challenges';
-                else if (sectionTitle.includes('Impact')) dataSection = 'impact';
-                else if (sectionTitle.includes('Process')) dataSection = 'process';
-                
-                const headerHtml = `<h3 data-section="${dataSection}">${sectionTitle}</h3><ul>`;
-                
-                if (inBulletSection) {
-                    bulletHtml += headerHtml;
-                } else {
-                    mainHtml += headerHtml;
+                if (isChallengesSection) {
+                    bulletHtml += `<h3 data-section="challenges">${sectionTitle}</h3><ul>`;
                 }
                 currentSection = sectionTitle;
             } else if (line.startsWith('•') || line.startsWith('-')) {
-                // Bullet point
                 const bulletText = line.slice(1).trim();
-                const bulletItem = `<li>${bulletText}</li>`;
-                
-                if (inBulletSection) {
-                    bulletHtml += bulletItem;
-                } else {
-                    mainHtml += bulletItem;
+                if (isChallengesSection) {
+                    bulletHtml += `<li>${bulletText}</li>`;
+                } else if (!inBulletSection) {
+                    mainHtml += `<li>${bulletText}</li>`;
                 }
             } else if (line.length > 0) {
-                // Regular paragraph
                 if (currentSection) {
-                    if (inBulletSection) {
-                        bulletHtml += '</ul>';
-                    } else {
-                        mainHtml += '</ul>';
-                    }
+                    if (isChallengesSection) bulletHtml += '</ul>';
+                    else if (!inBulletSection) mainHtml += '</ul>';
                     currentSection = '';
                     inBulletSection = false;
+                    isChallengesSection = false;
                 }
                 
-                // Check if this should be a prominent statement
-                const isProminent = line.length > 20 && line.length < 120 && 
-                                  (line.includes('transformed') || 
-                                   line.includes('innovative') || 
-                                   line.includes('breakthrough') || 
-                                   line.includes('revolutionary') || 
-                                   line.includes('immersive') || 
-                                   line.includes('interactive') || 
-                                   line.includes('cutting-edge') || 
-                                   line.includes('groundbreaking') ||
-                                   line.includes('multiuser') ||
-                                   line.includes('music-oriented') ||
-                                   line.includes('digital') ||
-                                   line.includes('experience') ||
-                                   line.includes('installation') ||
-                                   line.includes('collaboration'));
-                
-                const paragraph = isProminent ? 
-                    `<p class="prominent-statement">${line}</p>` : 
-                    `<p>${line}</p>`;
-                
-                if (inBulletSection) {
-                    bulletHtml += paragraph;
-                } else {
-                    mainHtml += paragraph;
+                if (!inBulletSection) {
+                    const isProminent = line.length > 20 && line.length < 120 && 
+                                      (line.includes('transformed') || line.includes('innovative') || 
+                                       line.includes('breakthrough') || line.includes('revolutionary') || 
+                                       line.includes('immersive') || line.includes('interactive') || 
+                                       line.includes('cutting-edge') || line.includes('groundbreaking') ||
+                                       line.includes('multiuser') || line.includes('music-oriented') ||
+                                       line.includes('digital') || line.includes('experience') || 
+                                       line.includes('installation') || line.includes('collaboration'));
+                    mainHtml += isProminent ? `<p class="prominent-statement">${line}</p>` : `<p>${line}</p>`;
                 }
             }
         });
         
         if (currentSection) {
-            if (inBulletSection) {
-                bulletHtml += '</ul>';
-    } else {
-                mainHtml += '</ul>';
-            }
+            if (isChallengesSection) bulletHtml += '</ul>';
+            else if (!inBulletSection) mainHtml += '</ul>';
         }
         
         mainDescHtml = mainHtml;
@@ -2328,7 +2265,7 @@ function generateProjectHTML(project, mediaIndex) {
     }
     
     // Add impact title section after videos (if exists)
-    const impactTitle = project['impact-title'] || '';
+    const impactTitle = (typeof i18n !== 'undefined' ? i18n.tp(project, 'impact-title') : project['impact-title']) || '';
     if (impactTitle) {
         // Extract the description part after " — "
         let descriptionOnly = impactTitle;
@@ -2415,13 +2352,13 @@ function generateProjectHTML(project, mediaIndex) {
                 <div class="header-overlay"></div>
                 <div class="header-content">
                 <h1>${formatTitleWithItalics(project.title)}</h1>
-                <p class="meta">${[project.year, project.client, project.role].filter(Boolean).join(" · ")}</p>
+                <p class="meta">${[project.year, project.client, (typeof i18n !== 'undefined' ? i18n.tRole(project.role) : project.role)].filter(Boolean).join(" · ")}</p>
                 <p class="tech">${project.technologies || ""}</p>
                 </div>
             </header>
             
             <div class="project-title-bar">
-                <button class="back-arrow" onclick="closeProjectOverlay()" aria-label="Back to projects">&larr;</button>
+                <button class="back-arrow" onclick="closeProjectOverlay()" aria-label="${typeof i18n !== 'undefined' ? i18n.t('overlay.back_aria') : 'Back to projects'}">&larr;</button>
                 <div class="project-title-bar-text">
                     <h2 class="project-title-bar-name">${formatTitleWithItalics(project.title)}</h2>
                     <p class="project-title-bar-meta">${[project.year, project.client].filter(Boolean).join(" · ")}</p>
@@ -2449,17 +2386,18 @@ function renderVideoEmbed(embedUrl) {
         // YouTube URLs
         if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?youtu\.be\/([\w-]+)/))) {
             const vid = m[1];
-            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
         }
         if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?youtube\.com\/(?:watch\?v=|shorts\/)([\w-]+)/))) {
             const vid = m[1];
-            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
+            return `<div class="video-embed"><iframe width="100%" height="400" src="https://www.youtube.com/embed/${vid}?autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
         }
         
-        // Vimeo URLs
-        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/))) {
+        // Vimeo URLs (with optional privacy hash)
+        if ((m = embedUrl.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)(?:\/([a-f0-9]+))?/))) {
             const vid = m[1];
-            return `<div class="video-embed"><iframe src="https://player.vimeo.com/video/${vid}" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+            const hash = m[2] ? `h=${m[2]}&` : '';
+            return `<div class="video-embed"><iframe src="https://player.vimeo.com/video/${vid}?${hash}autoplay=1&muted=1&loop=1" width="100%" height="400" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
         }
         
         // Direct iframe embed code
@@ -2489,9 +2427,10 @@ function renderMedia(url, title) {
             const vid = m[1];
             return `<div class="media"><iframe width="560" height="315" src="https://www.youtube.com/embed/${vid}" title="${title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>`;
         }
-        if ((m = url.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/))) {
+        if ((m = url.match(/^https?:\/\/(?:www\.)?vimeo\.com\/(\d+)(?:\/([a-f0-9]+))?/))) {
             const vid = m[1];
-            return `<div class="media"><iframe src="https://player.vimeo.com/video/${vid}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+            const hash = m[2] ? `h=${m[2]}&` : '';
+            return `<div class="media"><iframe src="https://player.vimeo.com/video/${vid}?${hash}autoplay=1&muted=1&loop=1" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
         }
         const isVideo = /\.(mp4|webm|mov)$/i.test(url);
         const mediaElement = isVideo ? 
@@ -2514,7 +2453,7 @@ function createProjectOverlay() {
     overlay.innerHTML = `
         <div class="project-overlay-content">
             <header class="project-overlay-header">
-                <a href="#" class="close-project" onclick="closeProjectOverlay()">← Tous les projets</a>
+                <a href="#" class="close-project" onclick="closeProjectOverlay()">${typeof i18n !== 'undefined' ? i18n.t('overlay.back') : '← All projects'}</a>
             </header>
             <main id="project-overlay-main"></main>
         </div>
@@ -2715,7 +2654,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
 
     const isMobileRender = window.innerWidth <= 768;
     const htmlContent = orderedProjects.map((p, index) => {
-        const shortTitle = p.title || p.id || 'Untitled Project';
+        const shortTitle = p.title || p.id || (typeof i18n !== 'undefined' ? i18n.t('untitled') : 'Untitled Project');
         const categories = ['installation', 'generative', 'performance', 'commercial'];
         const category = p.category || categories[index % categories.length];
         const variation = (index % 4) + 1;
@@ -2724,8 +2663,9 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
         const className = `project-block category-${category} variation-${variation}${featuredClass}`;
         const projectNumber = String(index + 1).padStart(2, '0');
         const yearStr = p.year ? String(p.year) : '';
+        const projectHref = typeof i18n !== 'undefined' ? i18n.localHref('project.html?id=' + p.id) : ('project.html?id=' + p.id);
         return `<article class="${className}" data-project-title="${p.title}" data-project-id="${p.id}" data-score-x="${(p._scores?.x || 0.5).toFixed(3)}" data-score-y="${(p._scores?.y || 0.5).toFixed(3)}">
-            <a href="project.html?id=${p.id}" class="project-link">
+            <a href="${projectHref}" class="project-link">
                 <div class="block-surface">
                     <div class="block-title" data-number="${projectNumber}">${shortTitle}</div>
                     <div class="thumbnail-overlay lazy-thumbnail" data-project-id="${p.id}"></div>
@@ -2809,6 +2749,16 @@ function initBackgroundImageHover() {
     backgroundOverlay.className = 'project-background-image';
     document.body.appendChild(backgroundOverlay);
     
+    function extractProjectId(href) {
+        try {
+            var u = new URL(href, window.location.origin);
+            return u.searchParams.get('id');
+        } catch (_) {
+            var m = href.match(/[?&]id=([^&#]+)/);
+            return m ? m[1] : null;
+        }
+    }
+
     if (isMobile) {
         // Mobile: Use the same overlay system, not card expansion
         document.addEventListener('click', function(e) {
@@ -2818,9 +2768,7 @@ function initBackgroundImageHover() {
                 
                 const projectBlock = projectLink.closest('.project-block');
             if (projectBlock) {
-                    // Get project ID from URL
-                    const projectUrl = projectLink.getAttribute('href');
-                    const projectId = projectUrl.split('id=')[1];
+                    const projectId = extractProjectId(projectLink.getAttribute('href'));
                     
                     if (projectId) {
                         // Show instant overlay on mobile (same as desktop)
@@ -2839,9 +2787,7 @@ function initBackgroundImageHover() {
                 
                 const projectBlock = projectLink.closest('.project-block');
                 if (projectBlock) {
-                    // Get project ID from URL
-                    const projectUrl = projectLink.getAttribute('href');
-                    const projectId = projectUrl.split('id=')[1];
+                    const projectId = extractProjectId(projectLink.getAttribute('href'));
                     
                     if (projectId) {
                         // Show instant overlay
@@ -3257,7 +3203,7 @@ function initializeNeuralNetwork() {
     if (!projectsToUse.length) {
         
         document.querySelectorAll('.project-grid').forEach(grid => {
-            grid.innerHTML = '<p style="padding:16px;color:#9aa">Aucun projet chargé. Vérifiez data.js.</p>';
+            grid.innerHTML = '<p style="padding:16px;color:#9aa">' + (typeof i18n !== 'undefined' ? i18n.t('loading.empty') : 'No projects loaded.') + '</p>';
         });
         return;
     }
@@ -3267,7 +3213,7 @@ function initializeNeuralNetwork() {
     // Show loading state
     const projectGrid = document.getElementById('list-1');
     if (projectGrid) {
-        projectGrid.innerHTML = '<div class="loading loading-dots">Generating neural network</div>';
+        projectGrid.innerHTML = '<div class="loading loading-dots">' + (typeof i18n !== 'undefined' ? i18n.t('loading.network') : 'Generating neural network') + '</div>';
     }
     
     // Use requestAnimationFrame for smooth rendering
