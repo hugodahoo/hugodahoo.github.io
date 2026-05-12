@@ -42,7 +42,7 @@
             <div class="mobile-hero-inner">
                 <div class="mobile-hero-text">
                     <h1 class="mobile-hero-name">Hugo Daoust</h1>
-                    <p class="mobile-hero-subtitle"><script>document.write(i18n.t('hero.subtitle'))</script> <span class="mobile-hero-sep">/</span> <script>document.write(i18n.t('nav.location'))</script></p>
+                    <p class="mobile-hero-subtitle"><span class="green-accent"><script>document.write(i18n.t('hero.subtitle'))</script></span> <span class="mobile-hero-sep">/</span> <script>document.write(i18n.t('nav.location'))</script></p>
                 </div>
                 <div class="mobile-hero-social">
                     <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
@@ -62,7 +62,7 @@
                         <a href="index.html" class="nav-name-link">HUGO DAOUST</a>
                     </div>
                     <div class="nav-identity">
-                        <span class="nav-title"><script>document.write(i18n.t('nav.title'))</script></span>
+                        <span class="nav-title green-accent"><script>document.write(i18n.t('nav.title'))</script></span>
                         <span class="nav-location"><script>document.write(i18n.t('nav.location'))</script></span>
                     </div>
                 </div>
@@ -295,32 +295,7 @@
         }
         
         .loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #90EE90;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .loading-dots::after {
-            content: '';
-            animation: dots 1.5s infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
+            content: ' :)';
         }
     </style>
     
