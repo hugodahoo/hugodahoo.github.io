@@ -1236,6 +1236,7 @@ window.projects = [
   },
   {
     "id": "my-morning-jacket",
+    "hidden": true,
     "title": "MY MORNING JACKET",
     "year": "2020",
     "client": "YouTube / WORLD",

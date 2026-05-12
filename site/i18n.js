@@ -46,7 +46,24 @@
     'section.process':       { en: 'Process and methodology', fr: 'Processus et méthodologie' },
 
     // Sidebar bio
-    'nav.bio':               { en: 'Interactive installations, concert visuals & immersive experiences', fr: 'Installations interactives, visuels de concert et expériences immersives' },
+    'nav.bio':               { en: 'Real-time visuals, computer vision, and sensor-driven installations', fr: 'Visuels temps réel, vision par ordinateur et installations pilotées par capteurs' },
+
+    // About overlay — bio paragraphs
+    'about.bio.p1': {
+      en: 'Creative technologist based in Montreal specializing in real-time graphics, computer vision, sensor integration, and projection mapping. He designs and builds interactive systems for large-scale art installations, live performance, and public space — works that respond to the presence, movement, and biometrics of their audiences.',
+      fr: 'Technologue créatif basé à Montréal, spécialisé en graphisme temps réel, vision par ordinateur, intégration de capteurs et projection architecturale. Il conçoit et développe des systèmes interactifs pour des installations artistiques à grande échelle, la performance en direct et l\'espace public — des œuvres qui réagissent à la présence, au mouvement et aux données biométriques du public.'
+    },
+    'about.bio.p2': {
+      en: 'Since 2021, Lead Creative Developer at Atelier Lozano-Hemmer, where he researches, prototypes, programs, and installs interactive artworks exhibited across four continents — from Abu Dhabi\'s MANAR festival and Madrid\'s LuzMadrid to Swarovski Crystal Worlds in Austria and the MOCA Jacksonville. Previously at Moment Factory, where he built visual systems for international tours including Arcade Fire (Infinite Content Tour, Frame Award — Set Design of the Year), Red Hot Chili Peppers (Getaway Tour), and Billie Eilish, alongside permanent installations like Nova Lumina and Kontinuum.',
+      fr: 'Depuis 2021, Lead Creative Developer à l\'Atelier Lozano-Hemmer, où il conçoit, prototype, programme et installe des œuvres interactives exposées sur quatre continents — du festival MANAR d\'Abu Dhabi à LuzMadrid en passant par le Swarovski Crystal Worlds en Autriche et le MOCA Jacksonville. Auparavant chez Moment Factory, il a développé les systèmes visuels de tournées internationales incluant Arcade Fire (Infinite Content Tour, Frame Award — Set Design of the Year), Red Hot Chili Peppers (Getaway Tour) et Billie Eilish, ainsi que des installations permanentes comme Nova Lumina et Kontinuum.'
+    },
+    'about.bio.p3': {
+      en: 'B.A. in Interactive Media & Digital Art, UQAM. TouchDesigner specialist. Over 60 projects delivered across 15+ countries.',
+      fr: 'Baccalauréat en médias interactifs et art numérique, UQAM. Spécialiste TouchDesigner. Plus de 60 projets livrés dans plus de 15 pays.'
+    },
+
+    // About section headings
+    'about.specialties':     { en: 'Specialties', fr: 'Spécialités' },
 
     // Footer
     'footer.heading':        { en: 'Get in touch', fr: 'Contact' },

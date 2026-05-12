@@ -1,5 +1,10 @@
 // Neural Network Portfolio Implementation
 
+function getSidebarWidth() {
+    var sidebar = document.getElementById('sidebar');
+    if (!sidebar || window.innerWidth <= 768) return 0;
+    return sidebar.offsetWidth + 16;
+}
 
 const projects = window.projects || [];
 
@@ -504,7 +509,7 @@ function sortBySimilarity(allProjects) {
 }
 
 function generateGridBackground(allProjects) {
-    const G = 40;
+    const G = 20; // Reduced from 40 — half the dots, same visual feel
     const pad = 1;
     const viewW = 200;
     const viewH = 120;
@@ -521,82 +526,51 @@ function generateGridBackground(allProjects) {
         return s;
     }
 
-    // Layer 1 (slowest): structural grid, dots, tick marks
     let p1 = '';
-    // Layer 2 (medium): radar rings, crosshairs, diagonal scans, data text
     let p2 = '';
-    // Layer 3 (fastest): data paths, project markers, geometric shapes, info blocks
     let p3 = '';
 
-    // ═══ LAYER 1 (slowest): structural grid, dots, ticks ═══
+    // ═══ LAYER 1: structural grid — dots only at major/mid intersections ═══
     for (let r = 0; r <= G; r++) {
         for (let c = 0; c <= G; c++) {
             const x = pad + c * cellW;
             const y = pad + r * cellH;
-            const isMajor = (r % 10 === 0 && c % 10 === 0);
-            const isMid = (r % 5 === 0 && c % 5 === 0);
-            const radius = isMajor ? 0.6 : isMid ? 0.4 : 0.18;
-            const opacity = isMajor ? 0.7 : isMid ? 0.4 : 0.15;
+            const isMajor = (r % 5 === 0 && c % 5 === 0);
+            const isMid = (r % 2 === 0 && c % 2 === 0);
+            if (!isMajor && !isMid) continue; // Skip fine dots entirely
+            const radius = isMajor ? 0.6 : 0.25;
+            const opacity = isMajor ? 0.7 : 0.15;
             p1 += `<circle cx="${x}" cy="${y}" r="${radius}" fill="rgba(90,155,115,${opacity})"/>`;
         }
     }
-    for (let i = 0; i <= G; i += 10) {
-        const x = pad + i * cellW;
-        const y = pad + i * cellH;
-        p1 += `<line x1="${pad}" y1="${y}" x2="${viewW - pad}" y2="${y}" stroke="rgba(90,155,115,0.35)" stroke-width="0.2"/>`;
-        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.35)" stroke-width="0.2"/>`;
-    }
+    // Major grid lines only
     for (let i = 0; i <= G; i += 5) {
-        if (i % 10 === 0) continue;
         const x = pad + i * cellW;
         const y = pad + i * cellH;
-        p1 += `<line x1="${pad}" y1="${y}" x2="${viewW - pad}" y2="${y}" stroke="rgba(90,155,115,0.18)" stroke-width="0.14"/>`;
-        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.18)" stroke-width="0.14"/>`;
+        const isMajor = i % 10 === 0;
+        const op = isMajor ? 0.35 : 0.12;
+        const sw = isMajor ? 0.2 : 0.12;
+        p1 += `<line x1="${pad}" y1="${y}" x2="${viewW - pad}" y2="${y}" stroke="rgba(90,155,115,${op})" stroke-width="${sw}"/>`;
+        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${viewH - pad}" stroke="rgba(90,155,115,${op})" stroke-width="${sw}"/>`;
     }
-    for (let i = 0; i <= G; i++) {
-        if (i % 5 === 0) continue;
+    // Tick labels only at major marks
+    for (let i = 0; i <= G; i += 5) {
         const x = pad + i * cellW;
-        const y = pad + i * cellH;
-        p1 += `<line x1="${pad}" y1="${y}" x2="${viewW - pad}" y2="${y}" stroke="rgba(90,155,115,0.07)" stroke-width="0.1"/>`;
-        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.07)" stroke-width="0.1"/>`;
-    }
-    for (let i = 0; i <= G; i++) {
-        const x = pad + i * cellW;
-        const y = pad + i * cellH;
-        const tickLen = (i % 10 === 0) ? 1.5 : (i % 5 === 0) ? 1.0 : 0.5;
-        const tickOp = (i % 10 === 0) ? 0.7 : (i % 5 === 0) ? 0.4 : 0.15;
-        p1 += `<line x1="${x}" y1="${pad}" x2="${x}" y2="${pad - tickLen}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
-        p1 += `<line x1="${x}" y1="${viewH - pad}" x2="${x}" y2="${viewH - pad + tickLen}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
-        if (i <= G * viewH / viewW) {
-            p1 += `<line x1="${pad}" y1="${y}" x2="${pad - tickLen}" y2="${y}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
-            p1 += `<line x1="${viewW - pad}" y1="${y}" x2="${viewW - pad + tickLen}" y2="${y}" stroke="rgba(90,155,115,${tickOp})" stroke-width="0.12"/>`;
-        }
-        if (i % 5 === 0) {
-            const label = (i / G * 10).toFixed(0);
-            p1 += `<text x="${x}" y="${pad - 1.8}" text-anchor="middle" fill="rgba(90,155,115,0.5)" font-size="1.4" font-family="monospace">${label}</text>`;
-            p1 += `<text x="${x}" y="${viewH - pad + 2.8}" text-anchor="middle" fill="rgba(90,155,115,0.3)" font-size="1.2" font-family="monospace">${label}</text>`;
-        }
+        const label = (i / G * 10).toFixed(0);
+        p1 += `<text x="${x}" y="${pad - 1.8}" text-anchor="middle" fill="rgba(90,155,115,0.5)" font-size="1.4" font-family="monospace">${label}</text>`;
     }
 
-    // ═══ LAYER 2 (medium): radar rings, crosshairs, diagonals, data text, shapes ═══
-    for (let d = -G; d <= G; d += 8) {
-        const x1 = pad + Math.max(0, d) * cellW;
-        const y1 = pad + Math.max(0, -d) * cellH;
-        const x2 = Math.min(viewW - pad, pad + (d + G) * cellW);
-        const y2 = Math.min(viewH - pad, pad + (G - d) * cellH * viewH / viewW);
-        p2 += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="rgba(90,155,115,0.06)" stroke-width="0.1"/>`;
-    }
+    // ═══ LAYER 2: radar rings, crosshairs, data text (reduced counts) ═══
     const cx = viewW / 2;
     const cy = viewH / 2;
-    for (let r = 5; r <= 55; r += 5) {
-        const op = r % 10 === 0 ? 0.2 : 0.08;
-        p2 += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(90,155,115,${op})" stroke-width="0.12"/>`;
+    for (let r = 10; r <= 55; r += 10) {
+        p2 += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(90,155,115,0.15)" stroke-width="0.12"/>`;
     }
     p2 += `<line x1="${pad}" y1="${cy}" x2="${viewW - pad}" y2="${cy}" stroke="rgba(90,155,115,0.2)" stroke-width="0.15" stroke-dasharray="1 2"/>`;
     p2 += `<line x1="${cx}" y1="${pad}" x2="${cx}" y2="${viewH - pad}" stroke="rgba(90,155,115,0.2)" stroke-width="0.15" stroke-dasharray="1 2"/>`;
 
-    const dataWords = ['TAG', 'NODE', 'LINK', 'GRID', 'MAP', 'VEC', 'POS', 'IDX', 'REF', 'SRC', 'OUT', 'IN', 'NET', 'SIM', 'CLS', 'GRP', 'ADJ', 'EDGE', 'DIST', 'ATTR', 'REP'];
-    for (let i = 0; i < 60; i++) {
+    const dataWords = ['TAG', 'NODE', 'LINK', 'GRID', 'MAP', 'VEC', 'NET', 'SIM', 'EDGE', 'DIST'];
+    for (let i = 0; i < 25; i++) { // Reduced from 60
         const x = pad + rand() * (viewW - pad * 2);
         const y = pad + rand() * (viewH - pad * 2);
         const word = dataWords[Math.floor(rand() * dataWords.length)];
@@ -604,59 +578,30 @@ function generateGridBackground(allProjects) {
         const op = 0.12 + rand() * 0.18;
         p2 += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="rgba(90,155,115,${op.toFixed(2)})" font-size="${(0.6 + rand() * 0.6).toFixed(1)}" font-family="monospace">${word}:${val}</text>`;
     }
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 12; i++) { // Reduced from 30
         const x = pad + rand() * (viewW - pad * 2);
         const y = pad + rand() * (viewH - pad * 2);
-        const type = Math.floor(rand() * 3);
         const op = 0.12 + rand() * 0.18;
-        if (type === 0) {
-            const s = 0.4 + rand() * 0.6;
-            p2 += `<rect x="${(x - s / 2).toFixed(1)}" y="${(y - s / 2).toFixed(1)}" width="${s.toFixed(1)}" height="${s.toFixed(1)}" fill="none" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08" transform="rotate(${(rand() * 45).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
-        } else if (type === 1) {
-            const s = 0.3 + rand() * 0.4;
-            const pts = `${x.toFixed(1)},${(y - s).toFixed(1)} ${(x - s * 0.87).toFixed(1)},${(y + s * 0.5).toFixed(1)} ${(x + s * 0.87).toFixed(1)},${(y + s * 0.5).toFixed(1)}`;
-            p2 += `<polygon points="${pts}" fill="none" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08"/>`;
-        } else {
-            const s = 0.3 + rand() * 0.5;
-            p2 += `<line x1="${(x - s).toFixed(1)}" y1="${(y - s).toFixed(1)}" x2="${(x + s).toFixed(1)}" y2="${(y + s).toFixed(1)}" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08"/>`;
-            p2 += `<line x1="${(x + s).toFixed(1)}" y1="${(y - s).toFixed(1)}" x2="${(x - s).toFixed(1)}" y2="${(y + s).toFixed(1)}" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08"/>`;
-        }
+        const s = 0.4 + rand() * 0.6;
+        p2 += `<rect x="${(x - s / 2).toFixed(1)}" y="${(y - s / 2).toFixed(1)}" width="${s.toFixed(1)}" height="${s.toFixed(1)}" fill="none" stroke="rgba(90,155,115,${op.toFixed(2)})" stroke-width="0.08" transform="rotate(${(rand() * 45).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
     }
 
-    // ═══ LAYER 3 (fastest): data paths, project markers, L-traces, info blocks ═══
+    // ═══ LAYER 3: data paths, project markers, info blocks ═══
     const scored = allProjects.filter(pr => pr._scores);
 
     scored.forEach((pr, idx) => {
-        for (let n = 1; n <= 3; n++) {
-            const ni = (idx + n) % scored.length;
-            if (!scored[ni]._scores) continue;
-            if (rand() > 0.55) continue;
-            const x1 = pad + pr._scores.x * (viewW - pad * 2);
-            const y1 = pad + (1 - pr._scores.y) * (viewH - pad * 2);
-            const x2 = pad + scored[ni]._scores.x * (viewW - pad * 2);
-            const y2 = pad + (1 - scored[ni]._scores.y) * (viewH - pad * 2);
-            const mx = (x1 + x2) / 2 + (rand() - 0.5) * 15;
-            const my = (y1 + y2) / 2 + (rand() - 0.5) * 10;
-            const isGreen = rand() > 0.4;
-            const color = isGreen ? `rgba(90,180,120,${0.15 + rand() * 0.2})` : `rgba(140,140,140,${0.1 + rand() * 0.15})`;
-            const dash = rand() > 0.5 ? `stroke-dasharray="${(0.3 + rand() * 0.5).toFixed(1)} ${(0.5 + rand() * 1).toFixed(1)}"` : '';
-            p3 += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${color}" stroke-width="${(0.15 + rand() * 0.2).toFixed(2)}" ${dash}/>`;
-        }
-    });
-
-    scored.forEach((pr, idx) => {
-        if (rand() > 0.4) return;
-        const ni = (idx + Math.floor(rand() * scored.length)) % scored.length;
-        if (!scored[ni]._scores) return;
+        // Only 1 neighbor link instead of 3
+        const ni = (idx + 1) % scored.length;
+        if (!scored[ni]._scores || rand() > 0.55) return;
         const x1 = pad + pr._scores.x * (viewW - pad * 2);
         const y1 = pad + (1 - pr._scores.y) * (viewH - pad * 2);
         const x2 = pad + scored[ni]._scores.x * (viewW - pad * 2);
         const y2 = pad + (1 - scored[ni]._scores.y) * (viewH - pad * 2);
-        const goHorizontalFirst = rand() > 0.5;
-        const path = goHorizontalFirst
-            ? `M${x1.toFixed(1)},${y1.toFixed(1)} H${x2.toFixed(1)} V${y2.toFixed(1)}`
-            : `M${x1.toFixed(1)},${y1.toFixed(1)} V${y2.toFixed(1)} H${x2.toFixed(1)}`;
-        p3 += `<path d="${path}" fill="none" stroke="rgba(90,155,115,0.15)" stroke-width="0.1" stroke-dasharray="0.3 0.6"/>`;
+        const mx = (x1 + x2) / 2 + (rand() - 0.5) * 15;
+        const my = (y1 + y2) / 2 + (rand() - 0.5) * 10;
+        const isGreen = rand() > 0.4;
+        const color = isGreen ? `rgba(90,180,120,${0.15 + rand() * 0.2})` : `rgba(140,140,140,${0.1 + rand() * 0.15})`;
+        p3 += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}" fill="none" stroke="${color}" stroke-width="${(0.15 + rand() * 0.2).toFixed(2)}"/>`;
     });
 
     scored.forEach(pr => {
@@ -667,13 +612,9 @@ function generateGridBackground(allProjects) {
         const ch = 1.0;
         p3 += `<line x1="${(x - ch).toFixed(1)}" y1="${y.toFixed(1)}" x2="${(x + ch).toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(90,155,115,0.3)" stroke-width="0.08"/>`;
         p3 += `<line x1="${x.toFixed(1)}" y1="${(y - ch).toFixed(1)}" x2="${x.toFixed(1)}" y2="${(y + ch).toFixed(1)}" stroke="rgba(90,155,115,0.3)" stroke-width="0.08"/>`;
-        if (rand() > 0.4 && pr._tags && pr._tags.length > 0) {
+        if (rand() > 0.5 && pr._tags && pr._tags.length > 0) {
             const label = pr._tags[0].substring(0, 8).toUpperCase();
             p3 += `<text x="${(x + 1).toFixed(1)}" y="${(y - 0.6).toFixed(1)}" fill="rgba(90,155,115,0.3)" font-size="0.8" font-family="monospace">${label}</text>`;
-        }
-        if (rand() > 0.7) {
-            const idFragment = pr.id.substring(0, 8).toUpperCase();
-            p3 += `<text x="${(x + 1).toFixed(1)}" y="${(y + 1.2).toFixed(1)}" fill="rgba(90,155,115,0.2)" font-size="0.7" font-family="monospace">${idFragment}</text>`;
         }
     });
 
@@ -827,18 +768,29 @@ function renderGridLayout(container, allProjects) {
             idx++;
         }
     });
+
 }
 
 // ── Grid Connection Lines ────────────────────────────────────────────────────
 
 function createScatterConnectionLines(allProjects) {
-    document.querySelectorAll('.connection-line').forEach(l => l.remove());
+    document.querySelectorAll('.connection-lines-svg').forEach(l => l.remove());
 
     const cards = document.querySelectorAll('.project-block');
     if (cards.length === 0) return;
 
+    // Single SVG for all connection lines
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('connection-lines-svg');
+    svg.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:5;';
+
     const projectMap = new Map();
     allProjects.forEach(p => projectMap.set(p.id, p));
+    const cardById = new Map();
+    cards.forEach(c => {
+        const id = c.getAttribute('data-project-id');
+        if (id) cardById.set(id, c);
+    });
     const drawn = new Set();
 
     cards.forEach(card => {
@@ -852,43 +804,37 @@ function createScatterConnectionLines(allProjects) {
             if (drawn.has(key)) return;
             drawn.add(key);
 
-            const targetCard = document.querySelector(`.project-block[data-project-id="${n.project.id}"]`);
+            const targetCard = cardById.get(n.project.id);
             if (!targetCard) return;
 
             const sr = card.getBoundingClientRect();
             const er = targetCard.getBoundingClientRect();
-            createScatterLine(
-                { x: sr.left + sr.width/2, y: sr.top + sr.height/2 },
-                { x: er.left + er.width/2, y: er.top + er.height/2 },
-                n.distance, pid, n.project.id
-            );
+            const start = { x: sr.left + sr.width/2, y: sr.top + sr.height/2 };
+            const end = { x: er.left + er.width/2, y: er.top + er.height/2 };
+
+            const opacity = Math.max(0.06, 0.18 - n.distance * 0.12);
+            const mx = (start.x + end.x)/2, my = (start.y + end.y)/2;
+            const dx = end.x - start.x, dy = end.y - start.y;
+
+            const useGreen = Math.random() < 0.4;
+            const color = useGreen
+                ? `rgba(144,238,144,${opacity})`
+                : `rgba(180,180,180,${opacity * 0.5})`;
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.classList.add('connection-line');
+            path.setAttribute('data-from', pid);
+            path.setAttribute('data-to', n.project.id);
+            path.setAttribute('d', `M${start.x},${start.y} Q${mx + dy*0.08},${my - dx*0.08} ${end.x},${end.y}`);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', color);
+            path.setAttribute('stroke-width', '1');
+            svg.appendChild(path);
         });
     });
-}
 
-function createScatterLine(start, end, distance, fromId, toId) {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.classList.add('connection-line');
-    if (fromId) svg.setAttribute('data-from', fromId);
-    if (toId) svg.setAttribute('data-to', toId);
-    svg.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:5;';
-
-    const opacity = Math.max(0.06, 0.18 - distance * 0.12);
-    const mx = (start.x + end.x)/2, my = (start.y + end.y)/2;
-    const dx = end.x - start.x, dy = end.y - start.y;
-
-    const useGreen = Math.random() < 0.4;
-    const color = useGreen
-        ? `rgba(144,238,144,${opacity})`
-        : `rgba(180,180,180,${opacity * 0.5})`;
-
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', `M${start.x},${start.y} Q${mx + dy*0.08},${my - dx*0.08} ${end.x},${end.y}`);
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', color);
-    path.setAttribute('stroke-width', '1');
-    svg.appendChild(path);
     document.body.appendChild(svg);
+    requestAnimationFrame(() => svg.classList.add('loaded'));
 }
 
 // ── Score Tooltip ────────────────────────────────────────────────────────────
@@ -1232,6 +1178,19 @@ function addShapeKeyboardListener() {
             }
         });
     }
+
+    // Re-layout cards when sidebar collapses/expands
+    window.addEventListener('sidebar-resize', debounce(function() {
+        if (window.innerWidth <= 768) return;
+        if (isNeuralNetworkStyle) {
+            resetPositionedCards();
+            const allBlocks = document.querySelectorAll('.project-block');
+            allBlocks.forEach((block, index) => {
+                const sizeClass = block.getAttribute('data-size') || getRandomSizeClass();
+                positionCardCircularly(block, sizeClass, index, allBlocks.length);
+            });
+        }
+    }, 350));
     
     keyboardListenerAdded = true;
     
@@ -1314,11 +1273,10 @@ function positionCardOrganically(index, totalCards) {
     const viewportWidth = window.innerWidth;
     const viewportHeight = Math.max(window.innerHeight, 1000);
     
-    // Define safe margins - positions are applied directly, no sidebar offset needed
     const margin = 80;
-    const sidebarOffset = 0; // Match the offset used in positionCardCircularly
-    const minX = 0; // Zero left padding - cards can start right at sidebar edge
-    const maxX = viewportWidth - sidebarOffset - margin; // Account for sidebar offset
+    const sidebarOffset = getSidebarWidth();
+    const minX = sidebarOffset;
+    const maxX = viewportWidth - margin;
     const minY = margin;
     const maxY = viewportHeight - margin;
     
@@ -1494,17 +1452,17 @@ function positionCardCircularly(card, sizeClass, index, totalCards) {
         finalX = x; // Allow negative X for left-side cropping!
         finalY = Math.max(y, 0); // Only prevent negative Y
     } else {
-        // Desktop: Keep cards within viewport
-    const maxX = viewportWidth - dimensions.width - 20;
-    const maxY = viewportHeight - dimensions.height - 20;
-        finalX = Math.min(Math.max(x, 20), maxX);
+        // Desktop: Keep cards within the area right of the sidebar
+        const sw = getSidebarWidth();
+        const maxX = viewportWidth - dimensions.width - 20 - sw;
+        const maxY = viewportHeight - dimensions.height - 20;
+        finalX = Math.min(Math.max(x, 0), Math.max(maxX, 0));
         finalY = Math.min(Math.max(y, 20), maxY);
     }
-    
+
     // Apply sidebar offset for desktop
     if (window.innerWidth > 768) {
-        const sidebarWidth = 200; // Desktop sidebar width
-        card.style.left = (finalX + sidebarWidth) + 'px';
+        card.style.left = (finalX + getSidebarWidth()) + 'px';
     } else {
     card.style.left = finalX + 'px';
     }
@@ -1633,8 +1591,7 @@ function positionCardRandomly(card, sizeClass, index) {
     // Apply sidebar offset for desktop when using organic positioning
     let finalX = position.x;
     if (window.innerWidth > 768 && currentShape === 'random') {
-        const sidebarWidth = 0; // No offset - cards start right at sidebar edge
-        finalX = position.x + sidebarWidth;
+        finalX = position.x + getSidebarWidth();
     }
     
     card.style.left = finalX + 'px';
@@ -2757,10 +2714,7 @@ function initBackgroundImageHover() {
     // Detect if device is mobile/touch
     const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
     
-    // Create the green dots overlay element
-    const backgroundOverlay = document.createElement('div');
-    backgroundOverlay.className = 'project-background-image';
-    document.body.appendChild(backgroundOverlay);
+    const sectionEl = document.querySelector('.project-section');
     
     function extractProjectId(href) {
         try {
@@ -2814,9 +2768,9 @@ function initBackgroundImageHover() {
         document.addEventListener('mouseover', function(e) {
             const projectBlock = e.target.closest('.project-block');
             if (projectBlock && !projectBlock.classList.contains('transitioning-to-page')) {
-                backgroundOverlay.classList.add('active');
+                sectionEl.classList.add('dots-active');
             }
-        });
+        }, { passive: true });
         
         // Hide effects when not hovering over project blocks
         document.addEventListener('mouseout', function(e) {
@@ -2824,7 +2778,7 @@ function initBackgroundImageHover() {
             if (projectBlock && !projectBlock.classList.contains('transitioning-to-page')) {
                 const relatedTarget = e.relatedTarget;
                 if (!relatedTarget || !relatedTarget.closest('.project-block')) {
-                    backgroundOverlay.classList.remove('active');
+                    sectionEl.classList.remove('dots-active');
                 }
             }
         });
@@ -2893,6 +2847,7 @@ function initLazyThumbnailLoading() {
                         
                         thumbnailDiv.innerHTML = '';
                         thumbnailDiv.appendChild(img);
+                        thumbnailDiv.classList.add('loaded');
 
                         const allThumbs = getAllThumbnails(projectId);
                         if (allThumbs.length > 1) {
@@ -2961,6 +2916,35 @@ function initLazyThumbnailLoading() {
 
 const _slideshowState = new Map();
 
+function _advanceSlide(state, direction) {
+    const { images, currentImg, nextImg, dotsContainer } = state;
+    if (state._transitioning) return;
+    state._transitioning = true;
+
+    state.currentIdx = (state.currentIdx + direction + images.length) % images.length;
+    nextImg.src = images[state.currentIdx];
+    nextImg.onload = () => {
+        nextImg.classList.add('visible');
+        if (dotsContainer) {
+            const dots = dotsContainer.querySelectorAll('.dot');
+            if (dots.length > 0) {
+                dots.forEach(d => d.classList.remove('active'));
+                dots[state.currentIdx % dots.length].classList.add('active');
+            }
+        }
+        setTimeout(() => {
+            currentImg.src = images[state.currentIdx];
+            nextImg.classList.remove('visible');
+            state._transitioning = false;
+        }, 850);
+    };
+}
+
+function _resetAutoTimer(state) {
+    clearInterval(state.intervalId);
+    state.intervalId = setInterval(() => _advanceSlide(state, 1), 3000);
+}
+
 function startSlideshow(card) {
     if (_slideshowState.has(card)) return;
     const overlay = card.querySelector('.thumbnail-overlay');
@@ -2976,7 +2960,6 @@ function startSlideshow(card) {
     const currentImg = overlay.querySelector('img:not(.slideshow-next)');
     if (!currentImg) return;
 
-    // Build slideshow dots on mobile
     const dotsContainer = card.querySelector('.card-slideshow-dots');
     if (dotsContainer && dotsContainer.children.length === 0) {
         const dotCount = Math.min(images.length, 5);
@@ -2987,7 +2970,6 @@ function startSlideshow(card) {
         }
     }
 
-    let currentIdx = 0;
     const nextImg = document.createElement('img');
     nextImg.className = 'slideshow-next';
     nextImg.style.position = 'absolute';
@@ -2999,28 +2981,66 @@ function startSlideshow(card) {
     nextImg.style.objectPosition = 'center';
     overlay.appendChild(nextImg);
 
-    const intervalId = setInterval(() => {
-        currentIdx = (currentIdx + 1) % images.length;
-        nextImg.src = images[currentIdx];
-        nextImg.onload = () => {
-            nextImg.classList.add('visible');
-            // Update dots
-            if (dotsContainer) {
-                const dots = dotsContainer.querySelectorAll('.dot');
-                const dotCount = dots.length;
-                if (dotCount > 0) {
-                    dots.forEach(d => d.classList.remove('active'));
-                    dots[currentIdx % dotCount].classList.add('active');
+    const state = {
+        images,
+        currentImg,
+        nextImg,
+        dotsContainer,
+        currentIdx: 0,
+        intervalId: null,
+        _transitioning: false
+    };
+
+    state.intervalId = setInterval(() => _advanceSlide(state, 1), 3000);
+    _slideshowState.set(card, state);
+
+    // Swipe-to-advance on mobile
+    if (window.innerWidth <= 768 && !card._swipeAttached) {
+        card._swipeAttached = true;
+        let startX = 0, startY = 0, tracking = false;
+        let swiped = false;
+
+        card.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            tracking = true;
+            swiped = false;
+        }, { passive: true });
+
+        card.addEventListener('touchmove', (e) => {
+            if (!tracking) return;
+            const dx = e.touches[0].clientX - startX;
+            const dy = e.touches[0].clientY - startY;
+            if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                if (e.cancelable) e.preventDefault();
+            }
+        }, { passive: false });
+
+        card.addEventListener('touchend', (e) => {
+            if (!tracking) return;
+            tracking = false;
+            const dx = e.changedTouches[0].clientX - startX;
+            const dy = e.changedTouches[0].clientY - startY;
+            if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                swiped = true;
+                if (e.cancelable) e.preventDefault();
+                const s = _slideshowState.get(card);
+                if (s) {
+                    _advanceSlide(s, dx < 0 ? 1 : -1);
+                    _resetAutoTimer(s);
                 }
             }
-            setTimeout(() => {
-                currentImg.src = images[currentIdx];
-                nextImg.classList.remove('visible');
-            }, 850);
-        };
-    }, 3000);
+        }, { passive: false });
 
-    _slideshowState.set(card, { intervalId, nextImg });
+        // Suppress click after swipe so it doesn't open the overlay
+        card.addEventListener('click', (e) => {
+            if (swiped) {
+                e.preventDefault();
+                e.stopPropagation();
+                swiped = false;
+            }
+        }, { capture: true });
+    }
 }
 
 function stopSlideshow(card) {
@@ -3139,8 +3159,8 @@ function injectClusterLabels(container, allProjects) {
         });
     });
 
-    const sidebarWidth = 210;
-    const containerWidth = window.innerWidth - sidebarWidth;
+    const sidebarW = getSidebarWidth();
+    const containerWidth = window.innerWidth - sidebarW;
     const containerHeight = window.innerHeight;
 
     Object.entries(tagGroups).forEach(([tag, members]) => {
@@ -3157,7 +3177,7 @@ function injectClusterLabels(container, allProjects) {
         const el = document.createElement('div');
         el.className = 'cluster-label';
         el.textContent = tag;
-        el.style.left = (sidebarWidth + avgX * containerWidth) + 'px';
+        el.style.left = (sidebarW + avgX * containerWidth) + 'px';
         el.style.top = ((1 - avgY) * containerHeight) + 'px';
         container.appendChild(el);
     });
@@ -3310,8 +3330,16 @@ let _parallaxBound = false;
 let _parallaxMouseX = 0;
 let _parallaxMouseY = 0;
 let _parallaxRafId = null;
+let _parallaxLayers = null;
 
 function initParallaxEffect() {
+    // Cache layer references once
+    _parallaxLayers = {
+        bg1: document.querySelector('.grid-bg-layer-1'),
+        bg2: document.querySelector('.grid-bg-layer-2'),
+        bg3: document.querySelector('.grid-bg-layer-3'),
+        dots: Array.from(document.querySelectorAll('.dot-layer'))
+    };
     if (!_parallaxBound) {
         _parallaxBound = true;
         document.addEventListener('mousemove', function(e) {
@@ -3320,16 +3348,14 @@ function initParallaxEffect() {
             if (!_parallaxRafId) {
                 _parallaxRafId = requestAnimationFrame(doParallax);
             }
-        });
+        }, { passive: true });
     }
 }
 
 function doParallax() {
     _parallaxRafId = null;
-    const bgLayer1 = document.querySelector('.grid-bg-layer-1');
-    const bgLayer2 = document.querySelector('.grid-bg-layer-2');
-    const bgLayer3 = document.querySelector('.grid-bg-layer-3');
-    const dotLayers = document.querySelectorAll('.dot-layer');
+    if (!_parallaxLayers) return;
+    const { bg1, bg2, bg3, dots } = _parallaxLayers;
 
     const w = window.innerWidth;
     const h = window.innerHeight;
@@ -3337,20 +3363,27 @@ function doParallax() {
     const ny = (_parallaxMouseY / h) * 2 - 1;
 
     const layerSpeeds = [0.3, 0.6, 0.9];
-    dotLayers.forEach((layer, i) => {
+    for (let i = 0; i < dots.length; i++) {
         const s = layerSpeeds[i] || 0.5;
-        layer.style.transform = `translate3d(${nx * s * 8}px, ${ny * s * 8}px, 0)`;
-    });
+        dots[i].style.transform = `translate3d(${nx * s * 8}px, ${ny * s * 8}px, 0)`;
+    }
 
-    if (bgLayer1) bgLayer1.style.transform = `translate3d(${nx * 4}px, ${ny * 3}px, 0)`;
-    if (bgLayer2) bgLayer2.style.transform = `translate3d(${nx * 10}px, ${ny * 7}px, 0)`;
-    if (bgLayer3) bgLayer3.style.transform = `translate3d(${nx * 18}px, ${ny * 12}px, 0)`;
+    if (bg1) bg1.style.transform = `translate3d(${nx * 4}px, ${ny * 3}px, 0)`;
+    if (bg2) bg2.style.transform = `translate3d(${nx * 10}px, ${ny * 7}px, 0)`;
+    if (bg3) bg3.style.transform = `translate3d(${nx * 18}px, ${ny * 12}px, 0)`;
 }
 
-// Refresh parallax effect when cards are repositioned
+// Refresh parallax — re-cache layer references after DOM changes
 function refreshParallaxEffect() {
-    // Re-initialize parallax effect for dot layers
-    setTimeout(initParallaxEffect, 100);
+    setTimeout(() => {
+        _parallaxLayers = {
+            bg1: document.querySelector('.grid-bg-layer-1'),
+            bg2: document.querySelector('.grid-bg-layer-2'),
+            bg3: document.querySelector('.grid-bg-layer-3'),
+            dots: Array.from(document.querySelectorAll('.dot-layer'))
+        };
+        initParallaxEffect();
+    }, 100);
 }
 
 // (createMobileNeuralOverlay retired — mobile uses same CSS grid as desktop)

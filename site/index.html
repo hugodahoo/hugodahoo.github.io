@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles.css?v=206">
+        <link rel="stylesheet" href="styles.css?v=214">
     
     <!-- Preload critical resources with high priority for local development -->
     <link rel="preload" href="data.js" as="script" fetchpriority="high">
@@ -54,36 +54,126 @@
             </div>
         </header>
 
-        <!-- Sticky mini bar (revealed on scroll-up) -->
-        <div class="mobile-sticky-bar" id="mobile-sticky-bar">
-            <span class="mobile-sticky-name">Hugo Daoust</span>
+        <!-- Desktop Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-inner">
+                <div class="sidebar-top">
+                    <div class="nav-name">
+                        <a href="index.html" class="nav-name-link">HUGO DAOUST</a>
+                    </div>
+                    <div class="nav-identity">
+                        <span class="nav-title"><script>document.write(i18n.t('nav.title'))</script></span>
+                        <span class="nav-location"><script>document.write(i18n.t('nav.location'))</script></span>
+                    </div>
+                </div>
+
+                <div class="sidebar-nav">
+                    <div class="nav-line"></div>
+                    <div class="nav-links">
+                        <a href="#section-1" class="nav-link active" data-section="section-1">
+                            <span class="nav-link-indicator"></span>
+                            <span class="nav-link-text">Projects</span>
+                        </a>
+                        <a href="#" class="nav-link" id="nav-about-link">
+                            <span class="nav-link-indicator"></span>
+                            <span class="nav-link-text">About</span>
+                        </a>
+                        <a href="#site-footer" class="nav-link" data-section="site-footer">
+                            <span class="nav-link-indicator"></span>
+                            <span class="nav-link-text">Contact</span>
+                        </a>
+                    </div>
+                    <div class="nav-line"></div>
+                </div>
+
+                <div class="sidebar-pinned">
+                    <span class="sidebar-pinned-label">PINNED</span>
+                    <a class="sidebar-pinned-card" href="https://www.creativeapplications.net/project/undercurrents-distributed-environmental-os-where-infrastructure-poetry-and-computation-converge/" target="_blank" rel="noopener">
+                        <img class="sidebar-pinned-thumb" src="media/thumbnails/undercurrents/undercurrents_houston_2026_ne_001.jpg" alt="Undercurrents" loading="lazy">
+                        <div class="sidebar-pinned-meta">
+                            <span class="sidebar-pinned-source">CreativeApplications.Net</span>
+                            <span class="sidebar-pinned-title">Undercurrents</span>
+                        </div>
+                    </a>
+                    <a class="sidebar-pinned-card" href="https://www.youtube.com/watch?v=l9wUQXwuFqQ" target="_blank" rel="noopener">
+                        <img class="sidebar-pinned-thumb" src="https://img.youtube.com/vi/l9wUQXwuFqQ/mqdefault.jpg" alt="Eli Keszler - LIVE" loading="lazy">
+                        <div class="sidebar-pinned-meta">
+                            <span class="sidebar-pinned-source">YouTube</span>
+                            <span class="sidebar-pinned-title">Eli Keszler — LIVE</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="sidebar-bottom">
+                    <div class="nav-bio">
+                        <script>document.write(i18n.t('nav.bio'))</script>
+                    </div>
+                    <div class="nav-social">
+                        <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">
+                            <span class="social-label">LI</span>
+                        </a>
+                        <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" class="nav-social-link" aria-label="Instagram">
+                            <span class="social-label">IG</span>
+                        </a>
+                        <button class="lang-switch" onclick="i18n.switchLang()" aria-label="Switch language">
+                            <script>document.write(i18n.t('lang.switch'))</script>
+                        </button>
+                    </div>
+                    <div class="nav-contact">
+                        <a href="mailto:info@hugodaoust.com" class="nav-contact-link">info@hugodaoust.com</a>
+                    </div>
+                    <div class="nav-copy">&copy; 2026</div>
+                </div>
+            </div>
+
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path class="toggle-arrow" d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- About Overlay -->
+        <div class="about-overlay" id="about-overlay">
+            <div class="about-overlay-content">
+                <header class="about-overlay-header">
+                    <a href="#" class="close-about" id="close-about">← <script>document.write(i18n.getLang() === 'fr' ? 'Retour' : 'Back')</script></a>
+                </header>
+                <div class="about-body">
+                    <h1 class="about-name">Hugo Daoust</h1>
+                    <p class="about-role"><script>document.write(i18n.t('nav.title'))</script></p>
+                    <p class="about-location"><script>document.write(i18n.t('nav.location'))</script></p>
+
+                    <div class="about-section">
+                        <p class="about-text"><script>document.write(i18n.t('about.bio.p1'))</script></p>
+                        <p class="about-text"><script>document.write(i18n.t('about.bio.p2'))</script></p>
+                        <p class="about-text"><script>document.write(i18n.t('about.bio.p3'))</script></p>
+                    </div>
+
+                    <div class="about-section">
+                        <h3 class="about-section-heading"><script>document.write(i18n.t('about.specialties'))</script></h3>
+                        <div class="about-tags">
+                            <span class="about-tag">TouchDesigner</span>
+                            <span class="about-tag">Projection Mapping</span>
+                            <span class="about-tag">Computer Vision</span>
+                            <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Systèmes temps réel' : 'Real-time Systems')</script></span>
+                            <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Installations interactives' : 'Interactive Installations')</script></span>
+                            <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Intégration de capteurs' : 'Sensor Integration')</script></span>
+                            <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Imagerie thermique' : 'Thermal Imaging')</script></span>
+                            <span class="about-tag">LED / DMX</span>
+                            <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Audio spatialisé' : 'Spatial Audio')</script></span>
+                        </div>
+                    </div>
+
+                    <div class="about-section about-links">
+                        <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" class="about-link">LinkedIn</a>
+                        <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" class="about-link">Instagram</a>
+                        <a href="mailto:info@hugodaoust.com" class="about-link">info@hugodaoust.com</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Desktop Sidebar Nav (unchanged) -->
-        <nav class="mobile-nav-menu" id="mobile-nav-menu">
-            <div class="nav-name">
-                <a href="index.html" class="nav-name-link">HUGO DAOUST</a>
-            </div>
-            <div class="nav-identity">
-                <span class="nav-title"><script>document.write(i18n.t('nav.title'))</script></span>
-                <span class="nav-location"><script>document.write(i18n.t('nav.location'))</script></span>
-            </div>
-            <div class="nav-line"></div>
-            <div class="nav-social">
-                <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">LI</a>
-                <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" class="nav-social-link" aria-label="Instagram">IG</a>
-                <button class="lang-switch" onclick="i18n.switchLang()" aria-label="Switch language">
-                    <script>document.write(i18n.t('lang.switch'))</script>
-                </button>
-            </div>
-            <div class="nav-bio">
-                <script>document.write(i18n.t('nav.bio'))</script>
-            </div>
-            <div class="nav-contact">
-                <a href="mailto:info@hugodaoust.com" class="nav-contact-link">info@hugodaoust.com</a>
-            </div>
-        </nav>
-        
         <section class="project-section" id="section-1">
             <main id="list-1" class="project-grid"></main>
         </section>
@@ -102,6 +192,44 @@
                 <p class="footer-copy">&copy; 2026 Hugo Daoust</p>
             </div>
         </footer>
+
+        <!-- Floating Pill Nav (mobile only) -->
+        <button class="floating-pill" id="floating-pill" aria-label="Menu">
+            <svg class="pill-icon" width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 3C1 1.9 1.9 1 3 1H13C14.1 1 15 1.9 15 3V19L8 15L1 19V3Z" fill="rgba(144,238,144,0.6)"/>
+                <path d="M8 5.5L9.09 7.86L11.64 8.18L9.73 9.89L10.27 12.39L8 11.1L5.73 12.39L6.27 9.89L4.36 8.18L6.91 7.86L8 5.5Z" fill="rgba(20,20,20,0.85)"/>
+            </svg>
+        </button>
+
+        <div class="pill-overlay" id="pill-overlay"></div>
+
+        <div class="pill-tray" id="pill-tray">
+            <div class="pill-tray-inner">
+                <span class="tray-section-label">PINNED</span>
+                <a class="pinned-card" href="https://www.creativeapplications.net/project/undercurrents-distributed-environmental-os-where-infrastructure-poetry-and-computation-converge/" target="_blank" rel="noopener">
+                    <img class="pinned-thumb" src="media/thumbnails/undercurrents/undercurrents_houston_2026_ne_001.jpg" alt="Undercurrents" loading="lazy">
+                    <div class="pinned-meta">
+                        <span class="pinned-source">CreativeApplications.Net</span>
+                        <span class="pinned-title">Undercurrents</span>
+                    </div>
+                </a>
+                <a class="pinned-card" href="https://www.youtube.com/watch?v=l9wUQXwuFqQ" target="_blank" rel="noopener">
+                    <img class="pinned-thumb" src="https://img.youtube.com/vi/l9wUQXwuFqQ/mqdefault.jpg" alt="Eli Keszler - LIVE" loading="lazy">
+                    <div class="pinned-meta">
+                        <span class="pinned-source">YouTube</span>
+                        <span class="pinned-title">Eli Keszler — LIVE</span>
+                    </div>
+                </a>
+                <div class="tray-actions">
+                    <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
+                    <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+                    <a href="mailto:info@hugodaoust.com" aria-label="Contact">@</a>
+                    <button class="tray-lang" onclick="i18n.switchLang()" aria-label="Switch language">
+                        <script>document.write(i18n.currentLang === 'fr' ? 'EN' : 'FR')</script>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Critical CSS inline for faster rendering -->
@@ -184,7 +312,7 @@
                         window.projectMedia = JSON.parse(cachedMedia);
                         // Load neural network script
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=351';
+                        neuralScript.src = 'neural-network.js?v=352';
                         neuralScript.onload = () => {
                             setTimeout(() => {
                                 
@@ -222,7 +350,7 @@
                         
                         
                         const neuralScript = document.createElement('script');
-                        neuralScript.src = 'neural-network.js?v=351';
+                        neuralScript.src = 'neural-network.js?v=352';
                         neuralScript.onload = () => {
                             // Small delay to ensure data is fully loaded
                             setTimeout(() => {
@@ -271,50 +399,119 @@
     </script>
     
     <script>
-        // Mobile sticky bar: show on scroll-up, hide on scroll-down
         document.addEventListener('DOMContentLoaded', function() {
-            if (window.innerWidth > 768) return;
-            const stickyBar = document.getElementById('mobile-sticky-bar');
+            // Tap hero name to close overlays
             const hero = document.getElementById('mobile-hero');
-            if (!stickyBar || !hero) return;
-
-            let lastY = 0;
-            let ticking = false;
-            const scrollEl = document.querySelector('.main-container') || window;
-            const getScrollY = () => scrollEl === window ? window.scrollY : scrollEl.scrollTop;
-
-            function onScroll() {
-                if (ticking) return;
-                ticking = true;
-                requestAnimationFrame(() => {
-                    const y = getScrollY();
-                    const heroBottom = hero.offsetHeight;
-                    if (y > heroBottom) {
-                        stickyBar.classList.toggle('visible', y < lastY);
-                    } else {
-                        stickyBar.classList.remove('visible');
-                    }
-                    lastY = y;
-                    ticking = false;
+            if (hero) {
+                hero.addEventListener('click', function() {
+                    if (typeof closeProjectOverlay === 'function') closeProjectOverlay();
                 });
             }
 
-            if (scrollEl === window) {
-                window.addEventListener('scroll', onScroll, { passive: true });
-            } else {
-                scrollEl.addEventListener('scroll', onScroll, { passive: true });
+            // Floating pill toggle
+            const pill = document.getElementById('floating-pill');
+            const tray = document.getElementById('pill-tray');
+            const overlay = document.getElementById('pill-overlay');
+            if (pill && tray && overlay) {
+                function openTray() {
+                    pill.classList.add('open');
+                    tray.classList.add('visible');
+                    overlay.style.display = 'block';
+                    requestAnimationFrame(function() {
+                        overlay.classList.add('visible');
+                    });
+                }
+
+                function closeTray() {
+                    pill.classList.remove('open');
+                    tray.classList.remove('visible');
+                    overlay.classList.remove('visible');
+                    setTimeout(function() {
+                        overlay.style.display = 'none';
+                    }, 250);
+                }
+
+                pill.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    tray.classList.contains('visible') ? closeTray() : openTray();
+                });
+
+                overlay.addEventListener('click', closeTray);
             }
 
-            // Tap sticky bar to scroll to top
-            stickyBar.addEventListener('click', () => {
-                if (scrollEl === window) window.scrollTo({ top: 0, behavior: 'smooth' });
-                else scrollEl.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+            // --- Sidebar collapse toggle ---
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.getElementById('sidebar-toggle');
+            if (sidebar && toggle) {
+                var collapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+                if (collapsed) sidebar.classList.add('collapsed');
 
-            // Tap hero name to close overlays
-            hero.addEventListener('click', function() {
-                if (typeof closeProjectOverlay === 'function') closeProjectOverlay();
-            });
+                toggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                    localStorage.setItem('sidebar_collapsed', sidebar.classList.contains('collapsed'));
+                    window.dispatchEvent(new Event('sidebar-resize'));
+                });
+            }
+
+            // --- Active section tracking ---
+            var navLinks = document.querySelectorAll('.sidebar .nav-link[data-section]');
+            if (navLinks.length > 0 && 'IntersectionObserver' in window) {
+                var sectionIds = [];
+                navLinks.forEach(function(link) { sectionIds.push(link.dataset.section); });
+
+                var observer = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            navLinks.forEach(function(l) { l.classList.remove('active'); });
+                            var match = document.querySelector('.nav-link[data-section="' + entry.target.id + '"]');
+                            if (match) match.classList.add('active');
+                        }
+                    });
+                }, { threshold: 0.15 });
+
+                sectionIds.forEach(function(id) {
+                    var el = document.getElementById(id);
+                    if (el) observer.observe(el);
+                });
+            }
+
+            // --- About overlay ---
+            var aboutLink = document.getElementById('nav-about-link');
+            var aboutOverlay = document.getElementById('about-overlay');
+            var closeAbout = document.getElementById('close-about');
+
+            function openAboutOverlay() {
+                if (!aboutOverlay) return;
+                aboutOverlay.style.display = 'block';
+                aboutOverlay.offsetHeight;
+                aboutOverlay.classList.add('active');
+            }
+
+            function closeAboutOverlay() {
+                if (!aboutOverlay) return;
+                aboutOverlay.classList.remove('active');
+                setTimeout(function() { aboutOverlay.style.display = 'none'; }, 400);
+            }
+
+            if (aboutLink) {
+                aboutLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openAboutOverlay();
+                });
+            }
+
+            if (closeAbout) {
+                closeAbout.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    closeAboutOverlay();
+                });
+            }
+
+            if (aboutOverlay) {
+                aboutOverlay.addEventListener('click', function(e) {
+                    if (e.target === aboutOverlay) closeAboutOverlay();
+                });
+            }
         });
     </script>
     

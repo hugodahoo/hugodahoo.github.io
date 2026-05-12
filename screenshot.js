@@ -5,48 +5,51 @@ const path = require('path');
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
     const dir = __dirname;
-    let idx = 0;
 
-    async function snap(label) {
-        idx++;
-        const file = path.join(dir, `desk_${String(idx).padStart(2,'0')}_${label}.png`);
-        await page.screenshot({ path: file, fullPage: false });
-        console.log(`[${idx}] ${label}`);
-    }
-
-    await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
-    await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2', timeout: 20000 });
-    await new Promise(r => setTimeout(r, 4000));
-
-    // Full view — check grid fade, card vibrancy
-    await snap('full_view');
-
-    // Sidebar detail at 2x
     await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 2 });
     await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2', timeout: 20000 });
-    await new Promise(r => setTimeout(r, 3000));
-    await page.screenshot({ path: path.join(dir, `desk_${String(++idx).padStart(2,'0')}_sidebar.png`), clip: { x: 0, y: 0, width: 220, height: 500 } });
-    console.log(`[${idx}] sidebar`);
-
-    // Hover — check no green overlay, only tooltip
-    await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
-    await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2', timeout: 20000 });
-    await new Promise(r => setTimeout(r, 3000));
-
-    const featured = await page.$('.project-block.featured-project');
-    if (featured) {
-        await featured.hover();
-        await new Promise(r => setTimeout(r, 1000));
-        await snap('hover_featured');
-    }
+    await new Promise(r => setTimeout(r, 5000));
 
     const cards = await page.$$('.project-block:not(.featured-project)');
-    if (cards.length > 2) {
-        await cards[2].hover();
-        await new Promise(r => setTimeout(r, 1000));
-        await snap('hover_regular');
+    console.log('Cards:', cards.length);
+
+    if (cards.length > 8) {
+        await cards[8].hover();
+        await new Promise(r => setTimeout(r, 2000));
+
+        // Check if pseudo-element approach is working
+        const info = await page.evaluate(() => {
+            const section = document.querySelector('.project-section');
+            const hasDots = section ? section.classList.contains('dots-active') : false;
+            const sectionCs = section ? getComputedStyle(section, '::before') : {};
+            const oldOverlay = document.querySelector('.project-background-image');
+            const hovered = document.querySelector('.project-block:hover');
+            
+            return {
+                dotsActive: hasDots,
+                pseudoOpacity: sectionCs.opacity,
+                pseudoZIndex: sectionCs.zIndex,
+                pseudoPosition: sectionCs.position,
+                pseudoContent: sectionCs.content,
+                oldOverlayExists: !!oldOverlay,
+                hoveredZIndex: hovered ? getComputedStyle(hovered).zIndex : 'N/A'
+            };
+        });
+        console.log('State:', JSON.stringify(info, null, 2));
+
+        await page.screenshot({ path: path.join(dir, 'pseudo_01_full.png'), fullPage: false });
+        console.log('[1] full');
+
+        const box = await cards[8].boundingBox();
+        if (box) {
+            await page.screenshot({
+                path: path.join(dir, 'pseudo_02_zoomed.png'),
+                clip: { x: box.x - 80, y: box.y - 80, width: box.width + 400, height: box.height + 200 }
+            });
+            console.log('[2] zoomed');
+        }
     }
 
     await browser.close();
-    console.log('\nDone.');
+    console.log('Done.');
 })();
