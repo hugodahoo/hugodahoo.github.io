@@ -2297,8 +2297,7 @@ function generateProjectHTML(project, mediaIndex) {
     
     const medias = contentBlocks.join('');
     
-    // Get Instagram links
-    const insta = (project.instagram || []).map(u => `<a target="_blank" rel="noopener" href="${u}">Instagram</a>`).join(" · ");
+    const insta = `<a target="_blank" rel="noopener" href="https://www.instagram.com/hugodahoo/">Instagram</a>`;
     
     // Get first media file for header background
     const headerBackgroundImage = allMedia.length > 0 ? allMedia[0] : null;
