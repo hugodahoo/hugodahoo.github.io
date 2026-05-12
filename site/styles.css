@@ -3055,6 +3055,7 @@ body.hover-as-default .project-block .thumbnail-overlay {
     }
 
     .about-overlay-content {
+        width: auto;
         max-width: 1100px;
         margin: 0;
         margin-left: 4rem;
