@@ -1179,18 +1179,6 @@ function addShapeKeyboardListener() {
         });
     }
 
-    // Re-layout cards when sidebar collapses/expands
-    window.addEventListener('sidebar-resize', debounce(function() {
-        if (window.innerWidth <= 768) return;
-        if (isNeuralNetworkStyle) {
-            resetPositionedCards();
-            const allBlocks = document.querySelectorAll('.project-block');
-            allBlocks.forEach((block, index) => {
-                const sizeClass = block.getAttribute('data-size') || getRandomSizeClass();
-                positionCardCircularly(block, sizeClass, index, allBlocks.length);
-            });
-        }
-    }, 350));
     
     keyboardListenerAdded = true;
     

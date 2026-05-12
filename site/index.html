@@ -125,20 +125,14 @@
                     <div class="nav-copy">&copy; 2026</div>
                 </div>
             </div>
-
-            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path class="toggle-arrow" d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
         </nav>
 
         <!-- About Overlay -->
         <div class="about-overlay" id="about-overlay">
             <div class="about-overlay-content">
-                <header class="about-overlay-header">
-                    <a href="#" class="close-about" id="close-about">← <script>document.write(i18n.getLang() === 'fr' ? 'Retour' : 'Back')</script></a>
-                </header>
+                <div class="sheet-top-bar">
+                    <button class="sheet-close-arrow" id="close-about" aria-label="Close">&larr;</button>
+                </div>
                 <div class="about-layout">
                     <div class="about-body">
                         <h1 class="about-name">Hugo Daoust</h1>
@@ -184,9 +178,9 @@
         <!-- Contact Overlay -->
         <div class="contact-overlay" id="contact-overlay">
             <div class="contact-overlay-content">
-                <header class="contact-overlay-header">
-                    <a href="#" class="close-contact" id="close-contact">← <script>document.write(i18n.getLang() === 'fr' ? 'Retour' : 'Back')</script></a>
-                </header>
+                <div class="sheet-top-bar">
+                    <button class="sheet-close-arrow" id="close-contact" aria-label="Close">&larr;</button>
+                </div>
                 <div class="contact-body">
                     <h1 class="contact-heading"><script>document.write(i18n.getLang() === 'fr' ? 'Discutons' : 'Let\u2019s talk')</script></h1>
                     <p class="contact-subtext"><script>document.write(i18n.getLang() === 'fr' ? 'Projet en tête, collaboration, ou juste envie de dire bonjour.' : 'Have a project in mind, want to collaborate, or just say hello.')</script></p>
@@ -241,17 +235,18 @@
         </footer>
 
         <!-- Floating Pill Nav (mobile only) -->
-        <button class="floating-pill" id="floating-pill" aria-label="Menu">
-            <svg class="pill-icon" width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 3C1 1.9 1.9 1 3 1H13C14.1 1 15 1.9 15 3V19L8 15L1 19V3Z" fill="rgba(144,238,144,0.6)"/>
-                <path d="M8 5.5L9.09 7.86L11.64 8.18L9.73 9.89L10.27 12.39L8 11.1L5.73 12.39L6.27 9.89L4.36 8.18L6.91 7.86L8 5.5Z" fill="rgba(20,20,20,0.85)"/>
-            </svg>
-        </button>
+        <button class="floating-pill" id="floating-pill" aria-label="Menu">+</button>
 
         <div class="pill-overlay" id="pill-overlay"></div>
 
         <div class="pill-tray" id="pill-tray">
             <div class="pill-tray-inner">
+                <div class="tray-nav">
+                    <a class="tray-nav-link active" id="tray-nav-projects" href="#section-1">Projects</a>
+                    <a class="tray-nav-link" id="tray-nav-about" href="#">About</a>
+                    <a class="tray-nav-link" id="tray-nav-contact" href="#">Contact</a>
+                </div>
+                <div class="tray-divider"></div>
                 <span class="tray-section-label">PINNED</span>
                 <a class="pinned-card" href="https://www.creativeapplications.net/project/undercurrents-distributed-environmental-os-where-infrastructure-poetry-and-computation-converge/" target="_blank" rel="noopener">
                     <img class="pinned-thumb" src="media/thumbnails/undercurrents/undercurrents_houston_2026_ne_001.jpg" alt="Undercurrents" loading="lazy">
@@ -267,12 +262,12 @@
                         <span class="pinned-title">Eli Keszler — LIVE</span>
                     </div>
                 </a>
+                <div class="tray-divider"></div>
                 <div class="tray-actions">
                     <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
                     <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-                    <a href="mailto:info@hugodaoust.com" aria-label="Contact">@</a>
                     <button class="tray-lang" onclick="i18n.switchLang()" aria-label="Switch language">
-                        <script>document.write(i18n.currentLang === 'fr' ? 'EN' : 'FR')</script>
+                        <script>document.write(i18n.getLang() === 'fr' ? 'EN' : 'FR')</script>
                     </button>
                 </div>
             </div>
@@ -484,21 +479,52 @@
                 });
 
                 overlay.addEventListener('click', closeTray);
+
+                // Tray nav links
+                var trayAbout = document.getElementById('tray-nav-about');
+                var trayContact = document.getElementById('tray-nav-contact');
+                var trayProjects = document.getElementById('tray-nav-projects');
+
+                function setTrayActive(id) {
+                    document.querySelectorAll('.tray-nav-link').forEach(function(l) { l.classList.remove('active'); });
+                    var el = document.getElementById(id);
+                    if (el) el.classList.add('active');
+                }
+
+                if (trayAbout) {
+                    trayAbout.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        closeTray();
+                        setTrayActive('tray-nav-about');
+                        setTimeout(function() { if (typeof openAboutOverlay === 'function') openAboutOverlay(); }, 280);
+                    });
+                }
+
+                if (trayContact) {
+                    trayContact.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        closeTray();
+                        setTrayActive('tray-nav-contact');
+                        setTimeout(function() { if (typeof openContactOverlay === 'function') openContactOverlay(); }, 280);
+                    });
+                }
+
+                if (trayProjects) {
+                    trayProjects.addEventListener('click', function(e) {
+                        closeTray();
+                        setTrayActive('tray-nav-projects');
+                        if (typeof closeAboutOverlay === 'function') closeAboutOverlay();
+                        if (typeof closeContactOverlay === 'function') closeContactOverlay();
+                    });
+                }
+
+                // Reset tray active state when overlays close
+                window.addEventListener('about-closed', function() { setTrayActive('tray-nav-projects'); });
+                window.addEventListener('contact-closed', function() { setTrayActive('tray-nav-projects'); });
             }
 
             // --- Sidebar collapse toggle ---
-            const sidebar = document.getElementById('sidebar');
-            const toggle = document.getElementById('sidebar-toggle');
-            if (sidebar && toggle) {
-                var collapsed = localStorage.getItem('sidebar_collapsed') === 'true';
-                if (collapsed) sidebar.classList.add('collapsed');
-
-                toggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('collapsed');
-                    localStorage.setItem('sidebar_collapsed', sidebar.classList.contains('collapsed'));
-                    window.dispatchEvent(new Event('sidebar-resize'));
-                });
-            }
+            var sidebar = document.getElementById('sidebar');
 
             // --- Active section tracking ---
             var navLinks = document.querySelectorAll('.sidebar .nav-link[data-section]');
@@ -535,19 +561,54 @@
                 if (target) target.classList.add('active');
             }
 
+            function setupMobileSheet(overlay, closeFn) {
+                if (window.innerWidth > 768) return;
+                if (overlay.querySelector('.sheet-handle')) return;
+                var content = overlay.querySelector('.about-overlay-content, .contact-overlay-content');
+                if (!content) return;
+                var handle = document.createElement('div');
+                handle.className = 'sheet-handle';
+                handle.innerHTML = '<span class="sheet-handle-pill"></span>';
+                content.insertBefore(handle, content.firstChild);
+
+                var startY = 0, dragging = false, dy = 0;
+                handle.addEventListener('touchstart', function(e) {
+                    startY = e.touches[0].clientY;
+                    dragging = true;
+                    overlay.style.transition = 'none';
+                }, { passive: true });
+                overlay.addEventListener('touchmove', function(e) {
+                    if (!dragging) return;
+                    dy = e.touches[0].clientY - startY;
+                    if (dy > 0) overlay.style.transform = 'translateY(' + dy + 'px)';
+                }, { passive: true });
+                overlay.addEventListener('touchend', function() {
+                    if (!dragging) return;
+                    dragging = false;
+                    overlay.style.transition = '';
+                    if (dy > 120) { closeFn(); }
+                    else { overlay.style.transform = ''; }
+                    dy = 0;
+                });
+            }
+
             function openAboutOverlay() {
                 if (!aboutOverlay) return;
+                if (contactOverlay && contactOverlay.classList.contains('active')) closeContactOverlay();
                 aboutOverlay.style.display = 'block';
                 aboutOverlay.offsetHeight;
                 aboutOverlay.classList.add('active');
                 setActiveNav('nav-about-link');
+                setupMobileSheet(aboutOverlay, closeAboutOverlay);
             }
 
             function closeAboutOverlay() {
                 if (!aboutOverlay) return;
                 aboutOverlay.classList.remove('active');
+                aboutOverlay.style.transform = '';
                 setActiveNav('nav-projects-link');
                 setTimeout(function() { aboutOverlay.style.display = 'none'; }, 400);
+                window.dispatchEvent(new Event('about-closed'));
             }
 
             if (aboutLink) {
@@ -570,13 +631,16 @@
                 contactOverlay.offsetHeight;
                 contactOverlay.classList.add('active');
                 setActiveNav('nav-contact-link');
+                setupMobileSheet(contactOverlay, closeContactOverlay);
             }
 
             function closeContactOverlay() {
                 if (!contactOverlay) return;
                 contactOverlay.classList.remove('active');
+                contactOverlay.style.transform = '';
                 setActiveNav('nav-projects-link');
                 setTimeout(function() { contactOverlay.style.display = 'none'; }, 400);
+                window.dispatchEvent(new Event('contact-closed'));
             }
 
             if (contactLink) {
