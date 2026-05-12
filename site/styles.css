@@ -392,9 +392,10 @@ header:not(.mobile-hero) {
 
 .green-accent {
     background: rgb(144, 238, 144);
-    color: #000;
+    color: #000 !important;
+    -webkit-text-fill-color: #000;
     padding: 0 0.15em;
-    border-radius: 3px;
+    border-radius: 0;
 }
 
 .mobile-hero-subtitle {
