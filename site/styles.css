@@ -2830,7 +2830,7 @@ body.hover-as-default .project-block .thumbnail-overlay {
     left: 50%;
     transform: translate(-50%, -50%);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 900;
     letter-spacing: 0.3px;
     color: #000;
@@ -3129,20 +3129,19 @@ body.hover-as-default .project-block .thumbnail-overlay {
 }
 
 .skill-thumbnails {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: relative;
+    width: 100%;
     margin-top: 10px;
     overflow: visible;
+    min-height: 0;
+    height: 0;
+    transition: height 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
 }
 
 .skill-thumbnails.visible {
+    height: 100px;
     pointer-events: auto;
-    opacity: 1;
 }
 
 /* SVG elbow line */
