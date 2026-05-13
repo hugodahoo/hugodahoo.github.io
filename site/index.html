@@ -130,12 +130,12 @@
         <!-- About Overlay -->
         <div class="about-overlay" id="about-overlay">
             <div class="about-overlay-content">
-                <div class="sheet-top-bar">
-                    <button class="sheet-close-arrow" id="close-about" aria-label="Close">&larr;</button>
-                </div>
                 <div class="about-layout">
                     <div class="about-body">
-                        <h1 class="about-name">Hugo Daoust</h1>
+                        <div class="about-title-row">
+                            <button class="sheet-close-arrow" id="close-about" aria-label="Close">&larr;</button>
+                            <h1 class="about-name">Hugo Daoust</h1>
+                        </div>
                         <p class="about-role"><script>document.write(i18n.t('nav.title'))</script></p>
                         <p class="about-location"><script>document.write(i18n.t('nav.location'))</script></p>
 
@@ -178,11 +178,11 @@
         <!-- Contact Overlay -->
         <div class="contact-overlay" id="contact-overlay">
             <div class="contact-overlay-content">
-                <div class="sheet-top-bar">
-                    <button class="sheet-close-arrow" id="close-contact" aria-label="Close">&larr;</button>
-                </div>
                 <div class="contact-body">
-                    <h1 class="contact-heading"><script>document.write(i18n.getLang() === 'fr' ? 'Discutons' : 'Let\u2019s talk')</script></h1>
+                    <div class="contact-title-row">
+                        <button class="sheet-close-arrow" id="close-contact" aria-label="Close">&larr;</button>
+                        <h1 class="contact-heading"><script>document.write(i18n.getLang() === 'fr' ? 'Discutons' : 'Let\u2019s talk')</script></h1>
+                    </div>
                     <p class="contact-subtext"><script>document.write(i18n.getLang() === 'fr' ? 'Projet en tête, collaboration, ou juste envie de dire bonjour.' : 'Have a project in mind, want to collaborate, or just say hello.')</script></p>
 
                     <form class="contact-form" id="contact-form" autocomplete="on">

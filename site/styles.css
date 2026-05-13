@@ -1562,19 +1562,21 @@ body::-webkit-scrollbar-thumb:hover {
     .bottom-sheet-handle {
         display: flex;
         justify-content: center;
-        padding: 10px 0 4px;
+        align-items: center;
+        padding: 18px 0 14px;
         cursor: grab;
         position: sticky;
         top: 0;
         z-index: 10005;
-        background: #fff;
+        background: rgb(144, 238, 144);
         border-radius: 16px 16px 0 0;
+        touch-action: none;
     }
     .handle-pill {
-        width: 36px;
-        height: 4px;
-        border-radius: 2px;
-        background: rgba(0,0,0,0.18);
+        width: 40px;
+        height: 5px;
+        border-radius: 3px;
+        background: rgba(0, 0, 0, 0.3);
     }
     
     .project-overlay-content {
@@ -2918,6 +2920,18 @@ body.hover-as-default .project-block .thumbnail-overlay {
     display: none;
 }
 
+.about-title-row,
+.contact-title-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.about-title-row .sheet-close-arrow,
+.contact-title-row .sheet-close-arrow {
+    display: none;
+}
+
 
 .about-body {
     color: #1a1a1a;
@@ -3354,16 +3368,20 @@ body.hover-as-default .project-block .thumbnail-overlay {
     .sheet-handle {
         display: flex;
         justify-content: center;
-        padding: 12px 0 6px;
+        align-items: center;
+        padding: 18px 0 14px;
+        margin: 0 -1.5rem;
         cursor: grab;
         touch-action: none;
+        background: rgb(144, 238, 144);
+        border-radius: 16px 16px 0 0;
     }
 
     .sheet-handle-pill {
-        width: 36px;
-        height: 4px;
-        border-radius: 2px;
-        background: rgba(0, 0, 0, 0.18);
+        width: 40px;
+        height: 5px;
+        border-radius: 3px;
+        background: rgba(0, 0, 0, 0.3);
     }
 
     .sheet-top-bar {
@@ -3393,6 +3411,11 @@ body.hover-as-default .project-block .thumbnail-overlay {
     .sheet-close-arrow:active {
         border-color: rgba(0, 0, 0, 0.3);
         color: rgba(0, 0, 0, 0.8);
+    }
+
+    .about-title-row .sheet-close-arrow,
+    .contact-title-row .sheet-close-arrow {
+        display: inline-flex;
     }
 
     .about-overlay-content {
