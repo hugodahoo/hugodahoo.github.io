@@ -110,14 +110,21 @@
                     </div>
                     <div class="nav-social">
                         <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" class="nav-social-link" aria-label="LinkedIn">
-                            <span class="social-label">LI</span>
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                <path d="M8 11v5"/>
+                                <path d="M8 8v.01"/>
+                                <path d="M12 16v-5"/>
+                                <path d="M16 16v-3a2 2 0 0 0-4 0"/>
+                            </svg>
                         </a>
                         <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" class="nav-social-link" aria-label="Instagram">
-                            <span class="social-label">IG</span>
+                            <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                                <circle cx="12" cy="12" r="5"/>
+                                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                            </svg>
                         </a>
-                        <button class="lang-switch" onclick="i18n.switchLang()" aria-label="Switch language">
-                            <script>document.write(i18n.t('lang.switch'))</script>
-                        </button>
                     </div>
                     <div class="nav-contact">
                         <a href="mailto:info@hugodaoust.com" class="nav-contact-link">info@hugodaoust.com</a>
@@ -126,6 +133,18 @@
                 </div>
             </div>
         </nav>
+
+        <!-- Desktop Language Toggle -->
+        <button class="desktop-lang-toggle" onclick="i18n.switchLang()" aria-label="Switch language">
+            <svg class="globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <ellipse cx="12" cy="12" rx="4" ry="10"/>
+                <path d="M2 12h20"/>
+                <path d="M4 7h16"/>
+                <path d="M4 17h16"/>
+            </svg>
+            <span class="lang-label"><script>document.write(i18n.getLang() === 'fr' ? 'ENG' : 'FR')</script></span>
+        </button>
 
         <!-- About Overlay -->
         <div class="about-overlay" id="about-overlay">
@@ -157,8 +176,8 @@
                                 <span class="about-tag" data-skill="Thermal"><script>document.write(i18n.getLang() === 'fr' ? 'Imagerie thermique' : 'Thermal Imaging')</script></span>
                                 <span class="about-tag" data-skill="LED,DMX">LED / DMX</span>
                                 <span class="about-tag" data-skill="audio"><script>document.write(i18n.getLang() === 'fr' ? 'Audio spatialisé' : 'Spatial Audio')</script></span>
+                                <div class="skill-thumbnails" id="skill-thumbnails"></div>
                             </div>
-                            <div class="skill-thumbnails" id="skill-thumbnails"></div>
                         </div>
 
                         <div class="about-section about-links">
@@ -680,27 +699,31 @@
                     });
 
                     tag.addEventListener('mouseleave', function() {
-                        hideTimer = setTimeout(function() {
-                            container.classList.remove('cards-visible');
-                            container.classList.remove('diamond-visible');
-                            setTimeout(function() {
-                                container.classList.remove('visible');
-                            }, 150);
-                        }, 250);
+                        hideTimer = setTimeout(retract, 200);
                     });
                 });
+
+                function retract() {
+                    container.classList.remove('cards-visible');
+                    setTimeout(function() {
+                        container.classList.remove('diamond-visible');
+                        var path = container.querySelector('.skill-line path');
+                        if (path) {
+                            var len = path.getTotalLength();
+                            path.style.transition = 'stroke-dashoffset 0.2s ease';
+                            path.style.strokeDashoffset = len;
+                        }
+                        setTimeout(function() {
+                            container.classList.remove('visible');
+                        }, 200);
+                    }, 120);
+                }
 
                 container.addEventListener('mouseenter', function() {
                     if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
                 });
                 container.addEventListener('mouseleave', function() {
-                    hideTimer = setTimeout(function() {
-                        container.classList.remove('cards-visible');
-                        container.classList.remove('diamond-visible');
-                        setTimeout(function() {
-                            container.classList.remove('visible');
-                        }, 150);
-                    }, 250);
+                    hideTimer = setTimeout(retract, 200);
                 });
             })();
 
