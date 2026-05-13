@@ -23,6 +23,7 @@ window.projects = [
   {
     "id": "undercurrents",
     "title": "UNDERCURRENTS",
+    "featuredNote": "This one pushed every boundary we had — light, sound, and human connection in a forgotten underground world.",
     "year": "2026",
     "client": "Rafael Lozano-Hemmer / Buffalo Bayou Park Cistern, Houston",
     "role": "Creative Technologist",
@@ -65,6 +66,7 @@ window.projects = [
   {
     "id": "deriva-termica-beti-jai",
     "title": "DERIVA T\u00c9RMICA (BETI JAI)",
+    "featuredNote": "Turning body heat into art inside a 130-year-old building — pure magic.",
     "year": "2026",
     "client": "Rafael Lozano-Hemmer / LuzMadrid Festival",
     "role": "Creative Technologist",
@@ -1090,7 +1092,7 @@ window.projects = [
     "cover": null,
     "hasMedia": true,
     "fullDescription": "Tabegami Sama was a multi-room interactive exhibition that explored Japanese food and culture through playful, technology-driven experiences. One room featured huge rice bowls where projection mapping and depth sensors invited visitors to experiment with gestures, revealing layered audiovisual responses. The exhibition unfolded along a narrative arc of cultural discovery, combining entertainment with information in a way that was both accessible and engaging. A major technical challenge was running four large-scale interactive walls from a single computer, solved through highly optimized realtime pipelines. Touch sensing was achieved using a 3D point cloud remapped to the installation’s geometry, allowing precise and reliable interaction\nTechnical details and implementation\n- Projection mapping onto sculptural/ritual surface.\n- Audio narrative and sensor triggers for call‑and‑response.\nChallenges and solutions\n- Respectful cultural framing and metaphor.\n- Precise mapping to complex surface geometry.\nImpact and results\n- Invited audiences to embody ritual through playful technology.\n- Expanded the practice into food/culture thematics.\nProcess and methodology\n- Motif research and consultation.\n- Prototype altar interactions; calibrate proximity sensors.\n---",
-    "videoEmbed": "https://www.youtube.com/watch?v=ve8SCZnujUY"
+    "videoEmbed": "https://vimeo.com/211486370"
   },
   {
     "id": "ozone",
@@ -1112,6 +1114,7 @@ window.projects = [
   {
     "id": "red-hot-chili-peppers-getaway-tour",
     "title": "RED HOT CHILI PEPPERS GETAWAY TOUR",
+    "featuredNote": "The project that made me fall in love with live shows — 50,000 people, one shared moment.",
     "year": "2016",
     "client": "Moment Factory / WORLD",
     "role": "Creative Developer",

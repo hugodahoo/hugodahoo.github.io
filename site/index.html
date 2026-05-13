@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="sidebar-pinned">
-                    <span class="sidebar-pinned-label">PINNED</span>
+                    <span class="sidebar-pinned-label">FEATURED</span>
                     <a class="sidebar-pinned-card" href="https://www.creativeapplications.net/project/undercurrents-distributed-environmental-os-where-infrastructure-poetry-and-computation-converge/" target="_blank" rel="noopener">
                         <img class="sidebar-pinned-thumb" src="media/thumbnails/undercurrents/undercurrents_houston_2026_ne_001.jpg" alt="Undercurrents" loading="lazy">
                         <div class="sidebar-pinned-meta">
@@ -148,16 +148,17 @@
                         <div class="about-section">
                             <h3 class="about-section-heading"><script>document.write(i18n.t('about.specialties'))</script></h3>
                             <div class="about-tags">
-                                <span class="about-tag">TouchDesigner</span>
-                                <span class="about-tag">Projection Mapping</span>
-                                <span class="about-tag">Computer Vision</span>
-                                <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Systèmes temps réel' : 'Real-time Systems')</script></span>
-                                <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Installations interactives' : 'Interactive Installations')</script></span>
-                                <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Intégration de capteurs' : 'Sensor Integration')</script></span>
-                                <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Imagerie thermique' : 'Thermal Imaging')</script></span>
-                                <span class="about-tag">LED / DMX</span>
-                                <span class="about-tag"><script>document.write(i18n.getLang() === 'fr' ? 'Audio spatialisé' : 'Spatial Audio')</script></span>
+                                <span class="about-tag" data-skill="TouchDesigner">TouchDesigner</span>
+                                <span class="about-tag" data-skill="Projection">Projection Mapping</span>
+                                <span class="about-tag" data-skill="Computer Vision,Camera">Computer Vision</span>
+                                <span class="about-tag" data-skill="Real-time"><script>document.write(i18n.getLang() === 'fr' ? 'Systèmes temps réel' : 'Real-time Systems')</script></span>
+                                <span class="about-tag" data-skill="Interactive"><script>document.write(i18n.getLang() === 'fr' ? 'Installations interactives' : 'Interactive Installations')</script></span>
+                                <span class="about-tag" data-skill="Sensor,tracking,Depth"><script>document.write(i18n.getLang() === 'fr' ? 'Intégration de capteurs' : 'Sensor Integration')</script></span>
+                                <span class="about-tag" data-skill="Thermal"><script>document.write(i18n.getLang() === 'fr' ? 'Imagerie thermique' : 'Thermal Imaging')</script></span>
+                                <span class="about-tag" data-skill="LED,DMX">LED / DMX</span>
+                                <span class="about-tag" data-skill="audio"><script>document.write(i18n.getLang() === 'fr' ? 'Audio spatialisé' : 'Spatial Audio')</script></span>
                             </div>
+                            <div class="skill-thumbnails" id="skill-thumbnails"></div>
                         </div>
 
                         <div class="about-section about-links">
@@ -168,7 +169,7 @@
                     </div>
 
                     <div class="about-photo" id="about-photo">
-                        <img class="about-photo-hires" src="media/hugo-portrait.jpg" alt="Hugo Daoust" draggable="false">
+                        <img class="about-photo-hires" src="media/hugo-photo.jpg" alt="Hugo Daoust" draggable="false">
                         <canvas class="about-photo-pixels" id="about-photo-canvas"></canvas>
                     </div>
                 </div>
@@ -247,7 +248,7 @@
                     <a class="tray-nav-link" id="tray-nav-contact" href="#">Contact</a>
                 </div>
                 <div class="tray-divider"></div>
-                <span class="tray-section-label">PINNED</span>
+                <span class="tray-section-label">FEATURED</span>
                 <a class="pinned-card" href="https://www.creativeapplications.net/project/undercurrents-distributed-environmental-os-where-infrastructure-poetry-and-computation-converge/" target="_blank" rel="noopener">
                     <img class="pinned-thumb" src="media/thumbnails/undercurrents/undercurrents_houston_2026_ne_001.jpg" alt="Undercurrents" loading="lazy">
                     <div class="pinned-meta">
@@ -595,6 +596,113 @@
                     openAboutOverlay();
                 });
             }
+
+            // --- Skill tag hover thumbnails ---
+            (function() {
+                var container = document.getElementById('skill-thumbnails');
+                if (!container) return;
+                var tags = document.querySelectorAll('.about-tag[data-skill]');
+                var hideTimer = null;
+                var activeTag = null;
+
+                function getProjects() {
+                    return window.allProjects || window.sortedProjectsWithMedia || [];
+                }
+
+                function buildContent(tag, projects) {
+                    var tagRect = tag.getBoundingClientRect();
+                    var contRect = container.getBoundingClientRect();
+                    var startX = tagRect.left + tagRect.width / 2 - contRect.left;
+                    var startY = 0;
+                    var elbowY = 18;
+                    var diamondX = 24;
+                    var diamondY = 42;
+
+                    var pathD = 'M ' + startX + ' ' + startY
+                        + ' L ' + startX + ' ' + elbowY
+                        + ' L ' + diamondX + ' ' + elbowY
+                        + ' L ' + diamondX + ' ' + diamondY;
+
+                    var html = '<svg class="skill-line" viewBox="0 0 500 60" preserveAspectRatio="xMinYMin meet">'
+                        + '<path d="' + pathD + '" fill="none" stroke="#90EE90" stroke-width="1.5" stroke-dasharray="200" stroke-dashoffset="200"/>'
+                        + '</svg>';
+                    html += '<div class="skill-diamond"></div>';
+                    html += '<div class="skill-thumb-row">';
+                    var shown = 0;
+                    for (var i = 0; i < projects.length && shown < 8; i++) {
+                        var thumb = typeof getThumbnail === 'function' ? getThumbnail(projects[i].id) : null;
+                        if (!thumb) continue;
+                        var href = 'project.html?id=' + projects[i].id;
+                        var title = projects[i].title || projects[i].id;
+                        var delay = shown * 0.04;
+                        html += '<a class="skill-thumb" href="' + href + '" style="transition-delay:' + delay + 's">'
+                            + '<img src="' + thumb + '" alt="' + title + '" loading="lazy">'
+                            + '<span class="skill-thumb-label">' + title + '</span></a>';
+                        shown++;
+                    }
+                    html += '</div>';
+                    return html;
+                }
+
+                tags.forEach(function(tag) {
+                    tag.addEventListener('mouseenter', function() {
+                        if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+                        activeTag = tag;
+                        var keywords = tag.dataset.skill.split(',').map(function(s) { return s.trim().toLowerCase(); });
+                        var projects = getProjects().filter(function(p) {
+                            var tech = (p.technologies || '').toLowerCase();
+                            return keywords.some(function(kw) { return tech.indexOf(kw) !== -1; });
+                        });
+                        if (!projects.length) return;
+
+                        container.innerHTML = buildContent(tag, projects);
+                        container.classList.add('visible');
+
+                        // Animate SVG line draw
+                        var path = container.querySelector('.skill-line path');
+                        if (path) {
+                            var len = path.getTotalLength();
+                            path.style.strokeDasharray = len;
+                            path.style.strokeDashoffset = len;
+                            requestAnimationFrame(function() {
+                                path.style.transition = 'stroke-dashoffset 0.25s ease';
+                                path.style.strokeDashoffset = '0';
+                            });
+                        }
+                        // Diamond appears after line draws
+                        setTimeout(function() {
+                            container.classList.add('diamond-visible');
+                        }, 200);
+                        // Cards after diamond
+                        setTimeout(function() {
+                            container.classList.add('cards-visible');
+                        }, 350);
+                    });
+
+                    tag.addEventListener('mouseleave', function() {
+                        hideTimer = setTimeout(function() {
+                            container.classList.remove('cards-visible');
+                            container.classList.remove('diamond-visible');
+                            setTimeout(function() {
+                                container.classList.remove('visible');
+                            }, 150);
+                        }, 250);
+                    });
+                });
+
+                container.addEventListener('mouseenter', function() {
+                    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+                });
+                container.addEventListener('mouseleave', function() {
+                    hideTimer = setTimeout(function() {
+                        container.classList.remove('cards-visible');
+                        container.classList.remove('diamond-visible');
+                        setTimeout(function() {
+                            container.classList.remove('visible');
+                        }, 150);
+                    }, 250);
+                });
+            })();
 
             // --- Contact overlay ---
             var contactLink = document.getElementById('nav-contact-link');

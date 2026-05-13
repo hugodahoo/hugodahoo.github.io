@@ -267,7 +267,7 @@ function getAllThumbnails(projectId) {
     if (!project) return [];
     const seen = new Set();
     return project.files
-        .filter(f => f.type === 'image')
+        .filter(f => f.type === 'image' && f.size > 5000)
         .map(f => {
             const thumbPath = 'media/' + f.path
                 .replace('high-res/', 'thumbnails/')
@@ -899,18 +899,9 @@ function initScatterInteractions(allProjects) {
         if (!proj) return;
 
         card.addEventListener('mouseenter', () => {
-            const myTags = new Set((proj._tags || []).map(t => t.toLowerCase()));
-            const relatedIds = new Set([pid]);
-
-            allProjects.forEach(p => {
-                if (p.id === pid || !p._tags) return;
-                const shared = p._tags.some(t => myTags.has(t.toLowerCase()));
-                if (shared) relatedIds.add(p.id);
-            });
-
             allCells.forEach(c => {
                 const cid = c.getAttribute('data-project-id');
-                if (cid && relatedIds.has(cid)) {
+                if (cid === pid) {
                     c.classList.add('scatter-highlight');
                     c.classList.remove('scatter-dimmed');
                 } else if (cid) {
@@ -924,13 +915,7 @@ function initScatterInteractions(allProjects) {
             showScoreTooltip(card, proj);
 
             connectionLines.forEach(line => {
-                const from = line.getAttribute('data-from');
-                const to = line.getAttribute('data-to');
-                if (relatedIds.has(from) && relatedIds.has(to)) {
-                    line.classList.add('line-highlight');
-                } else {
-                    line.classList.add('line-dimmed');
-                }
+                line.classList.add('line-dimmed');
             });
         });
 
@@ -2536,6 +2521,7 @@ function showProjectOverlay(projectId) {
     setTimeout(() => {
         generateConcentricSquares();
         initParallaxEffect();
+        initCardTiltEffect();
     }, 50);
     
     
@@ -2543,6 +2529,14 @@ function showProjectOverlay(projectId) {
 
 function closeProjectOverlay() {
     if (!currentProjectOverlay || !isOverlayOpen) return;
+    
+    // Stop all playing videos/iframes in the overlay
+    currentProjectOverlay.querySelectorAll('video').forEach(v => { v.pause(); v.currentTime = 0; });
+    currentProjectOverlay.querySelectorAll('iframe').forEach(iframe => {
+        const src = iframe.src;
+        iframe.src = '';
+        iframe.src = src;
+    });
     
     // Trigger mobile close event if on mobile
     if (window.innerWidth <= 768 && currentProjectOverlay) {
@@ -2638,6 +2632,7 @@ function renderNeuralNetworkSection(sectionId, projectIds) {
                     <div class="card-slideshow-dots"></div>` : ''}
                 </div>
             </a>
+            ${!isMobileRender && p.featured && p.featuredNote ? `<div class="featured-note" aria-hidden="true"><span class="featured-diamond"></span><span class="featured-note-text">${p.featuredNote}</span></div>` : ''}
         </article>`;
     }).join("");
     
@@ -2902,6 +2897,8 @@ function initLazyThumbnailLoading() {
 // ── Shared Slideshow Engine ───────────────────────────────────────────────────
 
 const _slideshowState = new Map();
+const _slideshowInterval = window.innerWidth > 768 ? 6000 : 3000;
+const _slideshowFadeHold = window.innerWidth > 768 ? 1400 : 850;
 
 function _advanceSlide(state, direction) {
     const { images, currentImg, nextImg, dotsContainer } = state;
@@ -2923,13 +2920,13 @@ function _advanceSlide(state, direction) {
             currentImg.src = images[state.currentIdx];
             nextImg.classList.remove('visible');
             state._transitioning = false;
-        }, 850);
+        }, _slideshowFadeHold);
     };
 }
 
 function _resetAutoTimer(state) {
     clearInterval(state.intervalId);
-    state.intervalId = setInterval(() => _advanceSlide(state, 1), 3000);
+    state.intervalId = setInterval(() => _advanceSlide(state, 1), _slideshowInterval);
 }
 
 function startSlideshow(card) {
@@ -2978,7 +2975,7 @@ function startSlideshow(card) {
         _transitioning: false
     };
 
-    state.intervalId = setInterval(() => _advanceSlide(state, 1), 3000);
+    state.intervalId = setInterval(() => _advanceSlide(state, 1), _slideshowInterval);
     _slideshowState.set(card, state);
 
     // Swipe-to-advance on mobile
@@ -3092,13 +3089,14 @@ function initMobileSlideshow() {
     }, 500);
 }
 
-// ── Desktop: hover-based slideshow ────────────────────────────────────────────
+// ── Desktop: ambient + hover slideshow ────────────────────────────────────────
 
 function initDesktopSlideshow() {
     if (window.innerWidth <= 768) return;
 
     function attach() {
-        document.querySelectorAll('.project-block').forEach(card => {
+        const cards = Array.from(document.querySelectorAll('.project-block'));
+        cards.forEach(card => {
             if (card._slideshowHover) return;
             card._slideshowHover = true;
 
@@ -3110,8 +3108,20 @@ function initDesktopSlideshow() {
             });
 
             card.addEventListener('mouseleave', () => {
+                if (card._slideshowAmbient) return;
                 stopSlideshow(card);
             });
+        });
+
+        // Ambient: start all cards with staggered delays (0-3s spread)
+        cards.forEach(card => {
+            const overlay = card.querySelector('.thumbnail-overlay');
+            if (!overlay || !overlay.dataset.images) return;
+            const delay = Math.random() * 6000;
+            setTimeout(() => {
+                card._slideshowAmbient = true;
+                startSlideshow(card);
+            }, delay);
         });
     }
 
@@ -3239,7 +3249,9 @@ function initializeNeuralNetwork() {
     // Use requestAnimationFrame for smooth rendering
     requestAnimationFrame(() => {
         const projectsWithMedia = [...projectsToUse];
-        
+        const featuredIdSet = new Set(['undercurrents', 'deriva-termica-beti-jai', 'red-hot-chili-peppers-getaway-tour']);
+        projectsWithMedia.forEach(p => { if (featuredIdSet.has(p.id)) p.featured = true; });
+
         // Sort alphabetically
         projectsWithMedia.sort((a, b) => {
             const titleA = (a.title || a.id || '').toLowerCase();
@@ -3370,7 +3382,97 @@ function refreshParallaxEffect() {
             dots: Array.from(document.querySelectorAll('.dot-layer'))
         };
         initParallaxEffect();
+        initCardTiltEffect();
     }, 100);
+}
+
+// ── Card Thumbnail Parallax Effect ────────────────────────────────────────────
+let _tiltBound = false;
+let _tiltCards = [];
+let _tiltThumbs = [];
+let _tiltRects = [];
+let _tiltRafId = null;
+let _tiltMouseX = 0;
+let _tiltMouseY = 0;
+let _tiltActive = false;
+
+const PARALLAX_SHIFT_PX = 10;
+const PARALLAX_RADIUS = 400;
+
+function initCardTiltEffect() {
+    if (window.innerWidth <= 768) return;
+    const grid = document.querySelector('.radar-grid-wrapper');
+    if (!grid) return;
+
+    _refreshTiltCards();
+
+    if (!_tiltBound) {
+        _tiltBound = true;
+
+        grid.addEventListener('mouseenter', _refreshTiltCards);
+
+        grid.addEventListener('mousemove', function(e) {
+            _tiltMouseX = e.clientX;
+            _tiltMouseY = e.clientY;
+            _tiltActive = true;
+            if (!_tiltRafId) {
+                _tiltRafId = requestAnimationFrame(_doCardTilt);
+            }
+        }, { passive: true });
+
+        grid.addEventListener('mouseleave', function() {
+            _tiltActive = false;
+            if (_tiltRafId) {
+                cancelAnimationFrame(_tiltRafId);
+                _tiltRafId = null;
+            }
+            for (let i = 0; i < _tiltThumbs.length; i++) {
+                if (_tiltThumbs[i]) {
+                    _tiltThumbs[i].style.transform = 'scale(1.08)';
+                }
+            }
+        });
+
+        window.addEventListener('resize', _refreshTiltCards);
+        window.addEventListener('scroll', _refreshTiltCards, { passive: true });
+    }
+}
+
+function _refreshTiltCards() {
+    _tiltCards = Array.from(document.querySelectorAll('.radar-grid-wrapper .project-block.loaded'));
+    _tiltThumbs = _tiltCards.map(card => card.querySelector('.thumbnail-overlay'));
+    _tiltRects = _tiltCards.map(card => {
+        const r = card.getBoundingClientRect();
+        return { cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
+    });
+}
+
+function _doCardTilt() {
+    _tiltRafId = null;
+    if (!_tiltActive) return;
+
+    for (let i = 0; i < _tiltCards.length; i++) {
+        const thumb = _tiltThumbs[i];
+        const rc = _tiltRects[i];
+        if (!thumb || !rc) continue;
+
+        const dx = _tiltMouseX - rc.cx;
+        const dy = _tiltMouseY - rc.cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < PARALLAX_RADIUS) {
+            const intensity = 1 - (dist / PARALLAX_RADIUS);
+            const tx = (dx / PARALLAX_RADIUS) * PARALLAX_SHIFT_PX * intensity;
+            const ty = (dy / PARALLAX_RADIUS) * PARALLAX_SHIFT_PX * intensity;
+            thumb.style.transform = 'scale(1.08) translate3d(' + tx.toFixed(1) + 'px, ' + ty.toFixed(1) + 'px, 0)';
+        } else {
+            thumb.style.transform = 'scale(1.08)';
+        }
+    }
+
+    if (_tiltActive) {
+        _tiltRafId = requestAnimationFrame(_doCardTilt);
+    }
 }
 
 // (createMobileNeuralOverlay retired — mobile uses same CSS grid as desktop)
@@ -3387,6 +3489,7 @@ document.addEventListener('DOMContentLoaded', function() {
     generateConcentricSquares();
     initializeNeuralNetwork();
     initParallaxEffect();
+    initCardTiltEffect();
     
     // Initialize mobile navigation
     
@@ -3412,6 +3515,7 @@ if (document.readyState === 'loading') {
         generateConcentricSquares();
         initializeNeuralNetwork();
         initParallaxEffect();
+        initCardTiltEffect();
         
         // Initialize mobile navigation
     });
@@ -3420,6 +3524,7 @@ if (document.readyState === 'loading') {
     // Don't initialize immediately - let the HTML script handle it
     // initializeNeuralNetwork();
     initParallaxEffect();
+    initCardTiltEffect();
     
     // Initialize mobile navigation
     
@@ -3440,6 +3545,7 @@ window.addEventListener('resize', function() {
     generateConcentricSquares();
     setTimeout(() => {
         initParallaxEffect();
+        initCardTiltEffect();
     }, 100);
 });
 

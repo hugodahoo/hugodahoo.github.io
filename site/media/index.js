@@ -777,7 +777,7 @@ const mediaIndex = {
           "filename": "star_icon.png",
           "path": "high-res/collider/star_icon.png",
           "size": 1310,
-          "type": "image",
+          "type": "icon",
           "extension": ".png",
           "hash": "high-res",
           "last_modified": 1758902354.1086788
@@ -1872,36 +1872,32 @@ const mediaIndex = {
     "red-hot-chili-peppers-getaway-tour": {
       "name": "Red Hot Chili Peppers Getaway Tour",
       "files": [
-        {
-          "filename": "image_1.jpg",
-          "path": "high-res/red-hot-chili-peppers-getaway-tour/image_1.jpg",
-          "size": 800559,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1778021910.75097
-        },
-        {
-          "filename": "image_2.jpg",
-          "path": "high-res/red-hot-chili-peppers-getaway-tour/image_2.jpg",
-          "size": 382185,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1778021910.75318
-        },
-        {
-          "filename": "image_3.jpg",
-          "path": "high-res/red-hot-chili-peppers-getaway-tour/image_3.jpg",
-          "size": 128055,
-          "type": "image",
-          "extension": ".jpg",
-          "hash": "high-res",
-          "last_modified": 1758901984.25349
-        }
+        { "filename": "image_1.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/image_1.jpg", "size": 800559, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778021910.75097 },
+        { "filename": "image_2.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/image_2.jpg", "size": 382185, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778021910.75318 },
+        { "filename": "image_3.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/image_3.jpg", "size": 128055, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1758901984.25349 },
+        { "filename": "rhcp_mf_05.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_05.jpg", "size": 304197, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702880.18 },
+        { "filename": "rhcp_mf_06.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_06.jpg", "size": 184398, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702880.68 },
+        { "filename": "rhcp_mf_07.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_07.jpg", "size": 248895, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702881.13 },
+        { "filename": "rhcp_mf_08.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_08.jpg", "size": 136561, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702881.71 },
+        { "filename": "rhcp_mf_09.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_09.jpg", "size": 323933, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702882.18 },
+        { "filename": "rhcp_mf_10.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_10.jpg", "size": 261269, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702882.67 },
+        { "filename": "rhcp_mf_11.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_11.jpg", "size": 436502, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702883.38 },
+        { "filename": "rhcp_mf_12.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_12.jpg", "size": 277971, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702884.04 },
+        { "filename": "rhcp_mf_13.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_13.jpg", "size": 281844, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702885.11 },
+        { "filename": "rhcp_mf_14.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_14.jpg", "size": 636441, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702886.11 },
+        { "filename": "rhcp_mf_15.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_15.jpg", "size": 270124, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702886.70 },
+        { "filename": "rhcp_mf_16.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_16.jpg", "size": 109998, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702887.11 },
+        { "filename": "rhcp_mf_17.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_17.jpg", "size": 267455, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702887.72 },
+        { "filename": "rhcp_mf_18.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_18.jpg", "size": 284135, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702888.53 },
+        { "filename": "rhcp_mf_19.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_19.jpg", "size": 417681, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702889.25 },
+        { "filename": "rhcp_mf_20.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_20.jpg", "size": 201972, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702889.75 },
+        { "filename": "rhcp_mf_21.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_21.jpg", "size": 252302, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702890.34 },
+        { "filename": "rhcp_mf_22.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_22.jpg", "size": 177042, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702890.78 },
+        { "filename": "rhcp_mf_23.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_23.jpg", "size": 320391, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702891.27 },
+        { "filename": "rhcp_mf_24.jpg", "path": "high-res/red-hot-chili-peppers-getaway-tour/rhcp_mf_24.jpg", "size": 394968, "type": "image", "extension": ".jpg", "hash": "high-res", "last_modified": 1778702891.82 }
       ],
-      "total_files": 3,
-      "total_size": 1310799,
+      "total_files": 23,
+      "total_size": 7048878,
       "has_issues": false
     },
     "refractions": {
