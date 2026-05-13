@@ -3356,6 +3356,7 @@ body.hover-as-default .project-block .thumbnail-overlay {
         justify-content: center;
         padding: 12px 0 6px;
         cursor: grab;
+        touch-action: none;
     }
 
     .sheet-handle-pill {
