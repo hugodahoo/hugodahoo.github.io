@@ -45,10 +45,31 @@
                     <p class="mobile-hero-subtitle"><span class="green-accent"><script>document.write(i18n.t('hero.subtitle'))</script></span> <span class="mobile-hero-sep">/</span> <script>document.write(i18n.t('nav.location'))</script></p>
                 </div>
                 <div class="mobile-hero-social">
-                    <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" aria-label="LinkedIn">LI</a>
-                    <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-                    <button class="lang-switch" onclick="i18n.switchLang()" aria-label="Switch language">
-                        <script>document.write(i18n.t('lang.switch'))</script>
+                    <a href="https://www.linkedin.com/in/hugo-daoust/" target="_blank" rel="noopener" aria-label="LinkedIn">
+                        <svg class="mobile-social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5"/>
+                            <path d="M8 11v5"/>
+                            <path d="M8 8v.01"/>
+                            <path d="M12 16v-5"/>
+                            <path d="M16 16v-3a2 2 0 0 0-4 0"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/hugodahoo/" target="_blank" rel="noopener" aria-label="Instagram">
+                        <svg class="mobile-social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5"/>
+                            <circle cx="12" cy="12" r="5"/>
+                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </a>
+                    <button class="mobile-lang-toggle" onclick="i18n.switchLang()" aria-label="Switch language">
+                        <svg class="mobile-globe-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <ellipse cx="12" cy="12" rx="4" ry="10"/>
+                            <path d="M2 12h20"/>
+                            <path d="M4 7h16"/>
+                            <path d="M4 17h16"/>
+                        </svg>
+                        <span class="mobile-lang-label"><script>document.write(i18n.getLang() === 'fr' ? 'ENG' : 'FR')</script></span>
                     </button>
                 </div>
             </div>

@@ -23,7 +23,7 @@ window.projects = [
   {
     "id": "undercurrents",
     "title": "UNDERCURRENTS",
-    "featuredNote": "This one pushed every boundary we had — light, sound, and human connection in a forgotten underground world.",
+    "featuredNote": "This one pushed every boundary we had. Light, sound, and human connection in a forgotten underground world.",
     "year": "2026",
     "client": "Rafael Lozano-Hemmer / Buffalo Bayou Park Cistern, Houston",
     "role": "Creative Technologist",
@@ -66,7 +66,7 @@ window.projects = [
   {
     "id": "deriva-termica-beti-jai",
     "title": "DERIVA T\u00c9RMICA (BETI JAI)",
-    "featuredNote": "Turning body heat into art inside a 130-year-old building — pure magic.",
+    "featuredNote": "Turning body heat into art inside a 130 year old building. Pure magic.",
     "year": "2026",
     "client": "Rafael Lozano-Hemmer / LuzMadrid Festival",
     "role": "Creative Technologist",
@@ -1114,7 +1114,7 @@ window.projects = [
   {
     "id": "red-hot-chili-peppers-getaway-tour",
     "title": "RED HOT CHILI PEPPERS GETAWAY TOUR",
-    "featuredNote": "The project that made me fall in love with live shows — 50,000 people, one shared moment.",
+    "featuredNote": "The project that made me fall in love with live shows. 50,000 people, one shared moment.",
     "year": "2016",
     "client": "Moment Factory / WORLD",
     "role": "Creative Developer",

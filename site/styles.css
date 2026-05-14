@@ -415,21 +415,59 @@ header:not(.mobile-hero) {
 
 .mobile-hero-social {
     display: flex;
-    gap: 12px;
+    align-items: center;
+    gap: 10px;
 }
 
 .mobile-hero-social a {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
     color: rgba(0,0,0,0.4);
     text-decoration: none;
+    display: flex;
+    align-items: center;
     transition: color 0.2s;
 }
 
 .mobile-hero-social a:active {
     color: rgba(144, 238, 144, 0.8);
+}
+
+.mobile-social-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.mobile-lang-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.35);
+    transition: color 0.2s;
+}
+
+.mobile-lang-toggle:active {
+    color: #90EE90;
+}
+
+.mobile-globe-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.mobile-lang-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7px;
+    font-weight: 900;
+    color: #000;
+    letter-spacing: 0.2px;
 }
 
 /* ── Floating Pill Nav ── */
@@ -2784,18 +2822,6 @@ body.hover-as-default .project-block .thumbnail-overlay {
 }
 
 /* Mobile hero language switcher */
-.mobile-hero-social .lang-switch {
-    font-size: 0.6rem;
-    color: rgba(0, 0, 0, 0.5);
-    border-color: rgba(0, 0, 0, 0.2);
-    padding: 2px 7px;
-}
-
-.mobile-hero-social .lang-switch:hover,
-.mobile-hero-social .lang-switch:active {
-    color: rgba(144, 238, 144, 0.8);
-    border-color: rgba(144, 238, 144, 0.5);
-}
 
 /* Desktop language toggle - top right */
 .desktop-lang-toggle {
@@ -3236,6 +3262,27 @@ body.hover-as-default .project-block .thumbnail-overlay {
     transform: translateX(0) scale(1.08) !important;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
     border-color: rgba(144, 238, 144, 0.5);
+}
+
+@media (max-width: 768px) {
+    .skill-thumbnails {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+    }
+    .skill-thumb-row {
+        left: 34px;
+        right: 0;
+        padding-right: 16px;
+    }
+    .skill-thumb {
+        width: 60px;
+        height: 60px;
+        flex-shrink: 0;
+    }
+    .skill-thumb-label {
+        font-size: 6.5px;
+    }
 }
 
 .about-links {
