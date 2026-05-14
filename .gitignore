@@ -30,6 +30,8 @@ site/media/*
 !site/media/thumbnails/
 !site/media/high-res/
 !site/media/index.js
+!site/media/hugo-photo.jpg
+!site/media/hugo-pixelated.jpg
 
 # Output files
 output.txt
