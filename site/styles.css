@@ -436,7 +436,7 @@ header:not(.mobile-hero) {
 .floating-pill {
     display: none;
     position: fixed;
-    bottom: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     right: 16px;
     width: 72px;
     height: 72px;

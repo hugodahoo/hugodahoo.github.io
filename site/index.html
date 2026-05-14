@@ -449,6 +449,19 @@
             const pill = document.getElementById('floating-pill');
             const tray = document.getElementById('pill-tray');
             const overlay = document.getElementById('pill-overlay');
+
+            // Keep pill pinned to visual viewport bottom on mobile
+            if (pill && window.visualViewport) {
+                function adjustPillPosition() {
+                    var vv = window.visualViewport;
+                    var offset = window.innerHeight - vv.height - vv.offsetTop;
+                    pill.style.bottom = (20 + offset) + 'px';
+                    if (tray) tray.style.bottom = (20 + offset) + 'px';
+                }
+                window.visualViewport.addEventListener('resize', adjustPillPosition);
+                window.visualViewport.addEventListener('scroll', adjustPillPosition);
+            }
+
             if (pill && tray && overlay) {
                 function openTray() {
                     pill.classList.add('open');
